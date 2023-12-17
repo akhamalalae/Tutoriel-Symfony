@@ -26,6 +26,8 @@
 
 ![Alt text](<Screenshot.png>)
 
+![Alt text](<Enregistrement.mov>)
+
 ## Environnement technique
 
 1. Backend
