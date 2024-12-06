@@ -1,0 +1,22 @@
+<li class="nav-item dropdown">
+    <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+        <i class="align-middle" data-feather="settings"></i>
+    </a>
+
+    <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+        {% if app.user.brochureFilename %} 
+            <img src="{{asset('img/avatars/' ~ app.user.brochureFilename)}}" class="avatar img-fluid rounded me-1" alt="{{ app.user.name }}">
+        {% else %} 
+            <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded me-1" alt="{{ app.user.name }}">
+        {% endif %}
+        <span class="text-dark">{{ app.user.name }}</span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end">
+        <a class="dropdown-item" href="{{ path('app_update_profile') }}"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
+        <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{  path('app_logout') }}">Log out</a>
+    </div>
+</li>

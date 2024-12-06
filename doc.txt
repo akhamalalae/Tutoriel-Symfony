@@ -1,0 +1,13 @@
+docker compose exec -it php bash
+
+php bin/console importmap:update
+php bin/console asset-map:compile  
+php bin/console inportmap:require Lib
+php bin/console importmap:remove Lib
+
+php bin/console translation:extract --force fr
+
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+
+php bin/console fos:elastica:populate

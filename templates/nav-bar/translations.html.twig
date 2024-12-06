@@ -1,0 +1,12 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+        <i class="align-middle" data-feather="globe"></i>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-end">
+        <a class="dropdown-item" href="{{ currentPath|replace({'en': 'fr'}) }}" > Fr</a>
+        <a class="dropdown-item" href="{{ currentPath|replace({'fr': 'en'}) }}" > En</a>
+    </div>
+</li>

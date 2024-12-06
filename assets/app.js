@@ -1,3 +1,11 @@
-import './bootstrap.js';
+import 'select2/dist/css/select2.min.css';
+import select2 from 'select2';
+select2($);
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+console.log("okii");
+
+$(document).ready(function() {
+    $('.js-select-multiple').select2();
+});
+
+

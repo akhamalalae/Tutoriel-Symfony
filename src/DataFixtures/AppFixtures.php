@@ -11,14 +11,15 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 100; $i++) {
+        ini_set("memory_limit", "-1");
+        for ($i = 0; $i < 1000; $i++) {
             CategoryFactory::createOne();
         }
 
         $manager->flush();
         $manager->clear();
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 10000; $i++) {
             CourseFactory::createOne();
         }
 
