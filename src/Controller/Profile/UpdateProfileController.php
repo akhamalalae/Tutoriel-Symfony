@@ -24,8 +24,7 @@ class UpdateProfileController extends AbstractController
     const DIRECTORY_AVATARS = 'img/avatars'; 
     private User $currentLoggedUser;
 
-    public function __construct(
-        Security $security)
+    public function __construct(Security $security)
     {
         $this->currentLoggedUser = $security->getUser();
     }
@@ -35,6 +34,7 @@ class UpdateProfileController extends AbstractController
         Request $request,
         FileUploader $fileUploader,
         UserPasswordHasherInterface $userPasswordHasher, 
+        TranslatorInterface $translator,
         EntityManagerInterface $entityManager): Response
     {
         $user = $this->currentLoggedUser;
@@ -60,7 +60,7 @@ class UpdateProfileController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             
-            $this->addFlash('success', 'Your profile has been updated.');
+            $this->addFlash('success', $translator->trans('Your profile has been updated'));
 
             //return $this->redirectToRoute('app_update_profile', array('id' => $id));
             return $this->redirectToRoute('app_update_profile');

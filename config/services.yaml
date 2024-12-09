@@ -20,15 +20,15 @@ services:
             - '@knp_paginator'
             - '@fos_elastica.finder.course'
 
+    App\Controller\Search\SearchMessages:
+        tags:
+            - controller_service_arguments
+        public: true
+        arguments:
+            - '@knp_paginator'
+            - '@fos_elastica.finder.discussion'
+
     App\Services\File\FileUploader:
         arguments:
             $targetDirectory: '%directory%'
-        
     
-    app.tokens.action_listener:
-        class: App\EventListener\RedirectUserListener
-        arguments:
-            - "@security.token_storage"
-            - "@router"
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

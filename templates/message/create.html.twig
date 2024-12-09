@@ -1,29 +1,153 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Message{% endblock %}
 
 {% block body %}
-
-<h1 class="h3 mb-3">Homme Page</h1>
-
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Card</h5>
-            </div>
-            <div class="card-body">
-                <div class="col-auto">
-                    <button id="add-message" class="btn btn-primary mb-3">New message</button>
-                </div>
-                <div id="form-message">
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="col-md-8 col-xl-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title mb-0">New discussion</h5>
+			</div>
+			<div class="card-body h-100">
+				{{ form_start(formDiscussion, { attr: {'id': 'form_discussion' } }) }}
+				<div class="row">
+					<div class="col">
+						{{ form_row(formDiscussion.personTwo) }}
+					</div>
+					<div class="col">
+						{{ form_row(formDiscussion.save) }}
+					</div>
+				</div>
+				{{ form_end(formDiscussion) }}
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 col-xl-3">
+		<div class="card mb-3">
+			<div class="card-header">
+				<h5 class="card-title mb-0">Discussions</h5>
+				<div class="card-body text-center">
+					<div id="discussion_list"></div>
+					{% for item in listDiscussions %}
+						{% include 'message/discussions.html.twig' with {'item': item} %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-8 col-xl-9">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title mb-0">Messages</h5>	
+			</div>
+			<div class="card-body h-100">
+				<div id="message_list"></div>
+				<div id="new_message"></div>
+			</div>
+		</div>
+		<div id="add_form_message"></div>
+	</div>
 </div>
+
+<h1 class="h3 mb-3"></h1>
 {% endblock %}
 
 {% block javascripts %} 
-   
+<script>
+	/**
+	 *
+	 * @typedef {Object} FormResponse
+	 * @property {string} code
+	 * @property {Object} errors
+	 * @property {string} html
+	 */
+
+	const formDiscussion = document.querySelector('#form_discussion');
+	const discussionList = document.querySelector('#discussion_list');
+
+	const addFormMessage = document.querySelector('#add_form_message');
+	const listMessage = document.querySelector('#message_list');
+
+	formDiscussion.addEventListener('submit', function (e) {
+		e.preventDefault();
+
+		fetch(this.action, {
+			body: new FormData(e.target),
+			method: 'POST'
+		})
+		.then(response => response.json())
+		.then(json => {
+			handleResponse(json);
+		});
+	});
+
+	/**
+	 *
+	 * @param {FormResponse} response
+	 */
+	const handleResponse = function (response) {
+		switch(response.code) {
+			case 'DISCUSSION_ADDED_SUCCESSFULLY':
+				discussionList.innerHTML += response.html;
+				break;
+			case 'DISCUSSION_INVALID_FORM':
+				handleErrors(response.errors);
+				break;
+		}
+	}
+
+	function discussion_click(clicked_id)
+  	{
+		//listMessage.innerHTML = "";
+		//document.getElementById("add_form_message").innerHTML = "";
+		message(clicked_id);
+  	}
+
+	function message(clicked_id) {
+		var url = urlMessage(clicked_id);
+		const options = {
+			method: 'GET',
+		};
+
+		fetch(url, options)
+		.then(response => response.json())
+		.then(json => {
+			addFormMessage.innerHTML = json.html;
+			listMessage.innerHTML = json.messages;
+			addmessage(clicked_id);
+		});
+    }
+
+	function addmessage(clicked_id)
+  	{
+		const formMessage = document.querySelector('#form_message');
+		const newMessage = document.querySelector('#new_message');
+		var url = urlMessage(clicked_id);
+
+		formMessage.addEventListener('submit', function (e) {
+			e.preventDefault();
+
+			fetch(url, {
+				body: new FormData(e.target),
+				method: 'POST'
+			})
+			.then(response => response.json())
+			.then(json => {
+				console.log(json);
+				//handleResponse(json);
+				newMessage.innerHTML += json.html;
+			});
+		});
+  	}
+
+	function urlMessage(clicked_id)
+  	{
+		var url = '{{ path("app_create_message", {'id': 'discussion_id'}) }}'; 
+
+		return url.replace("discussion_id", clicked_id);
+  	}
+
+</script>
 {% endblock %}

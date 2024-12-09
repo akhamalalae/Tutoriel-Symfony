@@ -1,1 +1,42 @@
-pages: Pages fr
+Your profile has been updated: Votre profil a été mis à jour
+Please Confirm your Email: Veuillez confirmer votre email
+Your email address has been verified: Your email address has been verified.
+LogicExceptionLogout: Cette méthode peut être vide - elle sera interceptée par la clé de déconnexion de votre pare-feu.
+First name: Prénom
+Name: Nom
+Email: E-mail
+Company: Entreprise
+Job: Emploi
+Date of birth: Date de naissance
+New password: Nouveau mot de passe
+Please enter a password: Veuillez saisir un mot de passe
+Your password should be at least {{ limit }} characters: Votre mot de passe doit comporter au moins {{ limit }} caractères
+Image: Image
+Please upload a valid image: Veuillez télécharger une image valide
+You should agree to our terms.: Vous devez accepter nos conditions.
+Error page: Page d'erreur
+Error: Erreur
+Update profile: Mettre à jour le profil
+Update: Mise à jour
+Log out: Se déconnecter
+Profile: Profil
+Settings & Privacy: Paramètres et confidentialité
+Help Center: Centre d'aide
+Hi! Please confirm your email!: Salut! Veuillez confirmer votre email !
+Please confirm your email address by clicking the following link: Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant
+Confirm my Email: Confirmer mon email
+This link will expire in: Ce lien expirera dans
+Cheers!: Acclamations!
+Register: Registre
+Get started: Commencer
+Start creating the best possible user experience for you customers: Commencez à créer la meilleure expérience utilisateur possible pour vos clients
+Welcome: Bienvenue
+Sign in to your account to continue: Connectez-vous à votre compte pour continuer
+Logout: Déconnexion
+You are logged in as: Vous êtes connecté en tant que
+Please sign in: Veuillez vous connecter
+Forgot password?: Mot de passe oublié ?
+Sign in: Se connecter
+Don’t have an account: Je n'ai pas de compte
+Sign up: S'inscrire
+

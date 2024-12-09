@@ -1,0 +1,20 @@
+{% if messages is not empty %}
+	{% for item in messages %}
+		<div class="d-flex align-items-start">
+			{% if item.message.creatorUser.brochureFilename %} 
+				<img src="{{asset('img/avatars/' ~ item.message.creatorUser.brochureFilename)}}" width="36" height="36" class="rounded-circle me-2" alt="{{ item.message.creatorUser.name }}">
+			{% else %} 
+				<img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
+			{% endif %}
+			<div class="flex-grow-1">
+				<small class="float-end text-navy">{{ item.message.dateCreation|date("F j, Y") }} </small>
+				<strong>{{ item.message.creatorUser.firstName }} {{ item.message.creatorUser.name }}</strong><br />
+				<small class="text-muted">{{ item.message.dateCreation|date("H:i") }}</small><br />
+
+				<div class="alert alert-primary" role="alert">
+					{{ item.message.message }}
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+{% endif %}

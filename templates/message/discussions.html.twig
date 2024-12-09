@@ -1,0 +1,17 @@
+<div id="{{ item.id }}" onClick="discussion_click(this.id)">
+    {% if item.personOne != app.user %}  
+        {% set new_item = item.personOne  %} 
+    {% endif %}
+
+    {% if item.personTwo != app.user %}  
+        {% set new_item = item.personTwo  %} 
+    {% endif %}
+
+    {% if new_item.brochureFilename %} 
+        <img src="{{asset('img/avatars/' ~ new_item.brochureFilename)}}" class="img-fluid rounded-circle mb-2" alt="{{ new_item.name }}" width="100" height="100">
+    {% else %} 
+        <img src="{{asset('img/avatars/avatar.jpg')}}" class="img-fluid rounded-circle mb-2"alt="{{ new_item.name }}" width="100" height="100">
+    {% endif %}
+    <h5 class="card-title mb-0">{{ new_item.firstName }} {{ new_item.name }}</h5>
+</div>
+<hr class="my-0" />

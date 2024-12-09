@@ -3,12 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
+    const MESSAGE_ADDED_SUCCESSFULLY = 'MESSAGE_ADDED_SUCCESSFULLY';
+    const MESSAGE_INVALID_FORM = 'MESSAGE_INVALID_FORM';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -26,9 +31,22 @@ class Message
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateModification = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\Column(length: 255)]
+    private ?string $objet = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $message = null;
+
+    #[ORM\ManyToOne(inversedBy: 'messagesCreatorUser')]
+    private ?User $creatorUser = null;
+
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: DiscussionMessageUser::class)]
+    private Collection $discussionMessageUsers;
+
+    public function __construct()
+    {
+        $this->discussionMessageUsers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,14 +101,68 @@ class Message
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getObjet(): ?string
     {
-        return $this->user;
+        return $this->objet;
     }
 
-    public function setUser(?User $user): static
+    public function setObjet(string $objet): static
     {
-        $this->user = $user;
+        $this->objet = $objet;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): static
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function getCreatorUser(): ?User
+    {
+        return $this->creatorUser;
+    }
+
+    public function setCreatorUser(?User $creatorUser): static
+    {
+        $this->creatorUser = $creatorUser;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiscussionMessageUser>
+     */
+    public function getDiscussionMessageUsers(): Collection
+    {
+        return $this->discussionMessageUsers;
+    }
+
+    public function addDiscussionMessageUser(DiscussionMessageUser $discussionMessageUser): static
+    {
+        if (!$this->discussionMessageUsers->contains($discussionMessageUser)) {
+            $this->discussionMessageUsers->add($discussionMessageUser);
+            $discussionMessageUser->setMessage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscussionMessageUser(DiscussionMessageUser $discussionMessageUser): static
+    {
+        if ($this->discussionMessageUsers->removeElement($discussionMessageUser)) {
+            // set the owning side to null (unless already changed)
+            if ($discussionMessageUser->getMessage() === $this) {
+                $discussionMessageUser->setMessage(null);
+            }
+        }
 
         return $this;
     }

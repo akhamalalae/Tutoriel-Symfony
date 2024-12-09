@@ -1,1 +1,42 @@
-pages: Pages en
+Your profile has been updated: Your profile has been updated
+Please Confirm your Email: Please Confirm your Email
+Your email address has been verified: Your email address has been verified.
+LogicExceptionLogout: This method can be blank - it will be intercepted by the logout key on your firewall.
+First name: First name
+Name: Name
+Email: Email
+Company: Company
+Job: Job
+Date of birth: Date of birth
+New password: New password
+Please enter a password: Please enter a password
+Your password should be at least {{ limit }} characters: Your password should be at least {{ limit }} characters
+Image: Image
+Please upload a valid image: Please upload a valid image
+You should agree to our terms.: You should agree to our terms.
+Error page: Error page
+Error: Error
+Update profile: Update profile
+Update: Update
+Log out: Log out
+Profile: Profile
+Settings & Privacy: Settings & Privacy
+Help Center: Help Center
+Hi! Please confirm your email!: Hi! Please confirm your email!
+Please confirm your email address by clicking the following link: Please confirm your email address by clicking the following link
+Confirm my Email: Confirm my Email
+This link will expire in: This link will expire in
+Cheers!: Cheers!
+Register: Register
+Get started: Get started
+Start creating the best possible user experience for you customers: Start creating the best possible user experience for you customers
+Welcome: Welcome
+Sign in to your account to continue: Sign in to your account to continue
+Logout: Logout
+You are logged in as: You are logged in as
+Please sign in: Please sign in
+Forgot password?: Forgot password?
+Sign in: Sign in
+Don’t have an account: Don’t have an account
+Sign up: Sign up
+

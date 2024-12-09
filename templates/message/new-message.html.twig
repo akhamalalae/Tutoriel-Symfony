@@ -1,0 +1,18 @@
+{% if message is not empty %}
+	<div class="d-flex align-items-start">
+		{% if message.creatorUser.brochureFilename %} 
+			<img src="{{asset('img/avatars/' ~ message.creatorUser.brochureFilename)}}" width="36" height="36" class="rounded-circle me-2" alt="{{ message.creatorUser.name }}">
+		{% else %} 
+			<img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
+		{% endif %}
+		<div class="flex-grow-1">
+			<small class="float-end text-navy">5m ago</small>
+			<strong>{{ message.creatorUser.firstName }} {{ message.creatorUser.name }}</strong><br />
+			<small class="text-muted">Today 7:51 pm</small><br />
+
+			<div class="alert alert-primary" role="alert">
+				{{ message.message }}
+			</div>
+		</div>
+	</div>
+{% endif %}

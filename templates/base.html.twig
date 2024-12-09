@@ -30,7 +30,6 @@
                 {% endif %}
                 <main class="content">
                     <div class="container-fluid p-0">
-                        {% if app.user %} 
                             {% block body %}
                                 {% for message in app.flashes('success') %}
                                     <div class="alert alert-success">
@@ -38,7 +37,6 @@
                                     </div>
                                 {% endfor %}
                             {% endblock %}
-                        {% endif %}
                     </div>
                 </main>
                 {% if app.user %} 

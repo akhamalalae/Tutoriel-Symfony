@@ -17,4 +17,95 @@ fos_elastica:
                         id: ~
                 createdAt:
                     type: date
+        user:
+            persistence:
+                # the driver can be orm, mongodb or phpcr
+                driver: orm
+                model: App\Entity\User
+                provider: ~
+                finder: ~
+            properties:
+                id: ~
+                email: ~
+                name: ~
+                firstName: ~
+                company: ~
+                job: ~
+                listMessages:
+                    type: object
+                    properties:
+                        id: ~
+                        message: ~
+                        objet: ~
+                dateOfBirth:
+                    type: date
+
+        message:
+            persistence:
+                # the driver can be orm, mongodb or phpcr
+                driver: orm
+                model: App\Entity\Message
+                provider: ~
+                finder: ~
+            properties:
+                title: ~
+                description: ~
+                objet: ~
+                message: ~
+                user:
+                    type: object
+                    properties:
+                        id: ~
+                dateCreation:
+                    type: date
+                dateModification:
+                    type: date
+
+        discussion:
+            persistence:
+                # the driver can be orm, mongodb or phpcr
+                driver: orm
+                model: App\Entity\DiscussionMessageUser
+                provider: ~
+                finder: ~
+            properties:
+                id: ~
+                creatorUser:
+                    type: object
+                    properties:
+                        id: ~
+                message:
+                    type: object
+                    properties:
+                        id: ~
+                        objet: ~
+                        message: ~
+                        user:
+                            type: object
+                            properties:
+                                id: ~
+                discussion:
+                    type: object
+                    properties:
+                        id: ~
+                        personOne:
+                            type: object
+                            properties:
+                                id: ~
+                        personTwo:
+                            type: object
+                            properties:
+                                id: ~
+                        creatorUser:
+                            type: object
+                            properties:
+                                id: ~
+                        dateCreation:
+                            type: date
+                        dateModification:
+                            type: date
+                dateCreation:
+                    type: date
+                dateModification:
+                    type: date
         
