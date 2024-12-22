@@ -5,9 +5,9 @@
 
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
-            {% include 'nav-bar/translations.html.twig' %}
             {{ render(controller('App\\Controller\\Navbar\\Messaging\\MessageController::messagesAction')) }}
             {{ render(controller('App\\Controller\\Navbar\\Notification\\NotificationController::notificationAction')) }}
+            {% include 'nav-bar/translations.html.twig' %}
             {{ render(controller('App\\Controller\\Navbar\\Profile\\ProfileController::profileAction')) }}
         </ul>
     </div>

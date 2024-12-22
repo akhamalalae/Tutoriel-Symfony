@@ -1,5 +1,6 @@
 parameters:
     directory: '%kernel.project_dir%/public/'
+    key_secrets: '%env(KEY_SECRETS)%'
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -31,4 +32,9 @@ services:
     App\Services\File\FileUploader:
         arguments:
             $targetDirectory: '%directory%'
+
+    App\EventListener\DatabaseActivitySubscriber:
+        tags:
+            - { name: 'doctrine.event_subscriber', connection: 'default' }
+    
     

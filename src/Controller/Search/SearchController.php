@@ -54,13 +54,9 @@ class SearchController extends AbstractController
                 $boolQuery->addFilter($range);
             }
 
-            dump($boolQuery);
-
             $results = $this->finder->createPaginatorAdapter($boolQuery);
 
-            dump($results);
             $pagination = $this->paginator->paginate($results, $page, 10);
-            dump($pagination);
         }
 
         return $this->render('search/index.html.twig', [

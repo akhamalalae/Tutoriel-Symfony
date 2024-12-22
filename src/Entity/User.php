@@ -71,6 +71,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: DiscussionMessageUser::class)]
     private Collection $discussionMessageUsers;
 
+    #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: FileMessage::class)]
+    private Collection $fileMessages;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -81,6 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->discussionsCreatorUser = new ArrayCollection();
         $this->discussionsMdifierUser = new ArrayCollection();
         $this->discussionMessageUsers = new ArrayCollection();
+        $this->fileMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -411,6 +415,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($discussionMessageUser->getCreatorUser() === $this) {
                 $discussionMessageUser->setCreatorUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FileMessage>
+     */
+    public function getFileMessages(): Collection
+    {
+        return $this->fileMessages;
+    }
+
+    public function addFileMessage(FileMessage $fileMessage): static
+    {
+        if (!$this->fileMessages->contains($fileMessage)) {
+            $this->fileMessages->add($fileMessage);
+            $fileMessage->setCreatorUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileMessage(FileMessage $fileMessage): static
+    {
+        if ($this->fileMessages->removeElement($fileMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($fileMessage->getCreatorUser() === $this) {
+                $fileMessage->setCreatorUser(null);
             }
         }
 

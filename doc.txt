@@ -12,4 +12,8 @@ php bin/console doctrine:migrations:migrate
 
 php bin/console fos:elastica:populate
 
-DiscussionMessageUser
+git add .
+git commit -a -m "commit" (do not need commit message either)
+git push
+
+be careful I am a secret keybe careful I am a secrebe careful i am a secret key

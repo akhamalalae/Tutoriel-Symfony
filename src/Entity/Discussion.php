@@ -40,6 +40,12 @@ class Discussion
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: DiscussionMessageUser::class)]
     private Collection $discussionMessageUsers;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $personOneNumberUnreadMessages = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $personTwoNumberUnreadMessages = null;
+
     public function __construct()
     {
         $this->discussionMessageUsers = new ArrayCollection();
@@ -148,6 +154,30 @@ class Discussion
                 $discussionMessageUser->setDiscussion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPersonOneNumberUnreadMessages(): ?int
+    {
+        return $this->personOneNumberUnreadMessages;
+    }
+
+    public function setPersonOneNumberUnreadMessages(?int $personOneNumberUnreadMessages): static
+    {
+        $this->personOneNumberUnreadMessages = $personOneNumberUnreadMessages;
+
+        return $this;
+    }
+
+    public function getPersonTwoNumberUnreadMessages(): ?int
+    {
+        return $this->personTwoNumberUnreadMessages;
+    }
+
+    public function setPersonTwoNumberUnreadMessages(?int $personTwoNumberUnreadMessages): static
+    {
+        $this->personTwoNumberUnreadMessages = $personTwoNumberUnreadMessages;
 
         return $this;
     }

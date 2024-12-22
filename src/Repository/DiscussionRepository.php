@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Discussion;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Discussion>
@@ -24,17 +26,35 @@ class DiscussionRepository extends ServiceEntityRepository
     /**
     * @return Discussion[] Returns an array of Discussion objects
     */
-    public function findDiscussion($user): array
+    public function findDiscussion(User $user): array
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.personOne = :user')
             ->orWhere('d.personTwo = :user')
-            ->setParameter('user', $user->getId())
-            ->orderBy('d.dateCreation', 'ASC')
+            ->setParameter('user', $user)
+            ->orderBy('d.dateCreation', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+    }
+
+    public function messagesNavBar(User $user) : array
+    {
+        return $this->createQueryBuilder('discussion')
+            ->andWhere('
+                :user = discussion.personOne
+                AND
+                discussion.personTwoNumberUnreadMessages IS NOT NULL
+            ')
+            ->orWhere('
+                :user = discussion.personTwo
+                AND
+                discussion.personOneNumberUnreadMessages IS NOT NULL
+            ')
+            ->setParameter('user', $user->getId())
+            ->orderBy('discussion.dateCreation', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

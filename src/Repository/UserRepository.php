@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -38,6 +39,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+    * @return QueryBuilder Returns an QueryBuilder of Discussion objects
+    */
+    public function queryFindUsersDiscussionForm(User $user): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+        //->leftJoin('u.discussionsPersonOne', 'personOne')
+        ->andwhere('u != :user')
+        ->setParameter('user', $user);
     }
 
 //    /**

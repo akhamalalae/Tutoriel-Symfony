@@ -88,6 +88,8 @@ fos_elastica:
                     type: object
                     properties:
                         id: ~
+                        personOneNumberUnreadMessages: ~
+                        personTwoNumberUnreadMessages: ~
                         personOne:
                             type: object
                             properties:

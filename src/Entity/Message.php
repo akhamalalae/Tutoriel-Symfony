@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\EncryptDecrypt\EncryptDecrypt;
+
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-class Message
+class Message extends EncryptDecrypt
 {
     const MESSAGE_ADDED_SUCCESSFULLY = 'MESSAGE_ADDED_SUCCESSFULLY';
     const MESSAGE_INVALID_FORM = 'MESSAGE_INVALID_FORM';
@@ -19,23 +21,11 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $title = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $description = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCreation = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateModification = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $objet = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $message = null;
 
     #[ORM\ManyToOne(inversedBy: 'messagesCreatorUser')]
     private ?User $creatorUser = null;
@@ -43,38 +33,21 @@ class Message
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: DiscussionMessageUser::class)]
     private Collection $discussionMessageUsers;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $message = null;
+
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: FileMessage::class)]
+    private Collection $fileMessages;
+
     public function __construct()
     {
         $this->discussionMessageUsers = new ArrayCollection();
+        $this->fileMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(?string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
     }
 
     public function getDateCreation(): ?\DateTimeInterface
@@ -101,26 +74,16 @@ class Message
         return $this;
     }
 
-    public function getObjet(): ?string
-    {
-        return $this->objet;
-    }
-
-    public function setObjet(string $objet): static
-    {
-        $this->objet = $objet;
-
-        return $this;
-    }
-
     public function getMessage(): ?string
     {
-        return $this->message;
+        $message = $this->decrypt($this->message);
+
+        return $message;
     }
 
     public function setMessage(string $message): static
     {
-        $this->message = $message;
+        $this->message = $this->encrypt($message);
 
         return $this;
     }
@@ -161,6 +124,36 @@ class Message
             // set the owning side to null (unless already changed)
             if ($discussionMessageUser->getMessage() === $this) {
                 $discussionMessageUser->setMessage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FileMessage>
+     */
+    public function getFileMessages(): Collection
+    {
+        return $this->fileMessages;
+    }
+
+    public function addFileMessage(FileMessage $fileMessage): static
+    {
+        if (!$this->fileMessages->contains($fileMessage)) {
+            $this->fileMessages->add($fileMessage);
+            $fileMessage->setMessage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileMessage(FileMessage $fileMessage): static
+    {
+        if ($this->fileMessages->removeElement($fileMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($fileMessage->getMessage() === $this) {
+                $fileMessage->setMessage(null);
             }
         }
 

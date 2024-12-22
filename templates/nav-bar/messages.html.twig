@@ -1,67 +1,49 @@
- <li class="nav-item dropdown">
+<li class="nav-item dropdown">
     <a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
         <div class="position-relative">
             <i class="align-middle" data-feather="message-square"></i>
+            {% if messages is not empty %}
+                <span class="indicator">{{ numbreMessages }}</span>
+            {% endif %}
         </div>
     </a>
     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
         <div class="dropdown-menu-header">
             <div class="position-relative">
-                4 New Messages
+                {{ numbreMessages }} {{ 'New Messages'|trans }}
             </div>
         </div>
         <div class="list-group">
-            <a href="#" class="list-group-item">
-                <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                        <img src="{{asset('img/avatars/avatar-5.jpg')}}" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
-                    </div>
-                    <div class="col-10 ps-2">
-                        <div class="text-dark">Vanessa Tucker</div>
-                        <div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
-                        <div class="text-muted small mt-1">15m ago</div>
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="list-group-item">
-                <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                        <img src="{{asset('img/avatars/avatar-2.jpg')}}" class="avatar img-fluid rounded-circle" alt="William Harris">
-                    </div>
-                    <div class="col-10 ps-2">
-                        <div class="text-dark">William Harris</div>
-                        <div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
-                        <div class="text-muted small mt-1">2h ago</div>
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="list-group-item">
-                <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                        <img src="{{asset('img/avatars/avatar-4.jpg')}}" class="avatar img-fluid rounded-circle" alt="Christina Mason">
-                    </div>
-                    <div class="col-10 ps-2">
-                        <div class="text-dark">Christina Mason</div>
-                        <div class="text-muted small mt-1">Pellentesque auctor neque nec urna.</div>
-                        <div class="text-muted small mt-1">4h ago</div>
+            {% for item in messages %}
+                {% if item.discussion.personOne != app.user %}  
+                    {% set newItem = item.discussion.personOne  %} 
+                {% endif %}
+
+                {% if item.discussion.personTwo != app.user %}  
+                    {% set newItem = item.discussion.personTwo  %} 
+                {% endif %}
+
+                <div class="list-group-item">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-2">
+                            {% if newItem.brochureFilename %} 
+                                <img src="{{asset('img/avatars/' ~ newItem.brochureFilename)}}" class="avatar img-fluid rounded-circle" alt="{{ newItem.name }}">
+                            {% else %} 
+                                <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded-circle" alt="{{ newItem.name }}">
+                            {% endif %}
+                        </div>
+
+                        <div class="col-10 ps-2">
+                            <div class="text-dark">{{ newItem.firstName }} {{ newItem.name }}</div>
+                            <div class="text-muted small mt-1">{{ item.message.message| raw }}</div>
+                            <div class="text-muted small mt-1">{{ item.dateCreation|date("F j, Y : H:i") }}</div>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <a href="#" class="list-group-item">
-                <div class="row g-0 align-items-center">
-                    <div class="col-2">
-                        <img src="{{asset('img/avatars/avatar-3.jpg')}}" class="avatar img-fluid rounded-circle" alt="Sharon Lessman">
-                    </div>
-                    <div class="col-10 ps-2">
-                        <div class="text-dark">Sharon Lessman</div>
-                        <div class="text-muted small mt-1">Aenean tellus metus, bibendum sed, posuere ac, mattis non.</div>
-                        <div class="text-muted small mt-1">5h ago</div>
-                    </div>
-                </div>
-            </a>
+            {% endfor %}
         </div>
         <div class="dropdown-menu-footer">
-            <a href="#" class="text-muted">Show all messages</a>
+            <a href="{{ path('app_discussion') }}" class="text-muted">Show all messages</a>
         </div>
     </div>
 </li>

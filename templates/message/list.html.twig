@@ -6,15 +6,41 @@
 			{% else %} 
 				<img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
 			{% endif %}
+			
 			<div class="flex-grow-1">
 				<small class="float-end text-navy">{{ item.message.dateCreation|date("F j, Y") }} </small>
 				<strong>{{ item.message.creatorUser.firstName }} {{ item.message.creatorUser.name }}</strong><br />
 				<small class="text-muted">{{ item.message.dateCreation|date("H:i") }}</small><br />
+				
+				<div role="alert"
+					{% if item.message.creatorUser == app.user %} 
+						class="alert alert-primary"
+					{% else %} 
+						class="alert alert-success"
+					{% endif %}
+					>
+					{{ item.message.message| raw  }}
 
-				<div class="alert alert-primary" role="alert">
-					{{ item.message.message }}
+					{% if item.message.fileMessages is not empty %}
+						{% for file in item.message.fileMessages %}
+							<span class="badge rounded-pill bg-warning text-dark">
+								<a download href="{{asset('files/message/' ~ file.name)}}">
+									{{ file.name }}
+								</a>
+							</span>
+						{% endfor %}
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	{% endfor %}
 {% endif %}
+
+<div id="new_message"></div>
+
+{% include 'pagination/message_pagination.html.twig' with {
+		'numbrePagesPagination': numbrePagesPagination,
+		'page': page,
+		'discussion': discussion
+	}
+%}

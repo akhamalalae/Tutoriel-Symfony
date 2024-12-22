@@ -2,13 +2,14 @@
 
 namespace App\Form\Type\Message;
 
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Security;
+use App\Entity\User;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class DiscussionFormType extends AbstractType
 {
@@ -27,17 +28,20 @@ class DiscussionFormType extends AbstractType
                 'choice_label' => 'name',
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('u')
-                    //->innerJoin('u.user', 'user')
-                    ->where('u.id != :user')
-                    ->setParameter('user', $user)
-                    ;
+                    //->leftJoin('u.discussionsPersonOne', 'personOne')
+                    ->andWhere('u != :user')
+                    ->setParameter('user', $user);
                 },
             ))
+            ->add('fieldDiscussion', CKEditorType::class, [
+                'mapped' => false,
+                'config_name' => 'default'
+            ])
             ->add('save', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ],
-                'label' => 'Go'
+                'label' => 'Send'
             ]);
     }
 }
