@@ -1,0 +1,11 @@
+{% if discussions is not empty %}
+	{% for item in discussions %}
+                {% include 'discussion/discussion.html.twig' with {'item': item} %}
+	{% endfor %}
+{% endif %}
+
+{% include 'pagination/discussion/discussion_pagination.html.twig' with {
+        'numbrePagesPagination': numbrePagesPagination,
+        'page': page
+    }
+%}

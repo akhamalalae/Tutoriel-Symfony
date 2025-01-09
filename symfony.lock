@@ -38,15 +38,6 @@
             "./migrations/.gitignore"
         ]
     },
-    "easycorp/easyadmin-bundle": {
-        "version": "4.8",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "3.0",
-            "ref": "b131e6cbfe1b898a508987851963fff485986285"
-        }
-    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.5",
         "recipe": {
@@ -69,6 +60,18 @@
         },
         "files": [
             "config/packages/fos_elastica.yaml"
+        ]
+    },
+    "friendsofsymfony/jsrouting-bundle": {
+        "version": "3.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.3",
+            "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
+        },
+        "files": [
+            "config/routes/fos_js_routing.yaml"
         ]
     },
     "knplabs/knp-paginator-bundle": {
@@ -282,18 +285,6 @@
         "files": [
             "./config/packages/twig.yaml",
             "./templates/base.html.twig"
-        ]
-    },
-    "symfony/uid": {
-        "version": "6.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "6.2",
-            "ref": "d294ad4add3e15d7eb1bae0221588ca89b38e558"
-        },
-        "files": [
-            "config/packages/uid.yaml"
         ]
     },
     "symfony/ux-turbo": {

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page Introuvable{% endblock %}
+
+{% block body %}
+
+<h1 class="h3 mb-3">{{ 'Error page'|trans }}</h1>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-center vh-100">
+                    <div class="text-center">
+                        <h1 class="display-1 fw-bold">404</h1>
+                        <p class="fs-3"> <span class="text-danger">{{ 'Opps!'|trans }}</span>{{ 'Page not found.'|trans }}</p>
+                        <p class="lead">
+                            {{ 'The page you’re looking for doesn’t exist.'|trans }}
+                        </p>
+                        <a href="{{ path('app_home') }}" class="btn btn-primary">{{ 'Back to home'|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

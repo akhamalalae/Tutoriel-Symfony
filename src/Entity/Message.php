@@ -7,14 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\EncryptDecrypt\EncryptDecrypt;
-
-
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-class Message extends EncryptDecrypt
+class Message
 {
-    const MESSAGE_ADDED_SUCCESSFULLY = 'MESSAGE_ADDED_SUCCESSFULLY';
-    const MESSAGE_INVALID_FORM = 'MESSAGE_INVALID_FORM';
+    const ADDED_SUCCESSFULLY = 'ADDED_SUCCESSFULLY';
+    const INVALID_FORM = 'INVALID_FORM';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -38,6 +35,8 @@ class Message extends EncryptDecrypt
 
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: FileMessage::class)]
     private Collection $fileMessages;
+
+    private ?string $sensitiveDataMessage = null;
 
     public function __construct()
     {
@@ -76,16 +75,26 @@ class Message extends EncryptDecrypt
 
     public function getMessage(): ?string
     {
-        $message = $this->decrypt($this->message);
-
-        return $message;
+        return $this->message;
     }
 
     public function setMessage(string $message): static
     {
-        $this->message = $this->encrypt($message);
+        $this->message = $message;
 
         return $this;
+    }
+
+    public function setSensitiveDataMessage($sensitiveDataMessage): static
+    {
+        $this->sensitiveDataMessage = $sensitiveDataMessage;
+
+        return $this;
+    }
+
+    public function getSensitiveDataMessage(): ?string
+    {
+        return $this->sensitiveDataMessage;
     }
 
     public function getCreatorUser(): ?User

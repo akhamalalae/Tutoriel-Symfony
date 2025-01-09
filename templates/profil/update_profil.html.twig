@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="col-md-4 col-xl-3">
+		<div class="card mb-3">
+			<div class="card-header">
+				<h5 class="card-title mb-0">{{ 'Profile Details'|trans }}</h5>
+			</div>
+			{% include 'profil/profil_info.html.twig' with {'item': app.user} %}
+		</div>
+	</div>
+
+	<div class="col-md-8 col-xl-9">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title mb-0">{{ 'Update profile'|trans }}</h5>
+			</div>
+			<div class="card-body h-100">
+
+				{% include 'flash_messages/flash_messages_verify_email_error.html.twig' %}
+
+				{{ form_errors(updateForm) }}
+
+				{{ form_start(updateForm) }}
+					{{ form_row(updateForm.image) }}
+					{{ form_row(updateForm.firstName) }}
+					{{ form_row(updateForm.name) }}
+					{{ form_row(updateForm.email) }}
+					{{ form_row(updateForm.company) }}
+					{{ form_row(updateForm.job) }}
+					{{ form_row(updateForm.dateOfBirth) }}
+					{{ form_row(updateForm.plainPassword, {
+						label: 'Password'
+					}) }}
+
+					{{ form_row(updateForm.street) }}
+					<div class="list-group" id="autocomplete-results"></div>
+					</br>
+
+					{{ form_row(updateForm.city) }}
+					{{ form_row(updateForm.postal_code) }}
+					{{ form_row(updateForm.country) }}
+
+					{{ form_row(updateForm.twitter) }}
+					{{ form_row(updateForm.facebook) }}
+					{{ form_row(updateForm.instagram) }}
+					{{ form_row(updateForm.linkedIn) }}
+
+					{{ form_label(updateForm.skills) }}
+					<a data-bs-toggle="collapse" 
+						data-bs-target="#collapseSkills" 
+						aria-expanded="false" 
+						aria-controls="collapseSkills"
+					>
+						<i class="fa fa-info-circle" style="font-size:20px;color:black;"></i>
+					</a>
+					<div class="collapse" id="collapseSkills">
+						<div class="alert alert-primary" role="alert">
+							{{ "Make sure to separate your skills with the symbol ','"|trans }}
+						</div>
+					</div>
+					{{ form_widget(updateForm.skills) }}
+
+					<hr />
+					<div class="text-end mt-3">
+						<button type="submit" class="btn btn-lg btn-primary">{{ 'Update'|trans }}</button>
+					</div>
+				{{ form_end(updateForm) }}
+			</div>
+		</div>
+	</div>
+</div>
+
+<h1 class="h3 mb-3"></h1>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('profil') }}
+{% endblock %}

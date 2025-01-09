@@ -1,8 +1,37 @@
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title mb-0">{{ 'New message'|trans }}</h5>
-    </div>
-    <div class="card-body h-100 align-items-start">
-        {{ form(formMessage, { attr: {'id': 'form_message' } }) }}
-    </div>
+<div class="d-flex align-items-start">
+	{% if item.message.creatorUser.brochureFilename %} 
+		{% set subDirectory = 'img/avatars/'  %} 
+		<img 
+            src="data:{{ item.message.creatorUser.mimeType }};base64,{{ item.message.creatorUser.brochureFilename|decrypt(subDirectory) }}" 
+			width="36" height="36" 
+			class="rounded-circle me-2" 
+			alt="{{ item.message.creatorUser.name }}"
+		>
+	{% else %} 
+		<img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
+	{% endif %}
+	
+	<div class="flex-grow-1">
+		<small class="float-end text-navy">{{ item.message.dateCreation|date("F j, Y") }} </small>
+		<strong>{{ item.message.creatorUser.firstName }} {{ item.message.creatorUser.name }}</strong><br />
+		<small class="text-muted">{{ item.message.dateCreation|date("H:i") }}</small><br />
+		
+		<div role="alert" class="alert alert-secondary">
+			{{ item.message.sensitiveDataMessage| raw  }} 
+			<br/>
+			{% if item.message.fileMessages is not empty %}
+				<hr class="my-0" />
+				<br/>
+				{% for file in item.message.fileMessages %}
+					{% set subDirectory = 'files/message/'  %} 
+					<span class="badge rounded-pill bg-primary text-dark">
+						<a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
+							{% set originalName = file.sensitiveDataOriginalName|split('.')[0] %}
+							{{ originalName }}
+						</a>
+					</span>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
 </div>

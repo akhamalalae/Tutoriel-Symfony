@@ -1,0 +1,16 @@
+{% block flash_messages %}
+    {% for label, messages in app.flashes %}
+        {% set bootstrapClass = {
+            'success': 'success',
+            'error': 'danger',
+            'info': 'info',
+            'warning': 'warning'
+        }[label] | default('info') %}
+
+        <div class="alert alert-{{ bootstrapClass }}" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}

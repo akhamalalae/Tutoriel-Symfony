@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -22,12 +21,6 @@ class MessageFormType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'required' => false
-            ])
-            ->add('field', CKEditorType::class, [
-                'label' => false,
-                'required' => true,
-                'mapped' => false,
-                'config_name' => 'default'
             ])
             ->add('files', FileType::class, [
                 'label' => false,

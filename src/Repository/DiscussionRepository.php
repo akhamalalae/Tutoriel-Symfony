@@ -28,14 +28,31 @@ class DiscussionRepository extends ServiceEntityRepository
     */
     public function findDiscussion(User $user): array
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.personOne = :user')
+        $discussions = $this->createQueryBuilder('d');
+
+        $activeDiscussions = $this->messagesNavBar($user);
+
+        if ($activeDiscussions) {
+            $array = array();
+    
+            foreach ($activeDiscussions as $item) {
+                array_push($array, $item->getId());
+            }
+
+            $discussions->andWhere('d.id NOT IN (:array)')
+            ->setParameter('array', $array);
+        }
+        
+        $discussions->andWhere('d.personOne = :user')
             ->orWhere('d.personTwo = :user')
             ->setParameter('user', $user)
             ->orderBy('d.dateCreation', 'DESC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
+        ;
+
+        return [
+            "discussions" => array_merge($activeDiscussions, $discussions->getQuery()->getResult()),
+            "countActiveDiscussions" => count($activeDiscussions)
+        ];
     }
 
     public function messagesNavBar(User $user) : array

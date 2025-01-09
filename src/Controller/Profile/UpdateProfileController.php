@@ -5,7 +5,6 @@ namespace App\Controller\Profile;
 use App\Entity\User;
 use App\Services\File\FileUploader;
 use App\Repository\UserRepository;
-use App\Form\Type\Profile\UpdateProfileFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -18,10 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Security\Core\Security;
+use App\Form\Type\Registration\RegistrationFormType;
 
 class UpdateProfileController extends AbstractController
 {
     const DIRECTORY_AVATARS = 'img/avatars'; 
+
     private User $currentLoggedUser;
 
     public function __construct(Security $security)
@@ -29,7 +30,7 @@ class UpdateProfileController extends AbstractController
         $this->currentLoggedUser = $security->getUser();
     }
 
-    #[Route('/update/profile', name: 'app_update_profile')]
+    #[Route('/user/update/profil', name: 'app_update_profil')]
     public function update(
         Request $request,
         FileUploader $fileUploader,
@@ -39,7 +40,10 @@ class UpdateProfileController extends AbstractController
     {
         $user = $this->currentLoggedUser;
         
-        $form = $this->createForm(UpdateProfileFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, $user, [
+            'view' => 'update',
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,8 +57,10 @@ class UpdateProfileController extends AbstractController
 
             $file = $form->get('image')->getData();
             if ($file) {
-                $fileName = $fileUploader->upload($file, self::DIRECTORY_AVATARS);
+                $mimeType = $file->getMimeType();
+                $fileName = $fileUploader->upload($file, self::DIRECTORY_AVATARS)['name'];
                 $user->setBrochureFilename($fileName);
+                $user->setMimeType($mimeType);
             }
 
             $entityManager->persist($user);
@@ -62,11 +68,10 @@ class UpdateProfileController extends AbstractController
             
             $this->addFlash('success', $translator->trans('Your profile has been updated'));
 
-            //return $this->redirectToRoute('app_update_profile', array('id' => $id));
-            return $this->redirectToRoute('app_update_profile');
+            return $this->redirectToRoute('app_update_profil');
         }
 
-        return $this->render('profile/update_profile.html.twig', [
+        return $this->render('profil/update_profil.html.twig', [
             'updateForm' => $form->createView(),
         ]);
     }

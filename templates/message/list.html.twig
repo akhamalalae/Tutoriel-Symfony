@@ -1,46 +1,40 @@
-{% if messages is not empty %}
-	{% for item in messages %}
-		<div class="d-flex align-items-start">
-			{% if item.message.creatorUser.brochureFilename %} 
-				<img src="{{asset('img/avatars/' ~ item.message.creatorUser.brochureFilename)}}" width="36" height="36" class="rounded-circle me-2" alt="{{ item.message.creatorUser.name }}">
-			{% else %} 
-				<img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
-			{% endif %}
-			
-			<div class="flex-grow-1">
-				<small class="float-end text-navy">{{ item.message.dateCreation|date("F j, Y") }} </small>
-				<strong>{{ item.message.creatorUser.firstName }} {{ item.message.creatorUser.name }}</strong><br />
-				<small class="text-muted">{{ item.message.dateCreation|date("H:i") }}</small><br />
-				
-				<div role="alert"
-					{% if item.message.creatorUser == app.user %} 
-						class="alert alert-primary"
-					{% else %} 
-						class="alert alert-success"
-					{% endif %}
+<div class="card">
+	<div class="card-header">
+		<div class="flex-grow-1">
+			<small class="float-end text-navy">
+				<a>
+					<i class="fa fa-search-plus" 
+						style="font-size:20px;color:#0080FF;"
+						onclick="searchWithCriteriaClick(event)" 
+						data-view="message"
+						data-bs-toggle="tooltip" 
+						data-bs-placement="top" 
+						title="Search message"
+						data-idDiscussion="{{ discussion.id }}" 
+						data-page="1"
 					>
-					{{ item.message.message| raw  }}
-
-					{% if item.message.fileMessages is not empty %}
-						{% for file in item.message.fileMessages %}
-							<span class="badge rounded-pill bg-warning text-dark">
-								<a download href="{{asset('files/message/' ~ file.name)}}">
-									{{ file.name }}
-								</a>
-							</span>
-						{% endfor %}
-					{% endif %}
-				</div>
-			</div>
+					</i>
+				</a>
+			</small>
+			<h5 class="card-title mb-0">
+				{{ 'Messages'|trans }}
+			</h5><br />
 		</div>
-	{% endfor %}
-{% endif %}
+	</div>
+	<div class="card-body h-100">
+		{% if messages is not empty %}
+			{% for item in messages %}
+				{% include 'message/message.html.twig' with {'item': item} %}
+			{% endfor %}
+		{% endif %}
 
-<div id="new_message"></div>
+		<div id="new_message"></div>
 
-{% include 'pagination/message_pagination.html.twig' with {
-		'numbrePagesPagination': numbrePagesPagination,
-		'page': page,
-		'discussion': discussion
-	}
-%}
+		{% include 'pagination/message/message_pagination.html.twig' with {
+				'numbrePagesPagination': numbrePagesPagination,
+				'page': page,
+				'discussion': discussion
+			}
+		%}
+	</div>
+</div>

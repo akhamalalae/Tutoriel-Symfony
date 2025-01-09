@@ -43,6 +43,14 @@ services:
       - caddy_config:/config
     tty: true
 
+  maildev:
+    image: maildev/maildev
+    container_name: maildev_docker_symfony
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "8081:80"
+    restart: always
+
 volumes:
   caddy_data:
   caddy_config:

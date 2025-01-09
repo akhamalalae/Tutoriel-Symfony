@@ -19,7 +19,7 @@ Error: Erreur
 Update profile: Mettre à jour le profil
 Update: Mise à jour
 Log out: Se déconnecter
-Profile: Profil
+Profil: Profile
 Settings & Privacy: Paramètres et confidentialité
 Help Center: Centre d'aide
 Hi! Please confirm your email!: Salut! Veuillez confirmer votre email !
@@ -45,8 +45,44 @@ Next: Suivante
 New discussion: Nouvelle discussion
 Discussions: Discussion
 Messages: Messages
+Message: Message
 New message: Nouveau message
 New Messages: Nouveau messages
 French: Français
 English: Anglais
+Discussion: Discussion
+Created This Month: Créé ce mois-ci
+Yes: Oui
+No: Non
+Search: Chercher
+Search Message: Chercher les messages
+Search Discussion: Chercher les discussions
+Choose saved search: Choisissez une recherche enregistrée
+Name file: Nom du fichier
+Description: Description
+Save Search: Enregistrer la recherche
+FirstName: Prénom
+
+Back to home: Retour à l'accueil
+The requested page could not be found: La page demandée est introuvable
+The page you’re looking for doesn’t exist.: La page que vous recherchez n’existe pas.
+Opps!: Oups !
+Page not found.: Page introuvable.
+
+Skills: Compétences
+About: À propos
+Works at: Travaille à
+From: Depuis
+Elsewhere: Autre part
+Profile Details: Détails du profil
+Make sure to separate your skills with the symbol ',': Veillez a séparer vos compétence avec le symbole ','
+Home Page: Page d'accueil
+App: App
+Forgotten password: Mot de passe oublié
+Reset Password: Réinitialiser le mot de passe
+Reset: Réinitialiser
+Messaging: Messagerie
+
+Dashboard: Tableau de bord
+
 

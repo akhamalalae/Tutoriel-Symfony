@@ -1,0 +1,18 @@
+<div class="modal fade" id="addDiscussion" tabindex="-1" aria-labelledby="addDiscussionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addDiscussionLabel">{{ 'New discussion'|trans }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ form_start(formDiscussion, { attr: {'id': 'form_discussion' } }) }}
+		    {{ form_row(formDiscussion.personTwo) }}
+      </div>
+      <div class="modal-footer">
+        {{ form_row(formDiscussion.save) }}
+		    {{ form_end(formDiscussion) }}
+      </div>
+    </div>
+  </div>
+</div>

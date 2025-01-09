@@ -13,20 +13,18 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Controller\Search\SearchController:
+    App\Controller\Search\Message\SearchMessages:
         tags:
             - controller_service_arguments
         public: true
         arguments:
-            - '@knp_paginator'
-            - '@fos_elastica.finder.course'
+            - '@fos_elastica.finder.message'
 
-    App\Controller\Search\SearchMessages:
+    App\Controller\Search\Discussion\SearchDiscussions:
         tags:
             - controller_service_arguments
         public: true
         arguments:
-            - '@knp_paginator'
             - '@fos_elastica.finder.discussion'
 
     App\Services\File\FileUploader:
@@ -36,5 +34,7 @@ services:
     App\EventListener\DatabaseActivitySubscriber:
         tags:
             - { name: 'doctrine.event_subscriber', connection: 'default' }
-    
-    
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

@@ -9,9 +9,7 @@ use App\Entity\Discussion;
 
 class MessageController extends AbstractController
 {
-    public function __construct(
-        private EntityManagerInterface $em, 
-        private Security $security) 
+    public function __construct(private EntityManagerInterface $em, private Security $security) 
     {}
 
     public function messagesAction()

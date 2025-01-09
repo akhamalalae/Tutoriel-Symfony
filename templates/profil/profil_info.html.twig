@@ -1,0 +1,56 @@
+
+<div class="card-body text-center">
+	{% if item.brochureFilename %} 
+		{% set subDirectory = 'img/avatars/'  %} 
+		<img
+			src="data:{{ item.mimeType }};base64,{{ item.brochureFilename|decrypt(subDirectory) }}" 
+			class="img-fluid rounded-circle mb-2" 
+			width="128" height="128"
+			alt="{{ item.name }}"
+		>
+	{% else %}
+		<img src="{{asset('img/avatars/avatar.jpg')}}" class="img-fluid rounded-circle mb-2" alt="{{ item.name }}" width="128" height="128">
+	{% endif %}
+	<h5 class="card-title mb-0">{{ item.firstName }} {{ item.name }}</h5>
+	<div class="text-muted mb-2">{{ item.job }}</div>
+</div>
+<hr class="my-0" />
+<div class="card-body">
+	<h5 class="h6 card-title">{{ 'Skills'|trans }}</h5>
+	{% set skills = item.skills|split(',') %}
+
+	{% for item in skills %}
+        <a href="#" class="badge bg-primary me-1 my-1">{{ item }}</a>
+	{% endfor %}
+</div>
+<hr class="my-0" />
+<div class="card-body">
+	<h5 class="h6 card-title">{{ 'About'|trans }}</h5>
+	<ul class="list-unstyled mb-0">
+		<li class="mb-1">
+			<span data-feather="home" class="feather-sm me-1"></span> 
+			{{ 'Lives in'|trans }} {{ item.city }} {{ item.street }} {{ item.getPostalCode }} 
+		</li>
+
+		<li class="mb-1">
+			<span data-feather="briefcase" class="feather-sm me-1"></span> 
+			{{ 'Works at'|trans }} {{ item.company }} 
+		</li>
+
+		<li class="mb-1">
+			<span data-feather="map-pin" class="feather-sm me-1"></span> 
+			{{ 'From'|trans }} {{ item.country }}
+		</li>
+	</ul>
+</div>
+<hr class="my-0" />
+<div class="card-body">
+	<h5 class="h6 card-title">{{ 'Elsewhere'|trans }}</h5>
+	<ul class="list-unstyled mb-0">
+		<li class="mb-1"><a href="#">{{ item.email }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.twitter }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.facebook }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.instagram }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.linkedIn }}</a></li>
+	</ul>
+</div>

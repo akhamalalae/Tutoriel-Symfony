@@ -12,7 +12,7 @@ class TranslationController extends AbstractController
     public function translationAction(Request $request)
     {
         $uri = $request->attributes->get('_route');
-        dump($uri);
+
         return $this->render('nav-bar/translations.html.twig', [
             //'currentPath' => $uri,
         ]);

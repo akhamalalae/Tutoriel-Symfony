@@ -27,7 +27,8 @@
                     <div class="row g-0 align-items-center">
                         <div class="col-2">
                             {% if newItem.brochureFilename %} 
-                                <img src="{{asset('img/avatars/' ~ newItem.brochureFilename)}}" class="avatar img-fluid rounded-circle" alt="{{ newItem.name }}">
+                                {% set subDirectory = 'img/avatars/'  %} 
+                                <img src="data:{{ newItem.mimeType }};base64,{{ newItem.brochureFilename|decrypt(subDirectory) }}" class="avatar img-fluid rounded-circle" alt="{{ newItem.name }}">
                             {% else %} 
                                 <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded-circle" alt="{{ newItem.name }}">
                             {% endif %}
@@ -35,7 +36,11 @@
 
                         <div class="col-10 ps-2">
                             <div class="text-dark">{{ newItem.firstName }} {{ newItem.name }}</div>
-                            <div class="text-muted small mt-1">{{ item.message.message| raw }}</div>
+                            <div class="text-muted small mt-1">
+                                {% if item.message.message %} 
+                                    {{ item.message.sensitiveDataMessage }}
+                                {% endif %}
+                            </div>
                             <div class="text-muted small mt-1">{{ item.dateCreation|date("F j, Y : H:i") }}</div>
                         </div>
                     </div>

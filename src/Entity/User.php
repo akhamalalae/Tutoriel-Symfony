@@ -20,7 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 180, unique: true, nullable: false)]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -35,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $job = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -74,6 +74,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: FileMessage::class)]
     private Collection $fileMessages;
 
+    #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: SearchDiscussion::class)]
+    private Collection $searchDiscussions;
+
+    #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: SearchMessage::class)]
+    private Collection $searchMessages;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mimeType = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $street = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $postal_code = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $country = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $twitter = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $facebook = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $instagram = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $linkedIn = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $skills = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $resetToken = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $resetTokenExpiresAt = null;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -85,6 +127,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->discussionsMdifierUser = new ArrayCollection();
         $this->discussionMessageUsers = new ArrayCollection();
         $this->fileMessages = new ArrayCollection();
+        $this->searchDiscussions = new ArrayCollection();
+        $this->searchMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -447,6 +491,210 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $fileMessage->setCreatorUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SearchDiscussion>
+     */
+    public function getSearchDiscussions(): Collection
+    {
+        return $this->searchDiscussions;
+    }
+
+    public function addSearchDiscussion(SearchDiscussion $searchDiscussion): static
+    {
+        if (!$this->searchDiscussions->contains($searchDiscussion)) {
+            $this->searchDiscussions->add($searchDiscussion);
+            $searchDiscussion->setCreatorUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSearchDiscussion(SearchDiscussion $searchDiscussion): static
+    {
+        if ($this->searchDiscussions->removeElement($searchDiscussion)) {
+            // set the owning side to null (unless already changed)
+            if ($searchDiscussion->getCreatorUser() === $this) {
+                $searchDiscussion->setCreatorUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SearchMessage>
+     */
+    public function getSearchMessages(): Collection
+    {
+        return $this->searchMessages;
+    }
+
+    public function addSearchMessage(SearchMessage $searchMessage): static
+    {
+        if (!$this->searchMessages->contains($searchMessage)) {
+            $this->searchMessages->add($searchMessage);
+            $searchMessage->setCreatorUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSearchMessage(SearchMessage $searchMessage): static
+    {
+        if ($this->searchMessages->removeElement($searchMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($searchMessage->getCreatorUser() === $this) {
+                $searchMessage->setCreatorUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMimeType(): ?string
+    {
+        return $this->mimeType;
+    }
+
+    public function setMimeType(string $mimeType): static
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    public function setStreet(?string $street): static
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postal_code;
+    }
+
+    public function setPostalCode(?string $postal_code): static
+    {
+        $this->postal_code = $postal_code;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getTwitter(): ?string
+    {
+        return $this->twitter;
+    }
+
+    public function setTwitter(?string $twitter): static
+    {
+        $this->twitter = $twitter;
+
+        return $this;
+    }
+
+    public function getFacebook(): ?string
+    {
+        return $this->facebook;
+    }
+
+    public function setFacebook(?string $facebook): static
+    {
+        $this->facebook = $facebook;
+
+        return $this;
+    }
+
+    public function getInstagram(): ?string
+    {
+        return $this->instagram;
+    }
+
+    public function setInstagram(?string $instagram): static
+    {
+        $this->instagram = $instagram;
+
+        return $this;
+    }
+
+    public function getLinkedIn(): ?string
+    {
+        return $this->linkedIn;
+    }
+
+    public function setLinkedIn(?string $linkedIn): static
+    {
+        $this->linkedIn = $linkedIn;
+
+        return $this;
+    }
+
+    public function getSkills(): ?string
+    {
+        return $this->skills;
+    }
+
+    public function setSkills(?string $skills): static
+    {
+        $this->skills = $skills;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    public function getResetTokenExpiresAt(): ?\DateTime
+    {
+        return $this->resetTokenExpiresAt;
+    }
+
+    public function setResetTokenExpiresAt(?\DateTime $resetTokenExpiresAt): self
+    {
+        $this->resetTokenExpiresAt = $resetTokenExpiresAt;
 
         return $this;
     }

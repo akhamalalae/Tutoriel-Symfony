@@ -1,0 +1,59 @@
+{% if item.personOne != app.user %}  
+    {% set newItem = item.personOne  %} 
+{% endif %}
+
+{% if item.personTwo != app.user %}  
+    {% set newItem = item.personTwo  %} 
+{% endif %}
+
+{% if item.personOne == app.user %}  
+    {% set numberUnreadMessages = item.personTwoNumberUnreadMessages  %}
+{% else %} 
+    {% set numberUnreadMessages = item.personOneNumberUnreadMessages  %}
+{% endif %}
+
+<div 
+    id="discussion-click-{{ item.id }}" 
+    class="discussions-card-click card text-white mb-3 position-relative"
+>
+    <div class="card-body">
+        {% if numberUnreadMessages %}  
+            <span class="position-absolute translate-middle badge rounded-pill bg-danger">
+                {{ numberUnreadMessages }}
+            </span>
+        {% endif %}
+        {% set subDirectory = 'img/avatars/'  %} 
+        <img 
+            class="card-img-top"
+            {% if newItem.brochureFilename %} 
+                src="data:{{ newItem.mimeType }};base64,{{ newItem.brochureFilename|decrypt(subDirectory) }}" 
+            {% else %}
+                src="{{asset('img/avatars/avatar.jpg')}}" 
+            {% endif %}
+            class="img-fluid rounded-circle mb-2" 
+            alt="{{ newItem.name }}" 
+            width="100" height="100" 
+            onclick="discussionClick(event)" 
+            data-idDiscussion="{{ item.id }}" 
+            data-page="1"
+            data-url= {{ path('app_message', {idDiscussion: item.id, page: 1}) }}
+        >
+        <h5 class="card-title" style="color:black;">
+            <br />
+            {{ newItem.firstName }} {{ newItem.name }}
+            
+            <a data-bs-toggle="modal" 
+                data-bs-target="#profilInfo{{ newItem.id }}"
+            >
+                <i class="fa fa-info-circle" style="font-size:20px;color:black;"></i>
+            </a>
+
+        </h5>
+    </div>
+</div>
+<hr class="my-0" />
+
+<!-- Modal -->
+{% include 'profil/modal_info_profil.html.twig' with {'item': newItem} %}
+
+

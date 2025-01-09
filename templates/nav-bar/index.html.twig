@@ -1,14 +1,20 @@
 <nav class="navbar navbar-expand navbar-light navbar-bg">
-    <a class="sidebar-toggle js-sidebar-toggle">
-        <i class="hamburger align-self-center"></i>
-    </a>
+    {% if app.user %} 
+        <a class="sidebar-toggle js-sidebar-toggle">
+            <i class="hamburger align-self-center"></i>
+        </a>
+    {% endif %}
 
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
-            {{ render(controller('App\\Controller\\Navbar\\Messaging\\MessageController::messagesAction')) }}
-            {{ render(controller('App\\Controller\\Navbar\\Notification\\NotificationController::notificationAction')) }}
+            {% if app.user %} 
+                {{ render(controller('App\\Controller\\Navbar\\Message\\MessageController::messagesAction')) }}
+                <!-- {{ render(controller('App\\Controller\\Navbar\\Notification\\NotificationController::notificationAction')) }} --> 
+            {% endif %}
             {% include 'nav-bar/translations.html.twig' %}
-            {{ render(controller('App\\Controller\\Navbar\\Profile\\ProfileController::profileAction')) }}
+            {% if app.user %} 
+                {{ render(controller('App\\Controller\\Navbar\\Profile\\ProfileController::profileAction')) }}
+            {% endif %}
         </ul>
     </div>
 </nav>

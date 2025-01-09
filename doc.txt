@@ -7,13 +7,18 @@ php bin/console importmap:remove Lib
 
 php bin/console translation:extract --force fr
 
+php bin/console doctrine:database:create
+
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 
 php bin/console fos:elastica:populate
 
-git add .
-git commit -a -m "commit" (do not need commit message either)
-git push
+git init 
+git add README.md 
+git commit -m "first commit" 
+git branch -M main 
+git remote add origin git@github.com:akhamalalae/projetCRM.git
+git push -u origin main
 
 be careful I am a secret keybe careful I am a secrebe careful i am a secret key

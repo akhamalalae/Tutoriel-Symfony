@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const FosRouting = require('fos-router/webpack/FosRouting');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -15,6 +16,7 @@ Encore
         {from: './node_modules/ckeditor4/skins', to: 'ckeditor/skins/[path][name].[ext]'},
         {from: './node_modules/ckeditor4/vendor', to: 'ckeditor/vendor/[path][name].[ext]'}
     ])
+    .addPlugin(new FosRouting())
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
@@ -29,7 +31,8 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addEntry('message', './assets/js/message.js')
+    .addEntry('discussionMessage', './assets/js/Discussion/discussionMessage.js')
+    .addEntry('profil', './assets/js/Profil/profil.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

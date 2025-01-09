@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DiscussionRepository::class)]
 class Discussion
 {
-    const DISCUSSION_ADDED_SUCCESSFULLY = 'DISCUSSION_ADDED_SUCCESSFULLY';
-    const DISCUSSION_INVALID_FORM = 'DISCUSSION_INVALID_FORM';
+    const ADDED_SUCCESSFULLY = 'ADDED_SUCCESSFULLY';
+    const INVALID_FORM = 'INVALID_FORM';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

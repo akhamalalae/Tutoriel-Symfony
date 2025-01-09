@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Doctrine\ORM\QueryBuilder;
 
+
 /**
  * @extends ServiceEntityRepository<User>
  *
@@ -42,14 +43,49 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-    * @return QueryBuilder Returns an QueryBuilder of Discussion objects
+    * @return QueryBuilder Returns an QueryBuilder of User objects
     */
-    public function queryFindUsersDiscussionForm(User $user): QueryBuilder
+    public function findUsersDiscussionForm(User $user, array $discussions): QueryBuilder
     {
-        return $this->createQueryBuilder('u')
-        //->leftJoin('u.discussionsPersonOne', 'personOne')
-        ->andwhere('u != :user')
-        ->setParameter('user', $user);
+        $findExistUsers = $this->findExistUsersDiscussion($discussions);
+
+        $createQueryBuilder = $this->createQueryBuilder('u')
+            ->leftJoin('u.discussionsPersonOne', 'dPersonOne')
+            ->leftJoin('u.discussionsPersonTwo', 'dPersonTwo')
+            ->leftJoin('dPersonTwo.personTwo', 'pTwo')
+            ->leftJoin('dPersonOne.personOne', 'pOne')
+        ;
+
+        if ($findExistUsers) {
+            $createQueryBuilder->andwhere('u NOT IN (:existUsers)')
+                ->setParameter('existUsers', $findExistUsers)
+            ;
+        }
+
+        return $createQueryBuilder;
+    }
+
+    /**
+    * @return array Returns an array of Id User
+    */
+    public function findExistUsersDiscussion(array $discussions): array
+    {
+        $existUsersDiscussion = array();
+
+        foreach ($discussions as $item) {
+            $personOne = $item->getPersonOne()->getId();
+            $personTwo = $item->getPersonTwo()->getId();
+
+            if (! in_array($personOne, $existUsersDiscussion)) {
+                array_push($existUsersDiscussion, $personOne);
+            }
+
+            if (! in_array($personTwo, $existUsersDiscussion)) {
+                array_push($existUsersDiscussion, $personTwo);
+            }
+        }
+
+        return $existUsersDiscussion;
     }
 
 //    /**

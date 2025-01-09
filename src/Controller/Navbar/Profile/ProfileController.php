@@ -10,6 +10,6 @@ class ProfileController extends AbstractController
 {
     public function profileAction()
     {
-        return $this->render('nav-bar/profile.html.twig');
+        return $this->render('nav-bar/profil.html.twig');
     }
 }

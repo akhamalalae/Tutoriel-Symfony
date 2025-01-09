@@ -1,0 +1,37 @@
+<div class="card-header">
+    <h5 class="card-title mb-0">
+        {{ 'Search Discussion'|trans }}
+    </h5>
+    <div class="card-body text-center">
+        <div class="row">
+            <div class="mb-3 col-6">
+                <input type="Name" class="form-control" id="inputName" placeholder="{{ 'Name'|trans }}">
+            </div>
+
+            <div class="mb-3 col-6">
+                <input type="Name" class="form-control" id="inputFirstName" placeholder="{{ 'FirstName'|trans }}">
+            </div>
+
+            <div class="mb-3 col-6">
+                <select id="createdThisMonth" class="form-select" placeholder="{{ 'Created This Month'|trans }}" aria-label="{{ 'Created This Month'|trans }}">
+                    <option value="" disabled selected>{{ 'Created This Month'|trans }}</option>
+                    <option value="true">{{ 'Yes'|trans }}</option>
+                    <option value="false">{{ 'No'|trans }}</option>
+                </select>
+            </div>
+
+            <hr/>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button onclick="submitSearchDiscussuionCriteriaClick(event)" 
+                    class="btn btn-primary mb-3"
+                    id="btn_submit_search_condition_criteria"
+                >
+                    {{ 'Search'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
