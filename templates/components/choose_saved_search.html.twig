@@ -1,0 +1,22 @@
+{% if view == 'message' %}
+    {% set search = searchMessage %} 
+{% endif %}  
+
+{% if view == 'discussion' %}
+    {% set search = searchDiscussion %} 
+{% endif %}
+
+{% if search is not empty %}
+    <select id="listSavedSearch" 
+        onchange="changeListSavedSearch();"
+        class="form-select form-select-sm select2" 
+        aria-label="Select Saved Search"
+    >
+        <option value="" disabled {{ description == '' ? "selected" : ""  }}>{{ 'Choose saved search'|trans }}</option>
+        {% for item in search %}
+            <option value="{{ item.id }}" {{ description == item.sensitiveDataDescription ? "selected" : ""  }}>
+                {{ item.sensitiveDataDescription }}
+            </option>
+        {% endfor %}
+    </select>
+{% endif %}

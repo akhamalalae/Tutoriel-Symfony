@@ -56,11 +56,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: Message::class)]
     private Collection $messagesCreatorUser;
 
-    #[ORM\OneToMany(mappedBy: 'personOne', targetEntity: Discussion::class)]
-    private Collection $discussionsPersonOne;
+    #[ORM\OneToMany(mappedBy: 'personInvitationSender', targetEntity: Discussion::class)]
+    private Collection $discussionsPersonInvitationSender;
 
-    #[ORM\OneToMany(mappedBy: 'personTwo', targetEntity: Discussion::class)]
-    private Collection $discussionsPersonTwo;
+    #[ORM\OneToMany(mappedBy: 'personInvitationRecipient', targetEntity: Discussion::class)]
+    private Collection $discussionsPersonInvitationRecipient;
 
     #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: Discussion::class)]
     private Collection $discussionsCreatorUser;
@@ -116,13 +116,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTime $resetTokenExpiresAt = null;
 
+    private ?string $sensitiveDataName = '';
+
+    private ?string $sensitiveDataFirstName = '';
+
+    private ?string $sensitiveDataEmail = '';
+
+    private ?string $sensitiveDataCompany = '';
+
+    private ?string $sensitiveDataJob = '';
+
+    private ?string $sensitiveDataBrochureFilename = '';
+
+    private ?string $sensitiveDataMimeType = '';
+
+    private ?string $sensitiveDataStreet = '';
+
+    private ?string $sensitiveDataCity = '';
+
+    private ?string $sensitiveDataPostalCode = '';
+
+    private ?string $sensitiveDataCountry = '';
+
+    private ?string $sensitiveDataTwitter = '';
+
+    private ?string $sensitiveDataFacebook = '';
+
+    private ?string $sensitiveDataInstagram = '';
+    
+    private ?string $sensitiveDataLinkedIn = '';
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->messagesCreatorUser = new ArrayCollection();
-        $this->discussionsPersonOne = new ArrayCollection();
-        $this->discussionsPersonTwo = new ArrayCollection();
+        $this->discussionsPersonInvitationSender = new ArrayCollection();
+        $this->discussionsPersonInvitationRecipient = new ArrayCollection();
         $this->discussionsCreatorUser = new ArrayCollection();
         $this->discussionsMdifierUser = new ArrayCollection();
         $this->discussionMessageUsers = new ArrayCollection();
@@ -318,27 +348,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Discussion>
      */
-    public function getDiscussionsPersonOne(): Collection
+    public function getDiscussionsPersonInvitationSender(): Collection
     {
-        return $this->discussionsPersonOne;
+        return $this->discussionsPersonInvitationSender;
     }
 
-    public function addDiscussionsPersonOne(Discussion $discussionsPersonOne): static
+    public function addDiscussionsPersonInvitationSender(Discussion $discussionsPersonInvitationSender): static
     {
-        if (!$this->discussionsPersonOne->contains($discussionsPersonOne)) {
-            $this->discussionsPersonOne->add($discussionsPersonOne);
-            $discussionsPersonOne->setPersonOne($this);
+        if (!$this->discussionsPersonInvitationSender->contains($discussionsPersonInvitationSender)) {
+            $this->discussionsPersonInvitationSender->add($discussionsPersonInvitationSender);
+            $discussionsPersonInvitationSender->setPersonInvitationSender($this);
         }
 
         return $this;
     }
 
-    public function removeDiscussionsPersonOne(Discussion $discussionsPersonOne): static
+    public function removeDiscussionsPersonInvitationSender(Discussion $discussionsPersonInvitationSender): static
     {
-        if ($this->discussionsPersonOne->removeElement($discussionsPersonOne)) {
+        if ($this->discussionsPersonInvitationSender->removeElement($discussionsPersonInvitationSender)) {
             // set the owning side to null (unless already changed)
-            if ($discussionsPersonOne->getPersonOne() === $this) {
-                $discussionsPersonOne->setPersonOne(null);
+            if ($discussionsPersonInvitationSender->getPersonInvitationSender() === $this) {
+                $discussionsPersonInvitationSender->setPersonInvitationSender(null);
             }
         }
 
@@ -348,27 +378,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Discussion>
      */
-    public function getDiscussionsPersonTwo(): Collection
+    public function getDiscussionsPersonInvitationRecipient(): Collection
     {
-        return $this->discussionsPersonTwo;
+        return $this->discussionsPersonInvitationRecipient;
     }
 
-    public function addDiscussionsPersonTwo(Discussion $discussionsPersonTwo): static
+    public function addDiscussionsPersonInvitationRecipient(Discussion $discussionsPersonInvitationRecipient): static
     {
-        if (!$this->discussionsPersonTwo->contains($discussionsPersonTwo)) {
-            $this->discussionsPersonTwo->add($discussionsPersonTwo);
-            $discussionsPersonTwo->setPersonTwo($this);
+        if (!$this->discussionsPersonInvitationRecipient->contains($discussionsPersonInvitationRecipient)) {
+            $this->discussionsPersonInvitationRecipient->add($discussionsPersonInvitationRecipient);
+            $discussionsPersonInvitationRecipient->setPersonInvitationRecipient($this);
         }
 
         return $this;
     }
 
-    public function removeDiscussionsPersonTwo(Discussion $discussionsPersonTwo): static
+    public function removeDiscussionsPersonInvitationRecipient(Discussion $discussionsPersonInvitationRecipient): static
     {
-        if ($this->discussionsPersonTwo->removeElement($discussionsPersonTwo)) {
+        if ($this->discussionsPersonInvitationRecipient->removeElement($discussionsPersonInvitationRecipient)) {
             // set the owning side to null (unless already changed)
-            if ($discussionsPersonTwo->getPersonTwo() === $this) {
-                $discussionsPersonTwo->setPersonTwo(null);
+            if ($discussionsPersonInvitationRecipient->getPersonInvitationRecipient() === $this) {
+                $discussionsPersonInvitationRecipient->setPersonInvitationRecipient(null);
             }
         }
 
@@ -695,6 +725,186 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetTokenExpiresAt(?\DateTime $resetTokenExpiresAt): self
     {
         $this->resetTokenExpiresAt = $resetTokenExpiresAt;
+
+        return $this;
+    }
+
+    public function getSensitiveDataName(): ?string
+    {
+        return $this->sensitiveDataName;
+    }
+
+    public function setSensitiveDataName(?string $sensitiveDataName): static
+    {
+        $this->sensitiveDataName = $sensitiveDataName;
+
+        return $this;
+    }
+
+    public function getSensitiveDataFirstName(): ?string
+    {
+        return $this->sensitiveDataFirstName;
+    }
+
+    public function setSensitiveDataFirstName(?string $sensitiveDataFirstName): static
+    {
+        $this->sensitiveDataFirstName = $sensitiveDataFirstName;
+
+        return $this;
+    }
+
+    public function getSensitiveDataEmail(): ?string
+    {
+        return $this->sensitiveDataEmail;
+    }
+
+    public function setSensitiveDataEmail(?string $sensitiveDataEmail): static
+    {
+        $this->sensitiveDataEmail = $sensitiveDataEmail;
+
+        return $this;
+    }
+
+    public function getSensitiveDataCompany(): ?string
+    {
+        return $this->sensitiveDataCompany;
+    }
+
+    public function setSensitiveDataCompany(?string $sensitiveDataCompany): static
+    {
+        $this->sensitiveDataCompany = $sensitiveDataCompany;
+
+        return $this;
+    }
+
+    public function getSensitiveDataJob(): ?string
+    {
+        return $this->sensitiveDataJob;
+    }
+
+    public function setSensitiveDataJob(?string $sensitiveDataJob): static
+    {
+        $this->sensitiveDataJob = $sensitiveDataJob;
+
+        return $this;
+    }
+
+    public function getSensitiveDataBrochureFilename(): ?string
+    {
+        return $this->sensitiveDataBrochureFilename;
+    }
+
+    public function setSensitiveDataBrochureFilename(?string $sensitiveDataBrochureFilename): static
+    {
+        $this->sensitiveDataBrochureFilename = $sensitiveDataBrochureFilename;
+
+        return $this;
+    }
+
+    public function getSensitiveDataMimeType(): ?string
+    {
+        return $this->sensitiveDataMimeType;
+    }
+
+    public function setSensitiveDataMimeType(?string $sensitiveDataMimeType): static
+    {
+        $this->sensitiveDataMimeType = $sensitiveDataMimeType;
+
+        return $this;
+    }
+
+    public function getSensitiveDataStreet(): ?string
+    {
+        return $this->sensitiveDataStreet;
+    }
+
+    public function setSensitiveDataStreet(?string $sensitiveDataStreet): static
+    {
+        $this->sensitiveDataStreet = $sensitiveDataStreet;
+
+        return $this;
+    }
+
+    public function getSensitiveDataCity(): ?string
+    {
+        return $this->sensitiveDataCity;
+    }
+
+    public function setSensitiveDataCity(?string $sensitiveDataCity): static
+    {
+        $this->sensitiveDataCity = $sensitiveDataCity;
+
+        return $this;
+    }
+
+    public function getSensitiveDataPostalCode(): ?string
+    {
+        return $this->sensitiveDataPostalCode;
+    }
+
+    public function setSensitiveDataPostalCode(?string $sensitiveDataPostalCode): static
+    {
+        $this->sensitiveDataPostalCode = $sensitiveDataPostalCode;
+
+        return $this;
+    }
+
+    public function getSensitiveDataCountry(): ?string
+    {
+        return $this->sensitiveDataCountry;
+    }
+
+    public function setSensitiveDataCountry(?string $sensitiveDataCountry): static
+    {
+        $this->sensitiveDataCountry = $sensitiveDataCountry;
+
+        return $this;
+    }
+
+    public function getSensitiveDataTwitter(): ?string
+    {
+        return $this->sensitiveDataTwitter;
+    }
+
+    public function setSensitiveDataTwitter(?string $sensitiveDataTwitter): static
+    {
+        $this->sensitiveDataTwitter = $sensitiveDataTwitter;
+
+        return $this;
+    }
+
+    public function getSensitiveDataFacebook(): ?string
+    {
+        return $this->sensitiveDataFacebook;
+    }
+
+    public function setSensitiveDataFacebook(?string $sensitiveDataFacebook): static
+    {
+        $this->sensitiveDataFacebook = $sensitiveDataFacebook;
+
+        return $this;
+    }
+
+    public function getSensitiveDataInstagram(): ?string
+    {
+        return $this->sensitiveDataInstagram;
+    }
+
+    public function setSensitiveDataInstagram(?string $sensitiveDataInstagram): static
+    {
+        $this->sensitiveDataInstagram = $sensitiveDataInstagram;
+
+        return $this;
+    }
+
+    public function getSensitiveDataLinkedIn(): ?string
+    {
+        return $this->sensitiveDataLinkedIn;
+    }
+
+    public function setSensitiveDataLinkedIn(?string $sensitiveDataLinkedIn): static
+    {
+        $this->sensitiveDataLinkedIn = $sensitiveDataLinkedIn;
 
         return $this;
     }

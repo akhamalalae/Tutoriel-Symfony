@@ -43,8 +43,8 @@ class DiscussionRepository extends ServiceEntityRepository
             ->setParameter('array', $array);
         }
         
-        $discussions->andWhere('d.personOne = :user')
-            ->orWhere('d.personTwo = :user')
+        $discussions->andWhere('d.personInvitationSender = :user')
+            ->orWhere('d.personInvitationRecipient = :user')
             ->setParameter('user', $user)
             ->orderBy('d.dateCreation', 'DESC')
         ;
@@ -59,14 +59,14 @@ class DiscussionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('discussion')
             ->andWhere('
-                :user = discussion.personOne
+                :user = discussion.personInvitationSender
                 AND
-                discussion.personTwoNumberUnreadMessages IS NOT NULL
+                discussion.personInvitationRecipientNumberUnreadMessages IS NOT NULL
             ')
             ->orWhere('
-                :user = discussion.personTwo
+                :user = discussion.personInvitationRecipient
                 AND
-                discussion.personOneNumberUnreadMessages IS NOT NULL
+                discussion.personInvitationSenderNumberUnreadMessages IS NOT NULL
             ')
             ->setParameter('user', $user->getId())
             ->orderBy('discussion.dateCreation', 'DESC')

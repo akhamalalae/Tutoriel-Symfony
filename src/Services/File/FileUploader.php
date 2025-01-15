@@ -36,6 +36,7 @@ class FileUploader
             $dest = $directory . '/encrypt-' . $fileName;
 
             $this->encryptDecryptFile->encryptFile($source, $dest);
+            
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }

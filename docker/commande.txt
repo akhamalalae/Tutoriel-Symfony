@@ -1,0 +1,27 @@
+Symfony App : http://localhost:8080
+phpMyAdmin : http://localhost:8081
+Elasticsearch : http://localhost:9200
+MailDev : http://localhost:8025
+
+docker-compose down
+docker-compose up -d
+
+docker exec -it symfony_app bash
+
+php bin/console doctrine:database:create
+
+php bin/console translation:extract --force fr
+
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+
+php bin/console fos:elastica:populate
+
+git init 
+git add README.md 
+git commit -m "first commit" 
+git branch -M main 
+git remote add origin git@github.com:akhamalalae/projetCRM.git
+git push -u origin main
+
+be careful I am a secret keybe careful I am a secrebe careful i am a secret key

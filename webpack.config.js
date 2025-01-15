@@ -33,6 +33,8 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('discussionMessage', './assets/js/Discussion/discussionMessage.js')
     .addEntry('profil', './assets/js/Profil/profil.js')
+    .addEntry('help', './assets/js/Help/help.js')
+    .addEntry('settings', './assets/js/Settings/settings.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

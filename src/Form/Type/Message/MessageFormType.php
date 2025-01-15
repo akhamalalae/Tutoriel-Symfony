@@ -20,7 +20,7 @@ class MessageFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
-                'required' => false
+                'required' => true
             ])
             ->add('files', FileType::class, [
                 'label' => false,

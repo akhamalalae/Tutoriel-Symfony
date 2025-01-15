@@ -1,18 +1,18 @@
 
 <div class="card-body text-center">
-	{% if item.brochureFilename %} 
+	{% if item.sensitiveDataBrochureFilename %} 
 		{% set subDirectory = 'img/avatars/'  %} 
 		<img
-			src="data:{{ item.mimeType }};base64,{{ item.brochureFilename|decrypt(subDirectory) }}" 
+			src="data:{{ item.sensitiveDataMimeType }};base64,{{ item.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
 			class="img-fluid rounded-circle mb-2" 
 			width="128" height="128"
 			alt="{{ item.name }}"
 		>
 	{% else %}
-		<img src="{{asset('img/avatars/avatar.jpg')}}" class="img-fluid rounded-circle mb-2" alt="{{ item.name }}" width="128" height="128">
+		<img src="{{asset('img/avatars/avatar.jpg')}}" class="img-fluid rounded-circle mb-2" alt="{{ item.sensitiveDataName }}" width="128" height="128">
 	{% endif %}
-	<h5 class="card-title mb-0">{{ item.firstName }} {{ item.name }}</h5>
-	<div class="text-muted mb-2">{{ item.job }}</div>
+	<h5 class="card-title mb-0">{{ item.sensitiveDataFirstName }} {{ item.sensitiveDataName }}</h5>
+	<div class="text-muted mb-2">{{ item.sensitiveDataJob }}</div>
 </div>
 <hr class="my-0" />
 <div class="card-body">
@@ -29,17 +29,17 @@
 	<ul class="list-unstyled mb-0">
 		<li class="mb-1">
 			<span data-feather="home" class="feather-sm me-1"></span> 
-			{{ 'Lives in'|trans }} {{ item.city }} {{ item.street }} {{ item.getPostalCode }} 
+			{{ 'Lives in'|trans }} {{ item.sensitiveDataCity }} {{ item.sensitiveDataStreet }} {{ item.sensitiveDataPostalCode }} 
 		</li>
 
 		<li class="mb-1">
 			<span data-feather="briefcase" class="feather-sm me-1"></span> 
-			{{ 'Works at'|trans }} {{ item.company }} 
+			{{ 'Works at'|trans }} {{ item.sensitiveDataCompany }} 
 		</li>
 
 		<li class="mb-1">
 			<span data-feather="map-pin" class="feather-sm me-1"></span> 
-			{{ 'From'|trans }} {{ item.country }}
+			{{ 'From'|trans }} {{ item.sensitiveDataCountry }}
 		</li>
 	</ul>
 </div>
@@ -47,10 +47,10 @@
 <div class="card-body">
 	<h5 class="h6 card-title">{{ 'Elsewhere'|trans }}</h5>
 	<ul class="list-unstyled mb-0">
-		<li class="mb-1"><a href="#">{{ item.email }}</a></li>
-		<li class="mb-1"><a href="#">{{ item.twitter }}</a></li>
-		<li class="mb-1"><a href="#">{{ item.facebook }}</a></li>
-		<li class="mb-1"><a href="#">{{ item.instagram }}</a></li>
-		<li class="mb-1"><a href="#">{{ item.linkedIn }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.sensitiveDataEmail }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.sensitiveDataTwitter }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.sensitiveDataFacebook }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.sensitiveDataInstagram }}</a></li>
+		<li class="mb-1"><a href="#">{{ item.sensitiveDataLinkedIn }}</a></li>
 	</ul>
 </div>

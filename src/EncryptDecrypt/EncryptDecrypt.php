@@ -1,6 +1,7 @@
 <?php
 
 namespace App\EncryptDecrypt;
+
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class EncryptDecrypt
 {
@@ -14,6 +15,11 @@ class EncryptDecrypt
     public function loadKey() : ?string
     {
         return $this->params->get('key_secrets');
+    }
+
+    public function loadIV() : ?string
+    {
+        return $this->params->get('iv');
     }
 
     public function encrypt(?string $val) : ?string
@@ -60,7 +66,7 @@ class EncryptDecrypt
         $data = $val;
         $method = "AES-256-CBC";
         $options = 0;
-        $iv = '1234567891011121';
+        $iv = $this->loadIV();
 
         return [
             'data' => $data,

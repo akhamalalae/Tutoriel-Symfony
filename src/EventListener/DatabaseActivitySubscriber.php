@@ -7,15 +7,27 @@ use App\Entity\Discussion;
 use App\Entity\DiscussionMessageUser;
 use App\Entity\FileMessage;
 use App\Entity\SearchMessage;
+use App\Entity\User;
+use App\Entity\SearchDiscussion;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
-use App\EncryptDecrypt\EncryptDecrypt;
+use App\EventListener\Activity\ActivityFileMessage;
+use App\EventListener\Activity\ActivityMessage;
+use App\EventListener\Activity\ActivitySearchDiscussion;
+use App\EventListener\Activity\ActivitySearchMessage;
+use App\EventListener\Activity\ActivityUser;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+
 final class DatabaseActivitySubscriber implements EventSubscriberInterface
-{     
-    public function __construct(private EncryptDecrypt $encryptDecrypt)
-    {
-    }
+{   
+    public function __construct(
+        private ActivityFileMessage $activityFileMessage,
+        private ActivityMessage $activityMessage,
+        private ActivitySearchDiscussion $activitySearchDiscussion,
+        private ActivitySearchMessage $activitySearchMessage,
+        private ActivityUser $activityUser
+    ){}
     
     // this method can only return the event names; you cannot define a
     // custom method name to execute when each event triggers
@@ -25,7 +37,7 @@ final class DatabaseActivitySubscriber implements EventSubscriberInterface
             Events::prePersist,
             Events::postPersist,
             Events::postRemove,
-            Events::postUpdate,
+            Events::preUpdate,
             Events::postLoad
         ];
     }
@@ -48,121 +60,128 @@ final class DatabaseActivitySubscriber implements EventSubscriberInterface
         $this->logActivity('remove', $args);
     }
 
-    public function postUpdate(LifecycleEventArgs $args): void
-    {
-        $this->logActivity('postUpdate', $args);
-    }
-
     public function postLoad(LifecycleEventArgs $args)
     {
         $this->logActivity('postLoad', $args);
     }
 
+    public function preUpdate(PreUpdateEventArgs $event): void
+    {
+        $this->logActivityPreUpdate($event);
+    }
+
     private function logActivity(string $action, LifecycleEventArgs $args): void
     {
-        $entity = $args->getObject();
-
         switch ($action) {
             case 'postPersist':
-                if ($entity instanceof Message) {
-                    $this->loadAndPostPersistDecryptMessage($entity);
-                    return;
-                }
-                if ($entity instanceof FileMessage) {
-                    $this->loadAndPostPersistDecryptFileMessage($entity);
-                    return;
-                }
-                if ($entity instanceof SearchMessage) {
-                    $this->loadAndPostPersistDecryptSearchMessage($entity);
-                    return;
-                }
-                break;
+                $this->logActivityPostPersist($args);
+            break;
             case 'prePersist':
-                if ($entity instanceof Message) {
-                    $this->prePersistEncryptMessage($entity);
-                    return;
-                }
-                if ($entity instanceof FileMessage) {
-                    $this->prePersistEncryptFileMessage($entity);
-                    return;
-                }
-                if ($entity instanceof SearchMessage) {
-                    $this->prePersistEncryptSearchMessage($entity);
-                    return;
-                }
-                break;
+                $this->logActivityPrePersist($args);
+            break;
             case 'postLoad':
-                if ($entity instanceof Message) {
-                    $this->loadAndPostPersistDecryptMessage($entity);
-                    return;
-                }
-                if ($entity instanceof FileMessage) {
-                    $this->loadAndPostPersistDecryptFileMessage($entity);
-                    return;
-                }
-                if ($entity instanceof SearchMessage) {
-                    $this->loadAndPostPersistDecryptSearchMessage($entity);
-                    return;
-                }
-                break;
+                $this->logActivityPostLoad($args);
+            break;
         }
     }
 
-    private function loadAndPostPersistDecryptSearchMessage(SearchMessage $searchMessage): void
+    public function logActivityPreUpdate(PreUpdateEventArgs $event)
     {
-        $decryptDescription = $this->encryptDecrypt->decrypt($searchMessage->getDescription());
-        $decryptMessage = $this->encryptDecrypt->decrypt($searchMessage->getMessage());
-        $decryptFileName = $this->encryptDecrypt->decrypt($searchMessage->getFileName());
+        $entity = $event->getEntity();
 
-        $searchMessage->setSensitiveDataDescription($decryptDescription);
-        $searchMessage->setSensitiveDataMessage($decryptMessage);
-        $searchMessage->setSensitiveDataFileName($decryptFileName);
+        if ($entity instanceof User) {
+            $this->activityUser->encryptPreUpdateUser($entity, $event);
+            return;
+        }
     }
 
-    private function prePersistEncryptSearchMessage(SearchMessage $searchMessage): void
+    private function logActivityPostPersist(LifecycleEventArgs $args): void
     {
-        $encryptDescription = $this->encryptDecrypt->encrypt($searchMessage->getDescription());
-        $encryptMessage = $this->encryptDecrypt->encrypt($searchMessage->getMessage());
-        $encryptFileName = $this->encryptDecrypt->encrypt($searchMessage->getFileName());
+        $entity = $args->getObject();
 
-        $searchMessage->setDescription($encryptDescription);
-        $searchMessage->setMessage($encryptMessage);
-        $searchMessage->setFileName($encryptFileName);
+        if ($entity instanceof Message) {
+            $this->activityMessage->decryptMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof FileMessage) {
+            $this->activityFileMessage->decryptFileMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof SearchMessage) {
+            $this->activitySearchMessage->decryptSearchMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof SearchDiscussion) {
+            $this->activitySearchDiscussion->decryptSearchDiscussion($entity);
+            return;
+        }
+
+        if ($entity instanceof User) {
+            $this->activityUser->decryptUser($entity);
+            return;
+        }
     }
 
-    private function loadAndPostPersistDecryptFileMessage(FileMessage $fileMessage): void
+    private function logActivityPrePersist(LifecycleEventArgs $args): void
     {
-        $decryptName = $this->encryptDecrypt->decrypt($fileMessage->getName());
-        $decryptMimeType = $this->encryptDecrypt->decrypt($fileMessage->getMimeType());
-        $decryptOriginalName = $this->encryptDecrypt->decrypt($fileMessage->getOriginalName());
+        $entity = $args->getObject();
 
-        $fileMessage->setSensitiveDataOriginalName($decryptOriginalName);
-        $fileMessage->setSensitiveDataName($decryptName);
-        $fileMessage->setSensitiveDataMimeType($decryptMimeType);
+        if ($entity instanceof Message) {
+            $this->activityMessage->encryptMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof FileMessage) {
+            $this->activityFileMessage->encryptFileMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof SearchMessage) {
+            $this->activitySearchMessage->encryptSearchMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof SearchDiscussion) {
+            $this->activitySearchDiscussion->encryptSearchDiscussion($entity);
+            return;
+        }
+
+        if ($entity instanceof User) {
+            $this->activityUser->encryptUser($entity);
+            return;
+        }
     }
 
-    private function prePersistEncryptFileMessage(FileMessage $fileMessage): void
+    private function logActivityPostLoad(LifecycleEventArgs $args): void
     {
-        $encryptName = $this->encryptDecrypt->encrypt($fileMessage->getName());
-        $encryptMimeType = $this->encryptDecrypt->encrypt($fileMessage->getMimeType());
-        $encryptOriginalName = $this->encryptDecrypt->encrypt($fileMessage->getOriginalName());
+        $entity = $args->getObject();
 
-        $fileMessage->setName($encryptName);
-        $fileMessage->setMimeType($encryptMimeType);
-        $fileMessage->setOriginalName($encryptOriginalName);
-    }
+        if ($entity instanceof Message) {
+            $this->activityMessage->decryptMessage($entity);
+            return;
+        }
 
-    private function loadAndPostPersistDecryptMessage(Message $message): void
-    {
-        $decrypt = $this->encryptDecrypt->decrypt($message->getMessage());
+        if ($entity instanceof FileMessage) {
+            $this->activityFileMessage->decryptFileMessage($entity);
+            return;
+        }
 
-        $message->setSensitiveDataMessage($decrypt);
-    }
+        if ($entity instanceof SearchMessage) {
+            $this->activitySearchMessage->decryptSearchMessage($entity);
+            return;
+        }
 
-    private function prePersistEncryptMessage(Message $message): void
-    {
-        $encrypt = $this->encryptDecrypt->encrypt($message->getMessage());
+        if ($entity instanceof SearchDiscussion) {
+            $this->activitySearchDiscussion->decryptSearchDiscussion($entity);
+            return;
+        }
 
-        $message->setMessage($encrypt);
+        if ($entity instanceof User) {
+            $this->activityUser->decryptUser($entity);
+            return;
+        }
     }
 }

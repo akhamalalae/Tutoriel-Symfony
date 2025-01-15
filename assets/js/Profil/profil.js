@@ -8,8 +8,6 @@ new Menu().selectItem(document.querySelector('#sidebar-nav-profil'));
 
 let locale = new Translation().locale();
 
-//console.log(new ProfilUtils().url('query'));
-
 document.addEventListener('DOMContentLoaded', () => {
     const input = document.querySelector('.address-autocomplete');
     
@@ -38,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     option.textContent = result.display_name;
 
                     option.addEventListener('click', () => {
-                        console.log(result.address);
                         input.value = result.display_name;
 
                         let city = '';

@@ -61,6 +61,20 @@ class Discussion {
         .then(response => response.json())
         .then(json => {
             searchDiscussion.innerHTML = json.html;
+            
+            const checkboxes = document.querySelectorAll('input[name="saveSearch"]');
+            document.getElementById("DivInputDescription").style.display = "none"; 
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', (event) => {
+                    if (event.target.checked) {
+                        document.getElementById("DivInputDescription").style.display = "block"; 
+                    } else {
+                        document.getElementById("DivInputDescription").style.display = "none"; 
+                        document.getElementById('inputDescription').value = '';
+                    }
+                });
+            });
         });
     }
 }

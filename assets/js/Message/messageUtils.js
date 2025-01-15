@@ -23,16 +23,37 @@ class MessageUtils {
             '_locale': locale, 
             'idDiscussion': idDiscussion, 
             'page': page,
-            'idSearchDiscussion': selectedValue,
+            'idSearchMessage': selectedValue,
         });
     }
     criteria () {
+        const selectedCreatedThisMonth = document.querySelectorAll('input[name="createdThisMonth"]:checked');
+        const valuesCreatedThisMonth = Array.from(selectedCreatedThisMonth).map(cb => cb.value);
+
+        const selectedSaveSearch = document.querySelectorAll('input[name="saveSearch"]:checked');
+        const valuesSaveSearch = Array.from(selectedSaveSearch).map(cb => cb.value);
+
+        let createdThisMonth = false;
+        let saveSearch = false;
+
+        if (valuesCreatedThisMonth.join() == 'on' ) {
+            createdThisMonth = true
+        }
+
+        if (valuesSaveSearch.join() == 'on' ) {
+            saveSearch = true
+        }
+        
+        const elementDescription = document.getElementById('inputDescription');
+        const elementMessage = document.getElementById('inputMessage');
+        const elementFile = document.getElementById('inputFile');
+
         return  {
-            'saveSearch': document.getElementById('saveSearch').value,
-            'description': document.getElementById('inputDescription').value,
-            'message': document.getElementById('inputMessage').value,
-            'fileName': document.getElementById('inputFile').value, 
-            'createdThisMonth': document.getElementById("createdThisMonth").value,
+            'saveSearch': saveSearch,
+            'description': elementDescription ? elementDescription.value : '',
+            'message': elementMessage ? elementMessage.value : '',
+            'fileName': elementFile ? elementFile.value : '', 
+            'createdThisMonth': createdThisMonth,
         };
     }
     cleanCriteria () {

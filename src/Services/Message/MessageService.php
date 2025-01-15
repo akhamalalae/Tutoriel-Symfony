@@ -9,7 +9,7 @@ use Twig\Environment;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
-use App\Controller\Search\Message\SearchMessages;
+use App\Controller\Messaging\Search\Message\SearchMessages;
 use App\Entity\User;
 use App\Entity\SearchMessage;
 use App\Entity\DiscussionMessageUser;
@@ -101,12 +101,12 @@ class MessageService
 
     public function messagesPaginationInfos(User $user, Discussion $discussion, int $page, SearchMessage|null $criteria, bool $saveSearch) : array
     {
-        $limit = $discussion->getPersonTwoNumberUnreadMessages() + $discussion->getPersonOneNumberUnreadMessages();
+        //$limit = $discussion->getPersonInvitationRecipientNumberUnreadMessages() + $discussion->getPersonInvitationSenderNumberUnreadMessages();
 
         return $this->pagination->getPagination(
             $this->searchMessages->findMessages($user, $discussion, $criteria, $saveSearch),
             $page,
-            $limit + self::LIMIT
+            self::LIMIT
         );
     }
 
@@ -142,13 +142,13 @@ class MessageService
 
     private function setDiscussion(Discussion $discussion, User $user) : void
     {
-        if ($user == $discussion->getPersonOne()) {
-            $discussion->setPersonOneNumberUnreadMessages(
-                $discussion->getPersonOneNumberUnreadMessages() + 1
+        if ($user == $discussion->getPersonInvitationSender()) {
+            $discussion->setPersonInvitationSenderNumberUnreadMessages(
+                $discussion->getPersonInvitationSenderNumberUnreadMessages() + 1
             );
         } else {
-            $discussion->setPersonTwoNumberUnreadMessages(
-                $discussion->getPersonTwoNumberUnreadMessages() + 1
+            $discussion->setPersonInvitationRecipientNumberUnreadMessages(
+                $discussion->getPersonInvitationRecipientNumberUnreadMessages() + 1
             );
         }
 

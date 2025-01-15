@@ -2,19 +2,15 @@
 	<div class="card-header">
 		<div class="flex-grow-1">
 			<small class="float-end text-navy">
-				<a>
-					<i class="fa fa-search-plus" 
-						style="font-size:20px;color:#0080FF;"
-						onclick="searchWithCriteriaClick(event)" 
-						data-view="message"
-						data-bs-toggle="tooltip" 
-						data-bs-placement="top" 
-						title="Search message"
-						data-idDiscussion="{{ discussion.id }}" 
-						data-page="1"
-					>
-					</i>
-				</a>
+				<button type="button" class="btn btn-primary btn-sm"
+					onclick="searchWithCriteriaClick(event)" 
+					title="{{ 'Search Message'|trans }}"
+					data-view="message"
+					data-idDiscussion="{{ discussion.id }}" 
+					data-page="1"
+				>
+					<i class="fa fa-search-plus"></i>
+				</button>
 			</small>
 			<h5 class="card-title mb-0">
 				{{ 'Messages'|trans }}
@@ -34,7 +30,6 @@
 				'numbrePagesPagination': numbrePagesPagination,
 				'page': page,
 				'discussion': discussion
-			}
-		%}
+		}%}
 	</div>
 </div>

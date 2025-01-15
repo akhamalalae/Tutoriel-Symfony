@@ -26,6 +26,8 @@ formDiscussion.addEventListener('submit', function (e) {
 
 let clickDiscussion = new DiscussionOnClick();
 
+clickDiscussion.newDiscussion();
+
 clickDiscussion.searchWithCriteria();
 
 clickDiscussion.submitSearchDiscussuionCriteria();

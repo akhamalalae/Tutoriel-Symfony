@@ -37,13 +37,13 @@ fos_elastica:
                     type: object
                     properties:
                         id: ~
-                        personOneNumberUnreadMessages: ~
-                        personTwoNumberUnreadMessages: ~
-                        personOne:
+                        personInvitationSenderNumberUnreadMessages: ~
+                        personInvitationRecipientNumberUnreadMessages: ~
+                        personInvitationSender:
                             type: object
                             properties:
                                 id: ~
-                        personTwo:
+                        personInvitationRecipient:
                             type: object
                             properties:
                                 id: ~
@@ -69,15 +69,15 @@ fos_elastica:
                 finder: ~
             properties:
                 id: ~
-                personOneNumberUnreadMessages: ~
-                personTwoNumberUnreadMessages: ~
-                personOne:
+                personInvitationSenderNumberUnreadMessages: ~
+                personInvitationRecipientNumberUnreadMessages: ~
+                personInvitationSender:
                     type: object
                     properties:
                         id: ~
                         name: ~
                         firstName: ~
-                personTwo:
+                personInvitationRecipient:
                     type: object
                     properties:
                         id: ~

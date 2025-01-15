@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-header">
+        <h5 class="card-title mb-0">
+            {{ 'Privacy Policy' }}
+        </h5>
+	</div>
+	<div class="card-body h-100">
+        <h2>
+            {{ '1. Introduction' }}
+        </h2>
+        <p>
+            {{ 
+                'Your trust is essential to us. This page explains how we collect, use, and protect your personal data when you interact with our site/application. We are committed to respecting and safeguarding your privacy in accordance with applicable regulations.'
+            }}
+        </p>
+
+        <h2>
+            {{ '2. Data Collected' }}
+        </h2>
+        <p>
+            {{
+                'We only collect the information necessary for the proper execution of our services, including:
+
+                Identification data (name, surname, email address).
+                Connection information (IP address, login logs).
+                Browsing data (visited pages, user preferences).
+                This data is collected with your consent and in compliance with legal obligations.'
+            }}
+        </p>
+
+        <h2>
+            {{ '3. Use of Data' }}
+        </h2>
+        <p>
+            {{ 
+                'Your information is used to:
+
+                Provide and personalize our services.
+                Ensure the security of our platform.
+                Improve your user experience.
+                Communicate important updates about our services.
+                We will never use your data for unauthorized purposes or without your consent.'
+            }}
+        </p>
+
+        <h2>
+            {{ '4. Data Security and Protection' }}
+        </h2>
+        <p>
+            {{
+                'We take the security of your data very seriously. All personal data you entrust to us is encrypted at every stage of processing, whether in storage or during transmission.
+
+                Encryption: Sensitive data is encrypted using advanced technologies to prevent unauthorized access.
+                Restricted Access: Only authorized team members have access to the information necessary for their specific tasks.
+                Regular Testing: Our systems are regularly tested to ensure their security.'
+            }}
+        </p>
+
+        <h2>
+            {{ '5. Data Sharing' }}
+        </h2>
+        <p>
+            {{ 
+                'We never share your information with third parties unless necessary to provide our services, comply with legal obligations, or ensure user security.'
+            }}
+        </p>
+
+        <h2>
+            {{ '6. Your Rights' }}
+        </h2>
+        <p>
+            {{
+                'In accordance with the law, you have rights over your personal data:
+
+                Access and correction.
+                Deletion of your information.
+                Opposition to data processing.
+                Portability of your data to another platform.
+                To exercise your rights, please contact us at [contact email address].'
+            }}
+        </p>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('settings') }}
+{% endblock %}

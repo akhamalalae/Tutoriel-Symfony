@@ -17,6 +17,8 @@ class MessageOnClick {
 
             document.getElementById('search_message_with_criteria').innerHTML = '';
 
+            document.getElementById("DivNewDiscussion").style.display = "none"; 
+
             const className = "bg-primary";
 
             var idDiscussion = event.target.getAttribute('data-idDiscussion');

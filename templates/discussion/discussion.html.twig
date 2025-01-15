@@ -1,15 +1,15 @@
-{% if item.personOne != app.user %}  
-    {% set newItem = item.personOne  %} 
+{% if item.personInvitationSender != app.user %}  
+    {% set newItem = item.personInvitationSender  %} 
 {% endif %}
 
-{% if item.personTwo != app.user %}  
-    {% set newItem = item.personTwo  %} 
+{% if item.personInvitationRecipient != app.user %}  
+    {% set newItem = item.personInvitationRecipient  %} 
 {% endif %}
 
-{% if item.personOne == app.user %}  
-    {% set numberUnreadMessages = item.personTwoNumberUnreadMessages  %}
+{% if item.personInvitationSender == app.user %}  
+    {% set numberUnreadMessages = item.personInvitationRecipientNumberUnreadMessages  %}
 {% else %} 
-    {% set numberUnreadMessages = item.personOneNumberUnreadMessages  %}
+    {% set numberUnreadMessages = item.personInvitationSenderNumberUnreadMessages  %}
 {% endif %}
 
 <div 
@@ -26,12 +26,12 @@
         <img 
             class="card-img-top"
             {% if newItem.brochureFilename %} 
-                src="data:{{ newItem.mimeType }};base64,{{ newItem.brochureFilename|decrypt(subDirectory) }}" 
+                src="data:{{ newItem.sensitiveDataMimeType }};base64,{{ newItem.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
             {% else %}
                 src="{{asset('img/avatars/avatar.jpg')}}" 
             {% endif %}
             class="img-fluid rounded-circle mb-2" 
-            alt="{{ newItem.name }}" 
+            alt="{{ newItem.sensitiveDataName }}" 
             width="100" height="100" 
             onclick="discussionClick(event)" 
             data-idDiscussion="{{ item.id }}" 
@@ -40,7 +40,7 @@
         >
         <h5 class="card-title" style="color:black;">
             <br />
-            {{ newItem.firstName }} {{ newItem.name }}
+            {{ newItem.sensitiveDataFirstName }} {{ newItem.sensitiveDataName }} {{newItem.id }} 
             
             <a data-bs-toggle="modal" 
                 data-bs-target="#profilInfo{{ newItem.id }}"

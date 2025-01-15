@@ -1,57 +1,98 @@
+version: '3.8'
+
 services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: symfony_app
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html:cached
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    ports:
+      - "9000:9000"
+    networks:
+      - symfony_network
+    environment:
+      SYMFONY_ENV: dev
+    depends_on:
+      - db
+      - elasticsearch
+
+  web:
+    image: nginx:latest
+    container_name: symfony_web
+    volumes:
+      - .:/var/www/html:cached
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    networks:
+      - symfony_network
+    depends_on:
+      - app
+
   db:
     image: mysql:8
+    container_name: symfony_db
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: search
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
     ports:
       - "3306:3306"
+    networks:
+      - symfony_network
     volumes:
       - db_data:/var/lib/mysql
 
   phpmyadmin:
-        image: phpmyadmin
-        restart: always
-        depends_on:
-            - db
-        ports:
-            - 8080:80
-        environment:
-            PMA_HOST: db
-            
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.16
-    container_name: elasticsearch
+    image: phpmyadmin:latest
+    container_name: symfony_phpmyadmin
     environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - symfony_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: symfony_elasticsearch
+    environment:
+      discovery.type: single-node
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
       - "9300:9300"
-
-  php:
-    build: .
-    ports:
-      - 80:80
-      - 443:443
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./:/app
-      - caddy_data:/data
-      - caddy_config:/config
-    tty: true
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - symfony_network
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
   maildev:
-    image: maildev/maildev
-    container_name: maildev_docker_symfony
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    image: maildev/maildev:latest
+    container_name: symfony_maildev
     ports:
-      - "8081:80"
-    restart: always
+      - "1025:1025"
+      - "8025:80"
+    networks:
+      - symfony_network
+
+networks:
+  symfony_network:
+    driver: bridge
 
 volumes:
-  caddy_data:
-  caddy_config:
   db_data:
+  es_data:
