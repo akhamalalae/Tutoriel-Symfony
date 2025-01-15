@@ -29,3 +29,10 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /doc.txt
+
+###> php-cs-fixer/shim ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< php-cs-fixer/shim ###
+
+/config/secrets/

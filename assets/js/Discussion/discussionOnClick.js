@@ -6,42 +6,52 @@ import DiscussionUtils from "./discussionUtils";
 
 import ButtonForm from "../Components/buttonForm";
 
-import Routing from "fos-router";
-
 import Message from "../Message/message";
 
 import MessageUtils from "../Message/messageUtils";
 
-import Translation from "../Translation/translation";
-
-class DiscussionOnClick {    
+class DiscussionOnClick {  
     constructor() {
     }
-    
+
+    newDiscussion () {
+        window.addNewDiscussion = function addNewDiscussion(event)
+        {
+            document.getElementById('search_message_with_criteria').innerHTML = '';
+
+            document.getElementById('search_discussion_with_criteria').innerHTML = '';
+
+            document.getElementById("DivNewDiscussion").style.display = "block"; 
+        }
+    }
     searchWithCriteria () {
         window.searchWithCriteriaClick = function searchWithCriteriaClick(event)
         {
             let view = event.target.getAttribute('data-view');
 
+            document.getElementById('search_message_with_criteria').innerHTML = '';
+
+            document.getElementById('search_discussion_with_criteria').innerHTML = '';
+
+            document.getElementById("DivNewDiscussion").style.display = "none"; 
+
             if (view == "discussion") {
-                document.getElementById('search_message_with_criteria').innerHTML = '';
-
-                document.getElementById('search_discussion_with_criteria').innerHTML = '';
-
-                let locale = new Translation().locale();
-
-                let url = Routing.generate('app_search_discussion', {
-                    '_locale': locale, 
-                });
+                let url = new DiscussionUtils().urlSearchDiscussion(null);
 
                 new Discussion().formSearchDiscussion(url);
+
+                window.changeListSavedSearch = function changeListSavedSearch() {
+                    var selectBox = document.getElementById("listSavedSearch");
+
+                    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+                    let url = new DiscussionUtils().urlSearchDiscussion(selectedValue);
+
+                    new Discussion().formSearchDiscussion(url);
+                }
             }
 
             if (view == "message") {
-                document.getElementById('search_discussion_with_criteria').innerHTML = '';
-
-                document.getElementById('search_message_with_criteria').innerHTML = '';
-
                 let messageUtils = new MessageUtils();
 
                 let idDiscussion = event.target.getAttribute('data-idDiscussion');
@@ -67,9 +77,9 @@ class DiscussionOnClick {
         }
     }
     submitSearchDiscussuionCriteria () {
-        window.submitSearchDiscussuionCriteriaClick = function submitSearchDiscussuionCriteriaClick(event)
+        window.submitSearchDiscussionCriteriaClick = function submitSearchDiscussionCriteriaClick(event)
         {
-            let btn = document.getElementById('btn_submit_search_condition_criteria');
+            let btn = document.getElementById('btn_submit_search_discussion_criteria');
 
             let btnSubmit = new ButtonForm();
 
@@ -83,7 +93,7 @@ class DiscussionOnClick {
 
             new Discussion().list(url);
 
-            utils.cleanCriteria();
+            //utils.cleanCriteria();
 
             btnSubmit.removeDisabled(btn);
         }
@@ -91,8 +101,6 @@ class DiscussionOnClick {
     paginationDiscussion () {
         window.paginationDiscussionClick = function paginationDiscussionClick(event)
         {
-            //let url = event.target.getAttribute('data-url');
-
             let utils = new DiscussionUtils();
 
             let criteria = utils.criteria();

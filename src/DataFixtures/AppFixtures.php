@@ -2,26 +2,27 @@
 
 namespace App\DataFixtures;
 
-use App\Factory\CategoryFactory;
-use App\Factory\CourseFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Factory\UserFactory;
+use App\Factory\MessageFactory;
+use App\Factory\DiscussionFactory;
+use App\Factory\DiscussionMessageUserFactory;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        ini_set("memory_limit", "-1");
-        for ($i = 0; $i < 1000; $i++) {
-            CategoryFactory::createOne();
-        }
+        ini_set('memory_limit', '1G'); // Définit la limite de mémoire à 1 Go
+ 
+        // Création de 10 utilisateurs avec la factory
+        UserFactory::new()->createMany(10);
 
-        $manager->flush();
-        $manager->clear();
+        DiscussionFactory::new()->createMany(10);
 
-        for ($i = 0; $i < 10000; $i++) {
-            CourseFactory::createOne();
-        }
+        MessageFactory::new()->createMany(10);
+
+        DiscussionMessageUserFactory::new()->createMany(10);
 
         $manager->flush();
     }

@@ -11,8 +11,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
+use App\Entity\SearchDiscussion;
 use Symfony\Component\HttpFoundation\Request;
-use App\Controller\Search\Discussion\SearchDiscussions;
+use App\Controller\Messaging\Search\Discussion\SearchDiscussions;
 use App\Controller\Pagination\Pagination;
 
 class DiscussionService
@@ -44,8 +45,8 @@ class DiscussionService
 
         $user = $this->security->getUser();
 
-        $discussion->setPersonOne($user)
-            ->setPersonTwo($discussion->getPersonTwo())
+        $discussion->setPersonInvitationSender($user)
+            ->setPersonInvitationRecipient($discussion->getPersonInvitationRecipient())
             ->setCreatorUser($user)
             ->setDateCreation(new \DateTime())
             ->setDateModification(new \DateTime());
@@ -62,11 +63,11 @@ class DiscussionService
         ]);
     }
 
-    public function searchDiscussions(int $page, array|null $criteria = []): array
+    public function searchDiscussions(int $page, SearchDiscussion|null $criteria, bool $saveSearch): array
     {
         $user = $this->security->getUser();
 
-        $discussions = $this->searchDiscussions->findDiscussions($user, $criteria);
+        $discussions = $this->searchDiscussions->findDiscussions($user, $criteria, $saveSearch);
 
         return $this->pagination->getPaginationDiscussion(
             $discussions['discussions'],

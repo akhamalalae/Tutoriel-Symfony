@@ -32,6 +32,27 @@
                     <span class="align-middle">{{ 'Discussion'|trans }}</span>
                 </a>
             </li>
+
+            <li class="sidebar-header" data-bs-toggle="collapse" href="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                {{ 'Settings'|trans }} 
+                <i class="align-middle" data-feather="chevron-down"></i> 
+            </li>
+
+            <div class="collapse" id="collapseSettings">
+                <li id='sidebar-nav-settings' class="sidebar-item">
+                    <a class="sidebar-link" href="{{ path('privacy_policy') }}">
+                        <i class="align-middle" data-feather="settings"></i> 
+                        <span class="align-middle">{{ 'Privacy'|trans }}</span>
+                    </a>
+                </li>
+                <li id='sidebar-nav-help-center' class="sidebar-item">
+                    <a class="sidebar-link" href="{{ path('help_center') }}">
+                        <i class="align-middle" data-feather="help-circle"></i> 
+                        <span class="align-middle">{{ 'Help Center'|trans }}</span>
+                    </a>
+                </li>
+            </div>
+
         </ul>
     </div>
 </nav>

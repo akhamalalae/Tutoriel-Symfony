@@ -1,14 +1,21 @@
 <?php
 
 namespace App\EncryptDecrypt;
-
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class EncryptDecryptFile
 {
     const FILE_ENCRYPTION_BLOCKS = 10000;
 
+    private $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
+
     public function loadKey() : ?string
     {
-        return $GLOBALS['app']->getContainer()->getParameter('key_secrets');
+        return $this->params->get('key_secrets');
     }
 
     /**

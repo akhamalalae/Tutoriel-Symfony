@@ -5,6 +5,8 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
+        custom_user_provider:
+            id: App\Security\CustomUserProvider
         app_user_provider:
             entity:
                 class: App\Entity\User
@@ -15,7 +17,7 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            provider: custom_user_provider
             form_login:
                 login_path: app_login
                 check_path: app_login

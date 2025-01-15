@@ -16,11 +16,12 @@ Please upload a valid image: Veuillez télécharger une image valide
 You should agree to our terms.: Vous devez accepter nos conditions.
 Error page: Page d'erreur
 Error: Erreur
-Update profile: Mettre à jour le profil
+Update profil: Mettre à jour le profil
 Update: Mise à jour
 Log out: Se déconnecter
 Profil: Profile
-Settings & Privacy: Paramètres et confidentialité
+Privacy: Confidentialité
+Settings: Paramètres
 Help Center: Centre d'aide
 Hi! Please confirm your email!: Salut! Veuillez confirmer votre email !
 Please confirm your email address by clicking the following link: Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant
@@ -82,7 +83,13 @@ Forgotten password: Mot de passe oublié
 Reset Password: Réinitialiser le mot de passe
 Reset: Réinitialiser
 Messaging: Messagerie
-
 Dashboard: Tableau de bord
+Show all messages: Afficher tous les messages
+Choose the Recipient person: Choisissez la personne destinataire
+Terms: Conditions Générales d'Utilisation
 
-
+Welcome to the help center. Here are the popular topics: Bienvenue au centre d'aide. Voici les sujets populaires
+How do I reset my password?: Comment réinitialiser mon mot de passe ?
+How do I update my profile?: Comment mettre à jour mon profil ?
+Contact technical support: Contactez le support technique
+This page describes how we collect, use and protect your personal data.:  Cette page décrit comment nous collectons, utilisons et protégeons vos données personnelles.

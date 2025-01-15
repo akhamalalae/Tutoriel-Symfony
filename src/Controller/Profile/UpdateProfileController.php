@@ -18,6 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Security\Core\Security;
 use App\Form\Type\Registration\RegistrationFormType;
+use App\Services\Breadcrumb\BreadcrumbService;
 
 class UpdateProfileController extends AbstractController
 {
@@ -36,10 +37,13 @@ class UpdateProfileController extends AbstractController
         FileUploader $fileUploader,
         UserPasswordHasherInterface $userPasswordHasher, 
         TranslatorInterface $translator,
+        BreadcrumbService $breadcrumbService,
         EntityManagerInterface $entityManager): Response
     {
         $user = $this->currentLoggedUser;
-        
+
+        $breadcrumbService->addBreadcrumb('Update profil', $this->generateUrl('app_update_profil'));
+
         $form = $this->createForm(RegistrationFormType::class, $user, [
             'view' => 'update',
         ]);
@@ -48,18 +52,23 @@ class UpdateProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            /*
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            */
 
             $file = $form->get('image')->getData();
             if ($file) {
                 $mimeType = $file->getMimeType();
+                
                 $fileName = $fileUploader->upload($file, self::DIRECTORY_AVATARS)['name'];
+
                 $user->setBrochureFilename($fileName);
+
                 $user->setMimeType($mimeType);
             }
 
@@ -68,7 +77,7 @@ class UpdateProfileController extends AbstractController
             
             $this->addFlash('success', $translator->trans('Your profile has been updated'));
 
-            return $this->redirectToRoute('app_update_profil');
+            //return $this->redirectToRoute('app_update_profil');
         }
 
         return $this->render('profil/update_profil.html.twig', [

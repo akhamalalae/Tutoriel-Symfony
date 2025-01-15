@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-header">
+        <h5 class="card-title mb-0">
+            {{ "Conditions Générales d'Utilisation" }}
+        </h5>
+	</div>
+	<div class="card-body h-100">
+        <h2>
+            {{ '1. Acceptation des Conditions' }}
+        </h2>
+        <p>
+            {{ 
+                "
+                En accédant et en utilisant notre site web, vous acceptez les présentes conditions générales d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser nos services.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "2. Services Fournis" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Notre site offre [décrire les services proposés, ex : une plateforme de vente, un service de réservation, etc.]. Nous nous réservons le droit de modifier, suspendre ou arrêter tout service à tout moment sans préavis.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "3. Inscription et Compte Utilisateur" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                L'utilisateur doit fournir des informations précises lors de la création d'un compte.
+                Vous êtes responsable de la confidentialité de vos identifiants.
+                Toute activité effectuée via votre compte relève de votre responsabilité.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "4. Protection des Données Personnelles" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Nous collectons et traitons vos données personnelles conformément à notre [Politique de confidentialité]. Vos informations sont sécurisées et chiffrées pour protéger votre vie privée.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "5. Propriété Intellectuelle" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Tous les contenus présents sur ce site (textes, images, vidéos, logos) sont protégés par des droits d'auteur et autres lois relatives à la propriété intellectuelle. Toute reproduction non autorisée est interdite.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "6. Responsabilités de l'Utilisateur" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                L'utilisateur s'engage à ne pas :
+
+                Utiliser le site à des fins illégales ;
+                Violer les droits d'autres utilisateurs ;
+                Tenter de nuire au fonctionnement du site.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "7. Limitation de Responsabilité" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Nous déclinons toute responsabilité pour tout dommage direct ou indirect résultant de l'utilisation de notre site ou de l'incapacité à y accéder.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "8. Modifications des Conditions" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Nous nous réservons le droit de modifier ces conditions à tout moment. Les utilisateurs seront informés des changements via une notification sur le site.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "9. Contact" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Si vous avez des questions sur ces conditions, veuillez nous contacter à [email@example.com].
+                "
+            }}
+        </p>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('settings') }}
+{% endblock %}

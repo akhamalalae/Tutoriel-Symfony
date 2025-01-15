@@ -1,0 +1,22 @@
+<div class="card-header">
+    <h5 class="card-title mb-0">
+      {{ 'New discussion'|trans }}
+    </h5>
+    <div class="card-body">
+        {{ form_start(formDiscussion, { attr: {'id': 'form_discussion' } }) }}
+        <div class="row">
+            <div class="mb-3 col-7">
+              {{ form_label(formDiscussion.personInvitationRecipient) }}
+              {{ form_widget(formDiscussion.personInvitationRecipient) }}
+            </div>
+
+            <div class="mb-3 col-5">
+                {{ form_row(formDiscussion.save) }}
+            </div>
+        </div>
+		    {{ form_end(formDiscussion) }}
+    </div>
+</div>
+
+
+

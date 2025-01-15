@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-header">
+        <h5 class="card-title mb-0">
+            {{ 'Politique de Confidentialité' }}
+        </h5>
+	</div>
+	<div class="card-body h-100">
+        <h2>
+            {{ '1. Introduction' }}
+        </h2>
+        <p>
+            {{ 
+                'Votre confiance est essentielle pour nous. Cette page décrit comment nous collectons, utilisons et protégeons vos données personnelles lorsque vous interagissez avec notre site/application. Nous nous engageons à respecter et protéger votre vie privée conformément aux réglementations en vigueur.'
+            }}
+        </p>
+
+        <h2>
+            {{ '2. Données Collectées' }}
+        </h2>
+        <p>
+            {{ 
+                'Nous collectons uniquement les informations nécessaires à la bonne exécution de nos services, notamment :'
+            }}
+            {{
+                'Données d’identification (nom, prénom, adresse e-mail).
+                Informations de connexion (adresse IP, logs de connexion).
+                Données de navigation (pages visitées, préférences utilisateur).
+                Ces données sont collectées avec votre consentement et dans le respect des obligations légales.'
+            }}
+        </p>
+
+        <h2>
+            {{ '3. Utilisation des Données' }}
+        </h2>
+        <p>
+            {{ 
+                'Vos informations sont utilisées pour :
+
+                Fournir et personnaliser nos services.
+                Assurer la sécurité de notre plateforme.
+                Améliorer votre expérience utilisateur.
+                Communiquer des informations importantes, telles que des mises à jour de nos services.
+                Nous n utiliserons jamais vos données à des fins non autorisées ou sans votre consentement.
+                '
+            }}
+        </p>
+
+        <h2>
+            {{ '4. Sécurité et Protection des Données' }}
+        </h2>
+        <p>
+            {{ 
+                "Nous prenons la sécurité de vos données très au sérieux. Toutes les données personnelles que vous nous confiez sont chiffrées à chaque étape de leur traitement, qu'il s'agisse de leur stockage ou de leur transmission."
+            }}
+            {{
+                'Chiffrement : Les données sensibles sont chiffrées grâce à des technologies de pointe afin d’empêcher tout accès non autorisé.
+                Accès restreint : Seuls les membres autorisés de notre équipe ont accès aux informations nécessaires à leurs missions spécifiques.
+                Tests réguliers : Nos systèmes sont régulièrement testés pour garantir leur sécurité.
+                '
+            }}
+        </p>
+
+        <h2>
+            {{ ' 5. Partage des Données' }}
+        </h2>
+        <p>
+            {{ 
+                'Nous ne partageons jamais vos informations avec des tiers, sauf si cela est nécessaire pour fournir nos services, respecter une obligation légale ou garantir la sécurité de nos utilisateurs.'
+            }}
+        </p>
+
+        <h2>
+            {{ '6. Vos Droits' }}
+        </h2>
+        <p>
+            {{ 
+                'Accès et rectification.
+                Suppression de vos informations.
+                Opposition au traitement de vos données.
+                Portabilité de vos données vers une autre plateforme.
+                Pour exercer vos droits, contactez-nous via [adresse e-mail de contact].'
+            }}
+        </p>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('settings') }}
+{% endblock %}

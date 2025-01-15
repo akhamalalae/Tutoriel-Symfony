@@ -21,7 +21,6 @@ class MessageController extends AbstractController
         $user = $this->security->getUser();
 
         $unreadMessages = $this->discussionService->searchMessagesNavBar();
-        //$this->em->getRepository(Discussion::class)->messagesNavBar($user);
 
         return $this->render('nav-bar/messages.html.twig', [
             'messages' => $unreadMessages,

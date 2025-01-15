@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-header">
+        <h5 class="card-title mb-0">
+            {{ "Terms and Conditions" }}
+        </h5>
+	</div>
+	<div class="card-body h-100">
+        <h2>
+            {{ "1. Acceptance of Terms" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                By accessing and using our website, you agree to these terms and conditions. If you do not agree, please refrain from using our services.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "2. Services Provided" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Our website offers [describe the services provided, e.g., a sales platform, booking service, etc.]. We reserve the right to modify, suspend, or discontinue any service at any time without notice.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "3. Registration and User Account" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Users must provide accurate information when creating an account.
+                You are responsible for keeping your login details confidential.
+                Any activity conducted through your account is your responsibility.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "4. Personal Data Protection" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                We collect and process your personal data in accordance with our [Privacy Policy]. Your information is securely encrypted to protect your privacy.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "5. Intellectual Property" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                All content on this site (texts, images, videos, logos) is protected by copyright and other intellectual property laws. Unauthorized reproduction is prohibited.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "6. User Responsibilities" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                Users agree not to:
+
+                Use the site for illegal purposes;
+                Violate the rights of other users;
+                Attempt to disrupt the functioning of the site.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "7. Limitation of Liability" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                We disclaim any liability for any direct or indirect damages resulting from the use of or inability to access our website.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "8. Changes to Terms" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                We reserve the right to modify these terms at any time. Users will be informed of changes via a notice on the site.
+                "
+            }}
+        </p>
+
+        <h2>
+            {{ "9. Contact" }}
+        </h2>
+        <p>
+            {{ 
+                "
+                If you have any questions regarding these terms, please contact us at [email@example.com].
+                "
+            }}
+        </p>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('settings') }}
+{% endblock %}

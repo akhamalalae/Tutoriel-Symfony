@@ -8,10 +8,14 @@
     </a>
 
     <div class="dropdown-menu dropdown-menu-end">
-        <a class="dropdown-item" href="{{ currentPath|replace({'en': 'fr'}) }}" >
+        <a class="dropdown-item" 
+            href="{{ currentPath|replace({'/en/': '/fr/'}) }}"
+        >
             {{ 'French'|trans }}
         </a>
-        <a class="dropdown-item" href="{{ currentPath|replace({'fr': 'en'}) }}" >
+        <a class="dropdown-item"
+            href="{{ currentPath|replace({'/fr/': '/en/'}) }}"
+        >
             {{ 'English'|trans }}
         </a>
     </div>

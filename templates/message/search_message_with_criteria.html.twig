@@ -13,61 +13,32 @@
 <div class="card-header">
     <div class="flex-grow-1">
         <small class="float-end text-navy">
-            {% if searchMessage is not empty %}
-                <select id="listSavedSearch" 
-                    onchange="changeListSavedSearch();"
-                    class="form-select" 
-                    aria-label="Select created This Month">
-                    <option value="" disabled {{ description == '' ? "selected" : ""  }}>{{ 'Choose saved search'|trans }}</option>
-                    {% for item in searchMessage %}
-                        <option value="{{ item.id }}" {{ description == item.sensitiveDataDescription ? "selected" : ""  }}>{{ item.sensitiveDataDescription }}</option>
-                    {% endfor %}
-                </select>
-            {% endif %}
+            {% include 'components/choose_saved_search.html.twig' with { 'view': 'message', 'searchMessage': searchMessage, 'description': description } %}
         </small>
         <h5 class="card-title mb-0">
             {{ 'Search Message'|trans }}
         </h5><br />
     </div>
-    <div class="card-body text-center">
+    <div class="card-body">
         <div class="row">
             <div class="mb-3 col-6">
+                <label for="message" class="form-label">{{ 'Message'|trans }}</label>
                 <input type="Message" value='{{ message }}' class="form-control" id="inputMessage" placeholder="{{ 'Message'|trans }}">
             </div>
 
             <div class="mb-3 col-6">
+                <label for="fileName" class="form-label">{{ 'Name file'|trans }}</label>
                 <input type="Message" value='{{ fileName }}' class="form-control" id="inputFile" placeholder="{{ 'Name file'|trans }}">
             </div>
 
             <div class="mb-3 col-6">
-                <select id="createdThisMonth" class="form-select" placeholder="{{ 'Created This Month'|trans }}" aria-label="{{ 'Created This Month'|trans }}">
-                    <option value="false" disabled selected>{{ 'Created This Month'|trans }}</option>
-                    <option value="true" {{ createdThisMonth == true ? "selected" : ""  }}>{{ 'Yes'|trans }}</option>
-                    <option value="false" {{ createdThisMonth == false ? "selected" : "" }}>{{ 'No'|trans }}</option>
-                </select>
+                <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" name="createdThisMonth" {{ createdThisMonth == true ? "checked" : "" }}>
+                    <label class="form-check-label">{{ 'Created This Month'|trans }}</label>
+                </div>
             </div>
     
-            <hr/>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <div class="mb-3 col-5">            
-                    <input type="Description" class="form-control" id="inputDescription" placeholder="{{ 'Description'|trans }}">
-                </div>
-                <div class="mb-3 col-4">            
-                    <select id="saveSearch" class="form-select" aria-label="Save Search">
-                        <option value="false" disabled selected>{{ 'Save Search'|trans }}</option>
-                        <option value="true">{{ 'Yes'|trans }}</option>
-                        <option value="false">{{ 'No'|trans }}</option>
-                    </select>
-                </div>
-                <button onclick="submitSearchMessageCriteriaClick(event)" 
-                    class="btn btn-primary mb-3"
-                    id="btn_submit_search_message_criteria"
-                    data-idDiscussion="{{ idDiscussion }}" 
-                    data-page="{{ page }}"
-                >
-                    {{ 'Search'|trans }}
-                </button>
-            </div>
+            {% include 'components/submit_search_criteria.html.twig' with { 'view': 'message', 'page': page, 'idDiscussion': idDiscussion } %}
         </div>
     </div>
 </div>

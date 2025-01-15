@@ -28,6 +28,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function findUsersWithBirthdayToday(): array
+    {
+        $today = (new \DateTime())->format('m-d');
+
+        $qb = $this->createQueryBuilder('u');
+        $qb->where('DATE_FORMAT(u.dateOfBirth, \'%m-%d\') = :today')
+            ->setParameter('today', $today);
+
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -50,10 +61,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $findExistUsers = $this->findExistUsersDiscussion($discussions);
 
         $createQueryBuilder = $this->createQueryBuilder('u')
-            ->leftJoin('u.discussionsPersonOne', 'dPersonOne')
-            ->leftJoin('u.discussionsPersonTwo', 'dPersonTwo')
-            ->leftJoin('dPersonTwo.personTwo', 'pTwo')
-            ->leftJoin('dPersonOne.personOne', 'pOne')
+            ->leftJoin('u.discussionsPersonInvitationSender', 'dPersonInvitationSender')
+            ->leftJoin('u.discussionsPersonInvitationRecipient', 'dPersonInvitationRecipient')
+            ->leftJoin('dPersonInvitationRecipient.personInvitationRecipient', 'pTwo')
+            ->leftJoin('dPersonInvitationSender.personInvitationSender', 'pOne')
         ;
 
         if ($findExistUsers) {
@@ -73,15 +84,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $existUsersDiscussion = array();
 
         foreach ($discussions as $item) {
-            $personOne = $item->getPersonOne()->getId();
-            $personTwo = $item->getPersonTwo()->getId();
+            $personInvitationSender = $item->getPersonInvitationSender()->getId();
+            $personInvitationRecipient = $item->getPersonInvitationRecipient()->getId();
 
-            if (! in_array($personOne, $existUsersDiscussion)) {
-                array_push($existUsersDiscussion, $personOne);
+            if (! in_array($personInvitationSender, $existUsersDiscussion)) {
+                array_push($existUsersDiscussion, $personInvitationSender);
             }
 
-            if (! in_array($personTwo, $existUsersDiscussion)) {
-                array_push($existUsersDiscussion, $personTwo);
+            if (! in_array($personInvitationRecipient, $existUsersDiscussion)) {
+                array_push($existUsersDiscussion, $personInvitationRecipient);
             }
         }
 

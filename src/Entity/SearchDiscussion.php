@@ -18,7 +18,7 @@ class SearchDiscussion
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nameUser = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
@@ -31,6 +31,12 @@ class SearchDiscussion
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
+
+    private ?string $sensitiveDataDescription = '';
+
+    private ?string $sensitiveDataName = '';
+
+    private ?string $sensitiveDataFirstName = '';
 
     public function getId(): ?int
     {
@@ -49,14 +55,14 @@ class SearchDiscussion
         return $this;
     }
 
-    public function getNameUser(): ?string
+    public function getName(): ?string
     {
-        return $this->nameUser;
+        return $this->name;
     }
 
-    public function setNameUser(string $nameUser): static
+    public function setName(string $name): static
     {
-        $this->nameUser = $nameUser;
+        $this->name = $name;
 
         return $this;
     }
@@ -105,6 +111,42 @@ class SearchDiscussion
     public function setDateCreation(\DateTimeInterface $dateCreation): static
     {
         $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getSensitiveDataDescription(): ?string
+    {
+        return $this->sensitiveDataDescription;
+    }
+
+    public function setSensitiveDataDescription(string $sensitiveDataDescription): static
+    {
+        $this->sensitiveDataDescription = $sensitiveDataDescription;
+
+        return $this;
+    }
+
+    public function getSensitiveDataName(): ?string
+    {
+        return $this->sensitiveDataName;
+    }
+
+    public function setSensitiveDataName(string $sensitiveDataName): static
+    {
+        $this->sensitiveDataName = $sensitiveDataName;
+
+        return $this;
+    }
+
+    public function getSensitiveDataFirstName(): ?string
+    {
+        return $this->sensitiveDataFirstName;
+    }
+
+    public function setSensitiveDataFirstName(string $sensitiveDataFirstName): static
+    {
+        $this->sensitiveDataFirstName = $sensitiveDataFirstName;
 
         return $this;
     }

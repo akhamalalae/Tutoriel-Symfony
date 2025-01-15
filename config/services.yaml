@@ -1,6 +1,7 @@
 parameters:
     directory: '%kernel.project_dir%/public/'
     key_secrets: '%env(KEY_SECRETS)%'
+    iv: '%env(IV)%'
 services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -13,14 +14,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Controller\Search\Message\SearchMessages:
+    App\Controller\Messaging\Search\Message\SearchMessages:
         tags:
             - controller_service_arguments
         public: true
         arguments:
             - '@fos_elastica.finder.message'
 
-    App\Controller\Search\Discussion\SearchDiscussions:
+    App\Controller\Messaging\Search\Discussion\SearchDiscussions:
         tags:
             - controller_service_arguments
         public: true

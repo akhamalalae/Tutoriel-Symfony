@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Help Center'|trans }}{% endblock %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-header">
+        <h5 class="card-title mb-0">
+            {{ "Help Center" }}
+        </h5>
+	</div>
+	<div class="card-body h-100">
+        <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    {{ "1. How do I reset my password?" }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <p>
+                            {{
+                                "If you have forgotten your password or want to change it:
+
+                                Click on the Forgot Password? link on the login page.
+                                Enter your registered email address and submit the form.
+                                Check your inbox for a password reset email.
+                                Follow the instructions in the email to create a new password.
+                                If you don’t receive the email, please check your spam folder or contact technical support."
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    {{ "2. How do I update my profile?" }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                    <div class="accordion-body">
+                        <p>
+                            {{
+                                "To update your profile information:
+
+                                Log in to your account.
+                                Navigate to the Profile.
+                                Click Edit to modify your personal information such as name, email, or contact details.
+                                Save the changes.
+                                For security reasons, some changes may require email confirmation."
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    {{ "3. Contact Technical Support" }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                <div class="accordion-body">
+                    <p>
+                        {{
+                            "
+                                If you need further assistance, our technical support team is here to help you.
+
+                                Email: [support@example.com]
+                                Phone: [Support Phone Number]
+                                Support Hours: Monday to Friday, 9:00 AM to 6:00 PM
+                                We strive to respond to all inquiries as quickly as possible to ensure your issues are resolved efficiently.
+
+                                Thank you for choosing our services!
+                            "
+                        }}
+                    </p>
+                </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('help') }}
+{% endblock %}

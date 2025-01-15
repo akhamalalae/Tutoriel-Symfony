@@ -19,11 +19,11 @@ class Discussion
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'discussionsPersonOne')]
-    private ?User $personOne = null;
+    #[ORM\ManyToOne(inversedBy: 'discussionsPersonInvitationSender')]
+    private ?User $personInvitationSender = null;
 
-    #[ORM\ManyToOne(inversedBy: 'discussionsPersonTwo')]
-    private ?User $personTwo = null;
+    #[ORM\ManyToOne(inversedBy: 'discussionsPersonInvitationRecipient')]
+    private ?User $personInvitationRecipient = null;
 
     #[ORM\ManyToOne(inversedBy: 'discussionsCreatorUser')]
     private ?User $creatorUser = null;
@@ -41,10 +41,10 @@ class Discussion
     private Collection $discussionMessageUsers;
 
     #[ORM\Column(nullable: true)]
-    private ?int $personOneNumberUnreadMessages = null;
+    private ?int $personInvitationSenderNumberUnreadMessages = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $personTwoNumberUnreadMessages = null;
+    private ?int $personInvitationRecipientNumberUnreadMessages = null;
 
     public function __construct()
     {
@@ -56,26 +56,26 @@ class Discussion
         return $this->id;
     }
 
-    public function getPersonOne(): ?User
+    public function getPersonInvitationSender(): ?User
     {
-        return $this->personOne;
+        return $this->personInvitationSender;
     }
 
-    public function setPersonOne(?User $personOne): static
+    public function setPersonInvitationSender(?User $personInvitationSender): static
     {
-        $this->personOne = $personOne;
+        $this->personInvitationSender = $personInvitationSender;
 
         return $this;
     }
 
-    public function getPersonTwo(): ?User
+    public function getPersonInvitationRecipient(): ?User
     {
-        return $this->personTwo;
+        return $this->personInvitationRecipient;
     }
 
-    public function setPersonTwo(?User $personTwo): static
+    public function setPersonInvitationRecipient(?User $personInvitationRecipient): static
     {
-        $this->personTwo = $personTwo;
+        $this->personInvitationRecipient = $personInvitationRecipient;
 
         return $this;
     }
@@ -158,26 +158,26 @@ class Discussion
         return $this;
     }
 
-    public function getPersonOneNumberUnreadMessages(): ?int
+    public function getPersonInvitationSenderNumberUnreadMessages(): ?int
     {
-        return $this->personOneNumberUnreadMessages;
+        return $this->personInvitationSenderNumberUnreadMessages;
     }
 
-    public function setPersonOneNumberUnreadMessages(?int $personOneNumberUnreadMessages): static
+    public function setPersonInvitationSenderNumberUnreadMessages(?int $personInvitationSenderNumberUnreadMessages): static
     {
-        $this->personOneNumberUnreadMessages = $personOneNumberUnreadMessages;
+        $this->personInvitationSenderNumberUnreadMessages = $personInvitationSenderNumberUnreadMessages;
 
         return $this;
     }
 
-    public function getPersonTwoNumberUnreadMessages(): ?int
+    public function getPersonInvitationRecipientNumberUnreadMessages(): ?int
     {
-        return $this->personTwoNumberUnreadMessages;
+        return $this->personInvitationRecipientNumberUnreadMessages;
     }
 
-    public function setPersonTwoNumberUnreadMessages(?int $personTwoNumberUnreadMessages): static
+    public function setPersonInvitationRecipientNumberUnreadMessages(?int $personInvitationRecipientNumberUnreadMessages): static
     {
-        $this->personTwoNumberUnreadMessages = $personTwoNumberUnreadMessages;
+        $this->personInvitationRecipientNumberUnreadMessages = $personInvitationRecipientNumberUnreadMessages;
 
         return $this;
     }

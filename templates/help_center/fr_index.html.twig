@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Help Center'|trans }}{% endblock %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-header">
+        <h5 class="card-title mb-0">
+            {{ "Centre d'Aide" }}
+        </h5>
+	</div>
+	<div class="card-body h-100">
+        <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    {{ "1. Comment réinitialiser mon mot de passe ?" }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <p>
+                            {{
+                                "Si vous avez oublié votre mot de passe ou souhaitez le changer :
+
+                                Cliquez sur le lien « Mot de passe oublié ? » sur la page de connexion.
+                                Entrez votre adresse email enregistrée et soumettez le formulaire.
+                                Consultez votre boîte de réception pour un email de réinitialisation de mot de passe.
+                                Suivez les instructions dans l'email pour créer un nouveau mot de passe.
+                                Si vous ne recevez pas l'email, vérifiez votre dossier de spam ou contactez le support technique.
+
+                                "
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    {{ "2. Comment mettre à jour mon profil ?" }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                    <div class="accordion-body">
+                        <p>
+                            {{
+                                "Pour modifier les informations de votre profil :
+
+                                Connectez-vous à votre compte.
+                                Accédez à la section « Profil » ou « Paramètres du compte ».
+                                Cliquez sur « Modifier » pour mettre à jour vos informations personnelles, telles que votre nom, email ou coordonnées.
+                                Enregistrez les modifications.
+                                Pour des raisons de sécurité, certaines modifications peuvent nécessiter une confirmation par email."
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    {{ "3. Contacter le support technique" }}
+                </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                <div class="accordion-body">
+                    <p>
+                        {{
+                            "Si vous avez besoin d'aide supplémentaire, notre équipe de support technique est à votre disposition.
+
+                            Email : [support@example.com]
+                            Téléphone : [Numéro de support]
+                            Horaires de support : Du lundi au vendredi, de 9h00 à 18h00
+                            Nous nous efforçons de répondre à toutes les demandes aussi rapidement que possible afin de résoudre vos problèmes efficacement.
+
+                            Merci de faire confiance à nos services !"
+                        }}
+                    </p>
+                </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('help') }}
+{% endblock %}
