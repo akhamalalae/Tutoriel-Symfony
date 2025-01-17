@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', async () => {
             const query = input.value;
             
-            if (query.length > 3) {
+            if (query.length > 3) {                
                 const response = await fetch(`/${locale}/user/address/search?q=${encodeURIComponent(query)}`);
                 const results = await response.json();
 

@@ -61,7 +61,7 @@ class RegistrationController extends AbstractController
                 $mimeType = $file->getMimeType();
 
                 $fileName = $fileUploader->upload($file, self::DIRECTORY_AVATARS)['name'];
-
+                
                 $user->setBrochureFilename($fileName);
                 
                 $user->setMimeType($mimeType);

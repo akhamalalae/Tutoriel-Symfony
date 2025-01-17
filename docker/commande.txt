@@ -17,6 +17,8 @@ php bin/console doctrine:migrations:migrate
 
 php bin/console fos:elastica:populate
 
+php bin/console debug:router --format=json > public/js/routes.json
+
 git init 
 git add README.md 
 git commit -m "first commit" 

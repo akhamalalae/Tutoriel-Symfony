@@ -146,6 +146,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     private ?string $sensitiveDataLinkedIn = '';
 
+    /**
+     * @var Collection<int, AnswerMessage>
+     */
+    #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: AnswerMessage::class)]
+    private Collection $answerMessages;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -159,6 +165,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->fileMessages = new ArrayCollection();
         $this->searchDiscussions = new ArrayCollection();
         $this->searchMessages = new ArrayCollection();
+        $this->answerMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -905,6 +912,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSensitiveDataLinkedIn(?string $sensitiveDataLinkedIn): static
     {
         $this->sensitiveDataLinkedIn = $sensitiveDataLinkedIn;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AnswerMessage>
+     */
+    public function getAnswerMessages(): Collection
+    {
+        return $this->answerMessages;
+    }
+
+    public function addAnswerMessage(AnswerMessage $answerMessage): static
+    {
+        if (!$this->answerMessages->contains($answerMessage)) {
+            $this->answerMessages->add($answerMessage);
+            $answerMessage->setCreatorUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswerMessage(AnswerMessage $answerMessage): static
+    {
+        if ($this->answerMessages->removeElement($answerMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($answerMessage->getCreatorUser() === $this) {
+                $answerMessage->setCreatorUser(null);
+            }
+        }
 
         return $this;
     }

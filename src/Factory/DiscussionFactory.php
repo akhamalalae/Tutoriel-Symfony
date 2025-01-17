@@ -10,9 +10,22 @@ use App\Factory\UserFactory;
 class DiscussionFactory extends ModelFactory
 {
     protected function getDefaults(): array
-    {   
+    {
         $personInvitationSender = UserFactory::random();
-        $personInvitationRecipient = UserFactory::random();
+
+        dump($personInvitationSender->getId());
+
+        // Obtenez tous les utilisateurs
+        $users = UserFactory::all();
+
+        // Filtrez l'utilisateur à exclure
+        $filteredUsers = array_filter($users, fn($user) => $user->getId() !== $personInvitationSender->getId());
+
+        // Sélectionnez un utilisateur aléatoire parmi ceux restants
+        $personInvitationRecipient = $filteredUsers[array_rand($filteredUsers)];
+        
+        dump($personInvitationRecipient->getId(), '-----');
+        
         return [
             'personInvitationSender' =>$personInvitationSender,
             'personInvitationRecipient' => $personInvitationRecipient,

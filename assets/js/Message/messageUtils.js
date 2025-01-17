@@ -1,26 +1,36 @@
-import Routing from "fos-router";
 
 import Translation from "../Translation/translation";
 
+const routes = require('../../js/routes.json');
+
+import Routing from '../../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
+
 class MessageUtils {    
     constructor() {
+        Routing.setRoutingData(routes);
+        this.locale = new Translation().locale();
     }
 
     url (idDiscussion, page , criteria) {
-        let locale = new Translation().locale();
 
         return Routing.generate('app_message', {
-            '_locale': locale, 
+            '_locale': this.locale , 
             'idDiscussion': idDiscussion, 
             'page': page,
             'criteria': criteria
         });
     }
+    urlDeleteMessage (idDiscussionMessageUser) {
+
+        return Routing.generate('app_delete_message', {
+            '_locale': this.locale , 
+            'id': idDiscussionMessageUser
+        });
+    }
     urlSearchMessage (idDiscussion, page, selectedValue) {
-        let locale = new Translation().locale();
 
         return Routing.generate('app_search_message', {
-            '_locale': locale, 
+            '_locale': this.locale , 
             'idDiscussion': idDiscussion, 
             'page': page,
             'idSearchMessage': selectedValue,
@@ -36,11 +46,11 @@ class MessageUtils {
         let createdThisMonth = false;
         let saveSearch = false;
 
-        if (valuesCreatedThisMonth.join() == 'on' ) {
+        if (valuesCreatedThisMonth.join() == 'on') {
             createdThisMonth = true
         }
 
-        if (valuesSaveSearch.join() == 'on' ) {
+        if (valuesSaveSearch.join() == 'on') {
             saveSearch = true
         }
         
@@ -62,6 +72,15 @@ class MessageUtils {
         document.getElementById("createdThisMonth").value  = '';
         document.getElementById('saveSearch').value = '';
         document.getElementById('inputDescription').value = '';
+    }
+    cleanForm () {
+        document.getElementById('message_form_message').value = '';
+        document.getElementById('message_form_toAnswer').value  = '';
+        document.getElementById('message_form_files').value  = '';
+        const htmlBlock = document.getElementById('add_message_to_answer');
+        if (htmlBlock) {
+            htmlBlock.innerHTML = '';
+        }
     }
 }
  

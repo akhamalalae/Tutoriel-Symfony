@@ -77,7 +77,7 @@ class UpdateProfileController extends AbstractController
             
             $this->addFlash('success', $translator->trans('Your profile has been updated'));
 
-            //return $this->redirectToRoute('app_update_profil');
+            return $this->redirectToRoute('app_update_profil');
         }
 
         return $this->render('profil/update_profil.html.twig', [

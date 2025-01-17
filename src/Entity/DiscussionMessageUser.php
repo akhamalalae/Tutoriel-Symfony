@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DiscussionMessageUserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,17 @@ class DiscussionMessageUser
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateModification = null;
+
+    /**
+     * @var Collection<int, AnswerMessage>
+     */
+    #[ORM\OneToMany(mappedBy: 'discussionMessageUser', targetEntity: AnswerMessage::class)]
+    private Collection $answerMessages;
+
+    public function __construct()
+    {
+        $this->answerMessages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +103,36 @@ class DiscussionMessageUser
     public function setDateModification(\DateTimeInterface $dateModification): static
     {
         $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AnswerMessage>
+     */
+    public function getAnswerMessages(): Collection
+    {
+        return $this->answerMessages;
+    }
+
+    public function addAnswerMessage(AnswerMessage $answerMessage): static
+    {
+        if (!$this->answerMessages->contains($answerMessage)) {
+            $this->answerMessages->add($answerMessage);
+            $answerMessage->setDiscussionMessageUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswerMessage(AnswerMessage $answerMessage): static
+    {
+        if ($this->answerMessages->removeElement($answerMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($answerMessage->getDiscussionMessageUser() === $this) {
+                $answerMessage->setDiscussionMessageUser(null);
+            }
+        }
 
         return $this;
     }

@@ -1,0 +1,19 @@
+<div role="alert" class="{{ alert }}">
+    {% if item.message is not empty %}
+        {{ item.sensitiveDataMessage| raw  }} 
+    {% endif %}
+    <br/>
+    {% if item.fileMessages is not empty %}
+        <hr class="my-0" />
+        <br/>
+        {% for file in item.fileMessages %}
+            {% set subDirectory = 'files/message/'  %} 
+            <span class="badge rounded-pill bg-primary text-dark">
+                <a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
+                    {% set originalName = file.sensitiveDataOriginalName|split('.')[0] %}
+                    {{ originalName }}
+                </a>
+            </span>
+        {% endfor %}
+    {% endif %}
+</div>

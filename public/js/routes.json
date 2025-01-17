@@ -1,0 +1,633 @@
+{
+    "fos_js_routing_js": {
+        "path": "\/js\/routing.{_format}",
+        "pathRegex": "{^\/js\/routing(?:\\.(?P<_format>js|json))?$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "fos_js_routing.controller::indexAction",
+            "_format": "js"
+        },
+        "requirements": {
+            "_format": "js|json"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_preview_error": {
+        "path": "\/_error\/{code}.{_format}",
+        "pathRegex": "{^\/_error\/(?P<code>\\d+)(?:\\.(?P<_format>[^\/]++))?$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "error_controller::preview",
+            "_format": "html"
+        },
+        "requirements": {
+            "code": "\\d+"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_wdt": {
+        "path": "\/_wdt\/{token}",
+        "pathRegex": "{^\/_wdt\/(?P<token>[^\/]++)$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::toolbarAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_home": {
+        "path": "\/_profiler\/",
+        "pathRegex": "{^\/_profiler\/$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::homeAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_search": {
+        "path": "\/_profiler\/search",
+        "pathRegex": "{^\/_profiler\/search$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::searchAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_search_bar": {
+        "path": "\/_profiler\/search_bar",
+        "pathRegex": "{^\/_profiler\/search_bar$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::searchBarAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_phpinfo": {
+        "path": "\/_profiler\/phpinfo",
+        "pathRegex": "{^\/_profiler\/phpinfo$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::phpinfoAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_xdebug": {
+        "path": "\/_profiler\/xdebug",
+        "pathRegex": "{^\/_profiler\/xdebug$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::xdebugAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_font": {
+        "path": "\/_profiler\/font\/{fontName}.woff2",
+        "pathRegex": "{^\/_profiler\/font\/(?P<fontName>[^\/\\.]++)\\.woff2$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::fontAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_search_results": {
+        "path": "\/_profiler\/{token}\/search\/results",
+        "pathRegex": "{^\/_profiler\/(?P<token>[^\/]++)\/search\/results$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::searchResultsAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_open_file": {
+        "path": "\/_profiler\/open",
+        "pathRegex": "{^\/_profiler\/open$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::openAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler": {
+        "path": "\/_profiler\/{token}",
+        "pathRegex": "{^\/_profiler\/(?P<token>[^\/]++)$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.profiler::panelAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_router": {
+        "path": "\/_profiler\/{token}\/router",
+        "pathRegex": "{^\/_profiler\/(?P<token>[^\/]++)\/router$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.router::panelAction"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_exception": {
+        "path": "\/_profiler\/{token}\/exception",
+        "pathRegex": "{^\/_profiler\/(?P<token>[^\/]++)\/exception$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.exception_panel::body"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "_profiler_exception_css": {
+        "path": "\/_profiler\/{token}\/exception.css",
+        "pathRegex": "{^\/_profiler\/(?P<token>[^\/]++)\/exception\\.css$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "web_profiler.controller.exception_panel::stylesheet"
+        },
+        "requirements": "NO CUSTOM",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_search_address": {
+        "path": "\/{_locale}\/user\/address\/search",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/address\/search$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "GET",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Address\\AddressController::search"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "expose": true,
+            "utf8": true
+        }
+    },
+    "forgot_password": {
+        "path": "\/{_locale}\/forgot-password",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/forgot\\-password$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Authentification\\Registration\\ForgotPasswordController::forgotPassword"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_register": {
+        "path": "\/{_locale}\/register",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/register$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Authentification\\Registration\\RegistrationController::register"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "reset_password": {
+        "path": "\/{_locale}\/reset-password\/{token}",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/reset\\-password\/(?P<token>[^\/]++)$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Authentification\\Registration\\ResetPasswordController::resetPassword"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_verify_email": {
+        "path": "\/{_locale}\/verify\/email",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/verify\/email$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Authentification\\Registration\\VerifyEmailController::verifyUserEmail"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_login": {
+        "path": "\/{_locale}\/login",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/login$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Authentification\\Security\\SecurityController::login"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_logout": {
+        "path": "\/{_locale}\/logout",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/logout$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Authentification\\Security\\SecurityController::logout"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_custom_404": {
+        "path": "\/{_locale}\/custom-404",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/custom\\-404$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\CustomError\\RouteNotFoundController::custom404"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_home": {
+        "path": "\/{_locale}\/user",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Home\\HomeController::index"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "help_center": {
+        "path": "\/{_locale}\/help_center",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/help_center$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Information\\HelpCenter\\HelpCenterController::index"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "privacy_policy": {
+        "path": "\/{_locale}\/privacy",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/privacy$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Information\\Privacy\\PrivacyController::index"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_terms": {
+        "path": "\/{_locale}\/terms",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/terms$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Information\\Terms\\TermsController::index"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_discussion": {
+        "path": "\/{_locale}\/user\/discussion",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/discussion$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Messaging\\Discussion\\DiscussionController::index"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    },
+    "app_list_discussion": {
+        "path": "\/{_locale}\/user\/list\/discussion\/{page}",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/list\/discussion(?:\/(?P<page>[^\/]++))?$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "page": 1,
+            "_controller": "App\\Controller\\Messaging\\Discussion\\DiscussionController::listDiscussions"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "expose": true,
+            "utf8": true
+        }
+    },
+    "app_search_discussion": {
+        "path": "\/{_locale}\/user\/search\/discussion",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/search\/discussion$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Messaging\\Discussion\\DiscussionController::searchDiscussion"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "expose": true,
+            "utf8": true
+        }
+    },
+    "app_message": {
+        "path": "\/{_locale}\/user\/message\/{idDiscussion}\/{page}",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/message(?:\/(?P<idDiscussion>[^\/]++)(?:\/(?P<page>[^\/]++))?)?$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "idDiscussion": 0,
+            "page": 1,
+            "_controller": "App\\Controller\\Messaging\\Message\\MessageController::index"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "expose": true,
+            "utf8": true
+        }
+    },
+    "app_search_message": {
+        "path": "\/{_locale}\/user\/search\/message",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/search\/message$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Messaging\\Message\\MessageController::searchMessage"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "expose": true,
+            "utf8": true
+        }
+    },
+    "app_delete_message": {
+        "path": "\/{_locale}\/user\/delete\/message\/{id}",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/delete\/message\/(?P<id>[^\/]++)$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "DELETE",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Messaging\\Message\\MessageController::delete"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "expose": true,
+            "utf8": true
+        }
+    },
+    "app_update_profil": {
+        "path": "\/{_locale}\/user\/update\/profil",
+        "pathRegex": "{^\/(?P<_locale>fr|en)\/user\/update\/profil$}sDu",
+        "host": "ANY",
+        "hostRegex": "",
+        "scheme": "ANY",
+        "method": "ANY",
+        "class": "Symfony\\Component\\Routing\\Route",
+        "defaults": {
+            "_controller": "App\\Controller\\Profile\\UpdateProfileController::update"
+        },
+        "requirements": {
+            "_locale": "fr|en"
+        },
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "utf8": true
+        }
+    }
+}

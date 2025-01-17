@@ -16,7 +16,7 @@ use App\Entity\DiscussionMessageUser;
 use App\Controller\Pagination\Pagination;
 use App\Services\File\FileUploader;
 use App\Entity\Discussion;
-
+use App\Entity\AnswerMessage;
 class MessageService
 {
     const LIMIT = 5;
@@ -46,6 +46,8 @@ class MessageService
         /** @var Message $message */
         $message = $messageForm->getData();
 
+        $toAnswerId = $messageForm->get('toAnswer')->getData();
+
         $user = $this->security->getUser();
 
         $message = $this->setMessageObject($message, $user);
@@ -55,6 +57,11 @@ class MessageService
         $messageDiscussionUser = $this->setMessageDiscussionUser($message, $discussion, $user);
         
         $this->setDiscussion($discussion, $user);
+
+        if ($toAnswerId) {
+            $toAnswer = $this->em->getRepository(Message::class)->find($toAnswerId);
+            $this->toAnswerMessage($messageDiscussionUser, $toAnswer, $user);
+        }
 
         return new JsonResponse([
             'code' => Message::ADDED_SUCCESSFULLY,
@@ -138,6 +145,24 @@ class MessageService
         $this->em->flush();
 
         return $messageDiscussionUser;
+    }
+
+    private function toAnswerMessage(DiscussionMessageUser $messageDiscussionUser, Message $toAnswer, User $user) : void
+    {
+        $answerMessage = new AnswerMessage();
+
+        $answerMessage->setDiscussionMessageUser($messageDiscussionUser)
+            ->setCreatorUser($user)
+            ->setDateCreation(new \DateTime())
+            ->setMessage($toAnswer);
+
+        $this->em->persist($answerMessage);
+
+        $messageDiscussionUser->addAnswerMessage($answerMessage);
+
+        $this->em->persist($messageDiscussionUser);
+
+        $this->em->flush();
     }
 
     private function setDiscussion(Discussion $discussion, User $user) : void

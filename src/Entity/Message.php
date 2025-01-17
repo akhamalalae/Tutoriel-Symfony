@@ -38,10 +38,24 @@ class Message
 
     private ?string $sensitiveDataMessage = null;
 
+    /**
+     * @var Collection<int, DiscussionMessageUser>
+     */
+    #[ORM\OneToMany(mappedBy: 'answerTo', targetEntity: DiscussionMessageUser::class)]
+    private Collection $discussionMessageUsersAnswerTo;
+
+    /**
+     * @var Collection<int, AnswerMessage>
+     */
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: AnswerMessage::class)]
+    private Collection $answerMessages;
+
     public function __construct()
     {
         $this->discussionMessageUsers = new ArrayCollection();
         $this->fileMessages = new ArrayCollection();
+        $this->discussionMessageUsersAnswerTo = new ArrayCollection();
+        $this->answerMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +177,66 @@ class Message
             // set the owning side to null (unless already changed)
             if ($fileMessage->getMessage() === $this) {
                 $fileMessage->setMessage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiscussionMessageUser>
+     */
+    public function getDiscussionMessageUsersAnswerTo(): Collection
+    {
+        return $this->discussionMessageUsersAnswerTo;
+    }
+
+    public function addDiscussionMessageUsersAnswerTo(DiscussionMessageUser $discussionMessageUsersAnswerTo): static
+    {
+        if (!$this->discussionMessageUsersAnswerTo->contains($discussionMessageUsersAnswerTo)) {
+            $this->discussionMessageUsersAnswerTo->add($discussionMessageUsersAnswerTo);
+            $discussionMessageUsersAnswerTo->setAnswerTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscussionMessageUsersAnswerTo(DiscussionMessageUser $discussionMessageUsersAnswerTo): static
+    {
+        if ($this->discussionMessageUsersAnswerTo->removeElement($discussionMessageUsersAnswerTo)) {
+            // set the owning side to null (unless already changed)
+            if ($discussionMessageUsersAnswerTo->getAnswerTo() === $this) {
+                $discussionMessageUsersAnswerTo->setAnswerTo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AnswerMessage>
+     */
+    public function getAnswerMessages(): Collection
+    {
+        return $this->answerMessages;
+    }
+
+    public function addAnswerMessage(AnswerMessage $answerMessage): static
+    {
+        if (!$this->answerMessages->contains($answerMessage)) {
+            $this->answerMessages->add($answerMessage);
+            $answerMessage->setMessage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnswerMessage(AnswerMessage $answerMessage): static
+    {
+        if ($this->answerMessages->removeElement($answerMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($answerMessage->getMessage() === $this) {
+                $answerMessage->setMessage(null);
             }
         }
 
