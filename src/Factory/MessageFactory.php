@@ -12,7 +12,7 @@ class MessageFactory extends ModelFactory
     protected function getDefaults(): array
     {   
         return [
-            'message' => self::faker()->word,
+            'message' => self::faker()->text(200),
             'creatorUser' => UserFactory::random(),
             'dateCreation' => self::faker()->dateTime(),
             'dateModification' => self::faker()->dateTime(),

@@ -1,22 +1,24 @@
-import Routing from "fos-router";
+const routes = require('../../js/routes.json');
+
+import Routing from '../../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 
 import Translation from "../Translation/translation";
 
 class DiscussionUtils {    
     constructor() {
+        Routing.setRoutingData(routes);
+        this.locale = new Translation().locale();
     }
 
     url (page , criteria) {
-        let locale = new Translation().locale();
 
         return Routing.generate('app_list_discussion', {
-            '_locale': locale, 
+            '_locale': this.locale, 
             'page': page,
             'criteria': criteria
         });
     }
     urlSearchDiscussion (selectedValue) {
-        let locale = new Translation().locale();
 
         return  Routing.generate('app_search_discussion', {
             '_locale': locale, 

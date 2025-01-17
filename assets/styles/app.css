@@ -1,3 +1,15 @@
 body {
     background-color: #f5f4f4;
 }
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: auto;
+}
+
+.pagination {
+    flex-wrap: wrap;  /* Permet de revenir à la ligne */
+    justify-content: center;  /* Centre les éléments */
+    overflow-x: hidden;  /* Évite le défilement horizontal */
+}

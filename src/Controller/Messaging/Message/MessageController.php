@@ -12,14 +12,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Message;
+use App\Entity\FileMessage;
 use App\Entity\SearchMessage;
 use App\Entity\Discussion;
 use App\Entity\DiscussionMessageUser;
 use Elastica\Query\Range;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
+use App\Entity\AnswerMessage;
 use Twig\Environment;
-
 class MessageController extends AbstractController
 {
     #[Route('/user/message/{idDiscussion}/{page}', name: 'app_message', options: ['expose' => true])]
@@ -162,5 +163,37 @@ class MessageController extends AbstractController
         $em->persist($discussion);
 
         $em->flush();
+    }
+
+    #[Route('/user/delete/message/{id}', name: 'app_delete_message', methods: ['DELETE'], options: ['expose' => true])]
+    public function delete(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $discussionMessageUser = $em->getRepository(DiscussionMessageUser::class)->find($id);
+
+        $message = $discussionMessageUser->getMessage();
+
+        $fileMessages = $message->getFileMessages();
+
+        $answerMessages = $discussionMessageUser->getAnswerMessages();
+
+        if (!$discussionMessageUser) {
+            return new JsonResponse(['message' => 'Message not found'], 404);
+        }
+
+        foreach ($fileMessages as $file) {
+            $em->remove($file);
+        }
+
+        $em->remove($message);
+
+        foreach ($answerMessages as $answer) {
+            $em->remove($answer);
+        }
+
+        $em->remove($discussionMessageUser);
+
+        $em->flush();
+
+        return new JsonResponse(['message' => 'Message deleted successfully'], 200);
     }
 }

@@ -2,6 +2,9 @@ import Loading from '../Components/displayLoading';
 
 import ButtonForm from '../Components/buttonForm';
 
+import LoadMore from '../Components/Pagination/loadMore';
+
+import MessageUtils from './messageUtils';
 class Message {    
     constructor() {
     }
@@ -24,6 +27,12 @@ class Message {
             listMessage.innerHTML = json.messages;
 
             this.add(url);
+
+            new LoadMore().pagination();
+
+            this.messageItemActionAnswer();
+
+            this.messageItemActionDelete();
         });
     }
     add (url) {
@@ -46,6 +55,7 @@ class Message {
             .then(json => {
                 newMessage.innerHTML += json.html;
                 new ButtonForm().removeDisabled(ButtonFormMessage);
+                new MessageUtils().cleanForm();
             });
         });
 
@@ -78,6 +88,54 @@ class Message {
                 });
             });
         });
+    }
+    messageItemActionAnswer () {
+        window.messageItemActionAnswerClick = messageItemActionAnswerClick;
+
+        function messageItemActionAnswerClick(event)
+        {
+            const formMessage = document.querySelector('#form_message');
+            
+            const toAnswer = document.getElementById('message_form_toAnswer');
+
+            let idMessage = event.target.getAttribute('data-idMessage');
+
+            toAnswer.value = idMessage;
+
+            let idDiscussionMessageUser = event.target.getAttribute('data-idDiscussionMessageUser');
+            
+            const copiedHTMLMessageBlock = document.getElementById('item-message-block-for-answer-'+idDiscussionMessageUser);
+            
+            const htmlBlock = document.getElementById('add_message_to_answer');
+
+            htmlBlock.innerHTML = copiedHTMLMessageBlock.innerHTML;
+            
+            formMessage.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+    messageItemActionDelete () {
+        window.messageItemActionDeleteClick = messageItemActionDeleteClick;
+
+        function messageItemActionDeleteClick(event)
+        {
+            let idDiscussionMessageUser = event.target.getAttribute('data-idDiscussionMessageUser');
+            
+            const itemMessageBlock = document.getElementById('item-message-block-for-delete-'+idDiscussionMessageUser);
+            
+            let url = new MessageUtils().urlDeleteMessage(idDiscussionMessageUser);
+
+            const options = {
+                method: 'DELETE',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            };
+            fetch(url, options)
+            .then(response => response.json())
+            .then(json => {
+                itemMessageBlock.innerHTML = '';
+            });
+        }
     }
 }
  

@@ -1,58 +1,79 @@
 {% if numbrePagesPagination > 1 %}
-	<nav aria-label="Page navigation">
-		<ul class="pagination pagination-sm justify-content-center">
-			<li
-				{% if page == 1 %} 
-					class="page-item disabled" 
-				{% else %}
-					class="page-item" 
-				{% endif %}
-			>
-				<p class="page-link" 
-					id="pagination_previous" 
-					onClick="paginationClick(event)"
-					data-idDiscussion="{{ discussion.id }}" 
-					data-page="{{ page - 1 }}"
-					data-url= {{ path('app_message', {idDiscussion: discussion.id, page:  page - 1}) }}
-				>
-					&laquo;
-				</p>
-			</li>
-			{% for pagination in 1..numbrePagesPagination %}
+	<br/>
+	<div class="pagination-wrapper">
+		<nav aria-label="Page navigation">
+			<ul class="pagination pagination-sm justify-content-center">
 				<li
-					{% if page == pagination %} 
-						class="page-item active" 
+					{% if page == 1 %} 
+						class="page-item disabled" 
 					{% else %}
 						class="page-item" 
 					{% endif %}
 				>
 					<p class="page-link" 
+						id="pagination_previous" 
 						onClick="paginationClick(event)"
 						data-idDiscussion="{{ discussion.id }}" 
-						data-page="{{ pagination }}"
-						data-url= {{ path('app_message', {idDiscussion: discussion.id, page:  pagination}) }}
+						data-page="{{ page - 1 }}"
+						data-url= {{ path('app_message', {idDiscussion: discussion.id, page:  page - 1}) }}
 					>
-						{{ pagination }}
+						&laquo;
 					</p>
 				</li>
-			{% endfor %}
-			<li
-				{% if page == numbrePagesPagination %} 
-					class="page-item disabled" 
-				{% else %}
-					class="page-item" 
+
+				{% set numberOfPagesDisplayed = 10 %} 
+
+				{% if page > numberOfPagesDisplayed %} 
+					{% set numberOfPagesDisplayed = page %} 
 				{% endif %}
-			>
-				<p class="page-link" 
-					id="pagination_next" 
-					onClick="paginationClick(event)"
-					data-idDiscussion="{{ discussion.id }}" 
-					data-page="{{ page + 1 }}"
-					data-url= {{ path('app_message', {idDiscussion: discussion.id, page:  page + 1}) }}
+
+				{% set index = 0 %} 
+
+				{% set className = '' %} 
+
+				{% for pagination in 1..numbrePagesPagination %}
+					{% if index > numberOfPagesDisplayed %} 
+						{% set className = 'd-none more-pages' %} 
+					{% endif %}
+					<li
+						{% if page == pagination %} 
+							class="page-item {{ className }} active" 
+						{% else %}
+							class="page-item {{ className }}" 
+						{% endif %}
+					>
+						<p class="page-link" 
+							onClick="paginationClick(event)"
+							data-idDiscussion="{{ discussion.id }}" 
+							data-page="{{ pagination }}"
+							data-url= {{ path('app_message', {idDiscussion: discussion.id, page:  pagination}) }}
+						>
+							{{ pagination }}
+						</p>
+					</li>
+					{% set index = index + 1 %} 
+				{% endfor %}
+				<li
+					{% if page == numbrePagesPagination %} 
+						class="page-item disabled" 
+					{% else %}
+						class="page-item" 
+					{% endif %}
 				>
-					&raquo;
-				</p>
-			</li>
-		</ul>
-	</nav>
+					<p class="page-link" 
+						id="pagination_next" 
+						onClick="paginationClick(event)"
+						data-idDiscussion="{{ discussion.id }}" 
+						data-page="{{ page + 1 }}"
+						data-url= {{ path('app_message', {idDiscussion: discussion.id, page:  page + 1}) }}
+					>
+						&raquo;
+					</p>
+				</li>
+				<li id="load-more">
+					&nbsp; &nbsp; <i class="fa fa-plus-circle" style="font-size:24px;color:#3380ff"></i>
+				</li>
+			</ul>
+		</nav>
+	</div>
 {% endif %}

@@ -1,0 +1,29 @@
+<div class="dropdown">
+    <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonActions" data-bs-toggle="dropdown" aria-expanded="false">
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonActions">
+        <li>
+            <a class="dropdown-item" 
+                id="dropdown-item-actions-answer"
+                onClick="messageItemActionAnswerClick(event)"
+                data-idMessage="{{item.message.id}}"
+                data-idDiscussionMessageUser="{{item.id}}"
+            >
+                <i class="fa fa-reply" style="color:#3380ff">
+                </i>
+                {{ 'Answer'|trans }}
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item"
+                id="dropdown-item-actions-delete"
+                onClick="messageItemActionDeleteClick(event)"
+                data-idDiscussionMessageUser="{{item.id}}"
+            >
+                <i class="fa fa-remove" style="color:red"></i>
+                {{ 'Delete'|trans }}
+            </a>
+        </li>
+    </ul>
+</div>

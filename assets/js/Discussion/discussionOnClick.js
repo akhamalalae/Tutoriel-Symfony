@@ -1,6 +1,6 @@
 import Discussion from "./discussion";
 
-import MessageOnClick from "../Message/MessageOnClick";
+import MessageOnClick from "../Message/messageOnClick";
 
 import DiscussionUtils from "./discussionUtils";
 

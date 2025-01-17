@@ -3,6 +3,29 @@
         <h5 class="card-title mb-0">{{ 'New message'|trans }}</h5>
     </div>
     <div class="card-body h-100 align-items-start">
-        {{ form(formMessage, { attr: {'id': 'form_message' } }) }}
+        <div id="add_message_to_answer"></div>
+        {{ form_start(formMessage, { attr: {'id': 'form_message' } }) }}
+        <div class="row">
+            <div class="mb-3 col-12">
+                {{ form_label(formMessage.message) }}
+                {{ form_widget(formMessage.message) }}
+            </div>
+            <div class="mb-3 col-12" style="display:none;">
+                <div id="divToAnswer">
+                    {{ form_row(formMessage.toAnswer) }}
+                </div> 
+            </div>
+            <div class="mb-3 col-12">
+                {{ form_label(formMessage.files) }}
+                {{ form_widget(formMessage.files) }}
+            </div>
+
+            <div class="mb-3 col-12 align-items-end">
+                {{ form_label(formMessage.save) }}
+                {{ form_widget(formMessage.save) }}
+            </div>
+        </div>
+        {{ form_end(formMessage) }}
     </div>
 </div>
+

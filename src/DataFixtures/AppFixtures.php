@@ -16,13 +16,13 @@ class AppFixtures extends Fixture
         ini_set('memory_limit', '1G'); // Définit la limite de mémoire à 1 Go
  
         // Création de 10 utilisateurs avec la factory
-        UserFactory::new()->createMany(10);
+        UserFactory::new()->createMany(2);
 
-        DiscussionFactory::new()->createMany(10);
+        DiscussionFactory::new()->createMany(1);
 
-        MessageFactory::new()->createMany(10);
+        MessageFactory::new()->createMany(100);
 
-        DiscussionMessageUserFactory::new()->createMany(10);
+        DiscussionMessageUserFactory::new()->createMany(1000);
 
         $manager->flush();
     }

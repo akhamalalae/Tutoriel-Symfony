@@ -1,4 +1,4 @@
-<div class="d-flex align-items-start">
+<div class="d-flex align-items-start" id="item-message-block-for-delete-{{item.id}}">
 	{% if item.message.creatorUser.sensitiveDataBrochureFilename %} 
 		{% set subDirectory = 'img/avatars/'  %} 
 		<img 
@@ -13,25 +13,22 @@
 	
 	<div class="flex-grow-1">
 		<small class="float-end text-navy">{{ item.message.dateCreation|date("F j, Y") }} </small>
-		<strong>{{ item.message.creatorUser.sensitiveDataFirstName }} {{ item.message.creatorUser.sensitiveDataName }}</strong><br />
-		<small class="text-muted">{{ item.message.dateCreation|date("H:i") }}</small><br />
-		
-		<div role="alert" class="alert alert-secondary">
-			{{ item.message.sensitiveDataMessage| raw  }} 
-			<br/>
-			{% if item.message.fileMessages is not empty %}
-				<hr class="my-0" />
-				<br/>
-				{% for file in item.message.fileMessages %}
-					{% set subDirectory = 'files/message/'  %} 
-					<span class="badge rounded-pill bg-primary text-dark">
-						<a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
-							{% set originalName = file.sensitiveDataOriginalName|split('.')[0] %}
-							{{ originalName }}
-						</a>
-					</span>
+		<strong>
+			{{ item.message.creatorUser.sensitiveDataFirstName }} 
+			{{ item.message.creatorUser.sensitiveDataName }}
+			{% include 'message/block_content_message_actions.html.twig' with {'item': item} %}
+		</strong>
+		<br />
+		<div id="item-message-block-for-answer-{{item.id}}">
+			{% if item.answerMessages is not empty %}
+				{% for answer in item.answerMessages %}
+					{% include 'message/block_content_message.html.twig' with {'item': answer.message, 'alert': 'alert alert-warning'} %}
 				{% endfor %}
 			{% endif %}
+
+			<small class="text-muted">{{ item.message.dateCreation|date("H:i") }}</small><br />
+			
+			{% include 'message/block_content_message.html.twig' with {'item': item.message, 'alert': 'alert alert-primary'} %}
 		</div>
 	</div>
 </div>

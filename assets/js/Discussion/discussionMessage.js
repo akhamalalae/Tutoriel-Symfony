@@ -4,7 +4,7 @@ import Discussion from './discussion';
 
 import DiscussionOnClick from './discussionOnClick';
 
-import MessageOnClick from '../Message/MessageOnClick';
+import MessageOnClick from '../Message/messageOnClick';
 
 import DiscussionUtils from './discussionUtils';
 
