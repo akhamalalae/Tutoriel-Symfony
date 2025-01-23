@@ -21,7 +21,7 @@ class DiscussionUtils {
     urlSearchDiscussion (selectedValue) {
 
         return  Routing.generate('app_search_discussion', {
-            '_locale': locale, 
+            '_locale': this.locale, 
             'idSearchDiscussion': selectedValue,
         });
     }

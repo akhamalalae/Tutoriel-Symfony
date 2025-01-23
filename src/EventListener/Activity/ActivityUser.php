@@ -29,21 +29,21 @@ class ActivityUser
         $decryptInstagram = $this->encryptDecrypt->decrypt($user->getInstagram());
         $decryptLinkedIn = $this->encryptDecrypt->decrypt($user->getLinkedIn());
 
-        $user->setSensitiveDataName($decryptName);
-        $user->setSensitiveDataFirstName($decryptFirstName);
-        $user->setSensitiveDataEmail($decryptEmail);
-        $user->setSensitiveDataCompany($decryptCompany);
-        $user->setSensitiveDataJob($decryptJob);
-        $user->setSensitiveDataBrochureFilename($decryptBrochureFilename);
-        $user->setSensitiveDataMimeType($decryptMimeType);
-        $user->setSensitiveDataStreet($decryptStreet);
-        $user->setSensitiveDataCity($decryptCity);
-        $user->setSensitiveDataPostalCode($decryptPostalCode);
-        $user->setSensitiveDataCountry($decryptCountry);
-        $user->setSensitiveDataTwitter($decryptTwitter);
-        $user->setSensitiveDataFacebook($decryptFacebook);
-        $user->setSensitiveDataInstagram($decryptInstagram);
-        $user->setSensitiveDataLinkedIn($decryptLinkedIn);
+        $user->setSensitiveDataName($decryptName)
+            ->setSensitiveDataFirstName($decryptFirstName)
+            ->setSensitiveDataEmail($decryptEmail)
+            ->setSensitiveDataCompany($decryptCompany)
+            ->setSensitiveDataJob($decryptJob)
+            ->setSensitiveDataBrochureFilename($decryptBrochureFilename)
+            ->setSensitiveDataMimeType($decryptMimeType)
+            ->setSensitiveDataStreet($decryptStreet)
+            ->setSensitiveDataCity($decryptCity)
+            ->setSensitiveDataPostalCode($decryptPostalCode)
+            ->setSensitiveDataCountry($decryptCountry)
+            ->setSensitiveDataTwitter($decryptTwitter)
+            ->setSensitiveDataFacebook($decryptFacebook)
+            ->setSensitiveDataInstagram($decryptInstagram)
+            ->setSensitiveDataLinkedIn($decryptLinkedIn);
 
         dump('decryptUser', $user);
     }
@@ -66,21 +66,21 @@ class ActivityUser
         $encryptInstagram = $this->encryptDecrypt->encrypt($user->getInstagram());
         $encryptLinkedIn = $this->encryptDecrypt->encrypt($user->getLinkedIn());
 
-        $user->setName($encryptName);
-        $user->setFirstName($encryptFirstName);
-        $user->setEmail($encryptEmail);
-        $user->setCompany($encryptCompany);
-        $user->setJob($encryptJob);
-        $user->setBrochureFilename($encryptBrochureFilename);
-        $user->setMimeType($encryptMimeType);
-        $user->setStreet($encryptStreet);
-        $user->setCity($encryptCity);
-        $user->setPostalCode($encryptPostalCode);
-        $user->setCountry($encryptCountry);
-        $user->setTwitter($encryptTwitter);
-        $user->setFacebook($encryptFacebook);
-        $user->setInstagram($encryptInstagram);
-        $user->setLinkedIn($encryptLinkedIn);
+        $user->setName($encryptName)
+            ->setFirstName($encryptFirstName)
+            ->setEmail($encryptEmail)
+            ->setCompany($encryptCompany)
+            ->setJob($encryptJob)
+            ->setBrochureFilename($encryptBrochureFilename)
+            ->setMimeType($encryptMimeType)
+            ->setStreet($encryptStreet)
+            ->setCity($encryptCity)
+            ->setPostalCode($encryptPostalCode)
+            ->setCountry($encryptCountry)
+            ->setTwitter($encryptTwitter)
+            ->setFacebook($encryptFacebook)
+            ->setInstagram($encryptInstagram)
+            ->setLinkedIn($encryptLinkedIn);
     }
 
     public function encryptPreUpdateUser(User $user, PreUpdateEventArgs $event): void

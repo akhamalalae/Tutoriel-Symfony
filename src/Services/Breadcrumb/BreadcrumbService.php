@@ -5,19 +5,23 @@ namespace App\Services\Breadcrumb;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-
+use Symfony\Contracts\Translation\TranslatorInterface;
 class BreadcrumbService
 {
-    private CacheInterface $cache;
-    
     private const CACHE_KEY = 'breadcrumbs';
 
     private RequestStack $requestStack;
+    private TranslatorInterface $translator;
+    private CacheInterface $cache;
 
-    public function __construct(CacheInterface $cache, RequestStack $requestStack)
-    {
+    public function __construct(
+        CacheInterface $cache,
+        TranslatorInterface $translator,
+        RequestStack $requestStack
+    ){
         $this->cache = $cache;
         $this->requestStack = $requestStack;
+        $this->translator = $translator;
     }
 
     /**
@@ -38,19 +42,18 @@ class BreadcrumbService
     {
         $breadcrumbs = $this->getBreadcrumbs();
 
-        // Vérifie si l'URL existe déjà pour éviter les doublons
-        foreach ($breadcrumbs as $breadcrumb) {
-            if ($breadcrumb['url'] === $url) {
-                return; // Ne rien faire si la page existe déjà
+        $labelTrans = $this->translator->trans($label);
+
+        foreach ($breadcrumbs as $key => $value) {
+            $locale = $this->requestStack->getCurrentRequest()->getLocale();
+
+            if ($value['label'] === $label || $value['label'] === $labelTrans ) {
+                unset($breadcrumbs[$key]);
+                break;
             }
         }
 
-        // Ajoute la nouvelle page à la liste des breadcrumbs
-        //$locale = $this->requestStack->getCurrentRequest()->getLocale();
         $breadcrumbs[] = ['label' => $label, 'url' => $url];
-    
-        // Met à jour le cache
-        $valueCacheBreadcrumbs = $this->cache->get(self::CACHE_KEY, function (ItemInterface $item) {});
 
         $cacheItems = $this->cache->getItem(self::CACHE_KEY);
 

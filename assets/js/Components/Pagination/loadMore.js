@@ -9,7 +9,7 @@ class LoadMore {
         if (loadMore) {
             loadMore.addEventListener('click', function() {
                 const hiddenPages = document.querySelectorAll('.more-pages.d-none');
-                for (let i = 0; i < 2; i++) {
+                for (let i = 0; i < 5; i++) {
                     if (hiddenPages[i]) {
                         hiddenPages[i].classList.remove('d-none');
                     }
