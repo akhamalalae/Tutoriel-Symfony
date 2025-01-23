@@ -2,15 +2,22 @@
 	<div class="card-header">
 		<div class="flex-grow-1">
 			<small class="float-end text-navy">
-				<button type="button" class="btn btn-primary btn-sm"
-					onclick="searchWithCriteriaClick(event)" 
-					title="{{ 'Search Message'|trans }}"
-					data-view="message"
-					data-idDiscussion="{{ discussion.id }}" 
-					data-page="1"
-				>
-					<i class="fa fa-search-plus"></i>
-				</button>
+				<div class="dropdown">
+					<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonsMessageAction" data-bs-toggle="dropdown" aria-expanded="false">
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonsMessageAction">
+						<li>
+							<a class="dropdown-item" 
+								onclick="searchWithCriteriaClick(event)"
+								data-view="message"
+								data-idDiscussion="{{ discussion.id }}" 
+								data-page="1"
+							>
+								<i class="fa fa-search-plus" style="color:#3380ff"></i> {{ 'Search Message'|trans }}
+							</a>
+						</li>
+					</ul>
+				</div>
 			</small>
 			<h5 class="card-title mb-0">
 				{{ 'Messages'|trans }}
@@ -27,9 +34,9 @@
 		<div id="new_message"></div>
 
 		{% include 'pagination/message/message_pagination.html.twig' with {
-				'numbrePagesPagination': numbrePagesPagination,
-				'page': page,
-				'discussion': discussion
+			'numbrePagesPagination': numbrePagesPagination,
+			'page': page,
+			'discussion': discussion
 		}%}
 	</div>
 </div>

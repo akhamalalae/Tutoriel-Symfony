@@ -27,16 +27,14 @@
                 {% include 'nav-bar/index.html.twig' %} 
                 <main class="content">
                     <div class="container-fluid p-0">
-                        {% include 'flash_messages/flash_messages.html.twig' %}
                         {% if app.user %} 
                             {% include 'breadcrumb/breadcrumb.html.twig' %} 
                         {% endif %}
+                        {% include 'flash_messages/flash_messages.html.twig' %}
                         {% block body %}{% endblock %}
                     </div>
                 </main>
-              
-                    {% include 'footer/index.html.twig' %}
-           
+                {% include 'footer/index.html.twig' %}
             </div>
         </div>
 

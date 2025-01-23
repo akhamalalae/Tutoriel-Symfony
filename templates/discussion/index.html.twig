@@ -21,19 +21,26 @@
 			<div class="card-header">
 				<div class="flex-grow-1">
 					<small class="float-end text-navy">
-						<button type="button" class="btn btn-primary btn-sm" 
-							onclick="addNewDiscussion(event)" 
-							title="{{ 'New discussion'|trans }}"
-						>
-							<i class="fa fa-plus"></i>
-						</button>
-						<button type="button" class="btn btn-primary btn-sm"  
-							title="{{ 'Search Discussion'|trans }}"
-							onclick="searchWithCriteriaClick(event)" 
-							data-view="discussion"
-						>
-							<i class="fa fa-search-plus"></i>
-						</button>
+						<div class="dropdown">
+							<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonDiscussionActions" data-bs-toggle="dropdown" aria-expanded="false">
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDiscussionActions">
+								<li>
+									<a class="dropdown-item" onclick="addNewDiscussion(event)">
+										<i class="fa fa-plus-circle" style="color:#3380ff"></i> {{ 'New discussion'|trans }}
+									</a>
+								</li>
+								<li><hr class="dropdown-divider"></li>
+								<li>
+									<a class="dropdown-item" 
+										onclick="searchWithCriteriaClick(event)" 
+										data-view="discussion"
+									>
+										<i class="fa fa-search-plus" style="color:#3380ff"></i> {{ 'Search Discussion'|trans }}
+									</a>
+								</li>
+							</ul>
+						</div>
 					</small>
 					<h5 class="card-title mb-0">
 						{{ 'Discussions'|trans }}

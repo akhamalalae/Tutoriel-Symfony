@@ -30,7 +30,7 @@ class DiscussionController extends AbstractController
     ) : Response
     {      
         $breadcrumbService->addBreadcrumb('Discussion', $this->generateUrl('app_discussion'));
-        
+
         $request = $requestStack->getMainRequest();
 
         $discussion = new Discussion();
