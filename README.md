@@ -1,6 +1,4 @@
-# Solution : Messagerie Sécurisée avec Chiffrement de Données
-
-## Messagerie Interne Sécurisée
+## Messagerie Sécurisée avec Chiffrement de Données
 
 #### Pour garantir des échanges confidentiels et protéger la vie privée des utilisateurs, notre système de messagerie interne intègre un chiffrement de bout en bout (end-to-end encryption). Ce mécanisme assure que seuls l’expéditeur et le destinataire peuvent lire les messages, empêchant ainsi tout accès non autorisé, même par les administrateurs du système.
 
@@ -33,6 +31,7 @@
 1. Backend
   - PHP 8
   - Symfony 6.4 et son écosystème
+  - Elasticsearch
 
 2. Frontend
   - Webpack encore
@@ -53,7 +52,6 @@
 6. Database
   - MySql
 
-
 ## Installation
 
 1 : Clonage du dépôt.
@@ -66,6 +64,8 @@
 
 5 : Installer les dépendances.
   - composer install
+  - npm install
+  - npm run build
 
 6 : Créer la base de données.
   - php bin/console doctrine:database:create
@@ -74,15 +74,25 @@
   - php bin/console make:migration
   - php bin/console doctrine:migrations:migrate
 
-8 : Lancé les fixtures.
+8 : Create Secrets (Définissez des secrets sensibles)
+  - php bin/console secrets:set IV (exemple : 1234567891011121)
+  - php bin/console secrets:set KEY_SECRETS (exemple : secret key)
+  - documentation technique : https://symfony.com/doc/current/configuration/secrets.html
+
+9 : Lancé les fixtures.
   - php bin/console doctrine:fixtures:load
+
+10 : indexer les données dans Elasticsearch.
+  - php bin/console fos:elastica:populate
 
 ## URL
 
 1 : Application
-   - https://localhost/fr/
-   - Authentification ("username": "admin@gmail.com", "password": "admin")
+   - https://localhost/fr/login
 
 2 : phpMyAdmin
   - http://localhost:8081/
   - Authentification ("username": "root", "password": "root")
+
+1 : MailDev
+   - http://localhost:8025/
