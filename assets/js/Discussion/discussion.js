@@ -2,6 +2,9 @@ import Loading from '../Components/displayLoading';
 
 import Response from '../Components/formResponse';
 
+import DiscussionUtils from './discussionUtils';
+
+import Notification from '../Components/Notyf/notification';
 class Discussion {    
     constructor() {
     }
@@ -26,6 +29,8 @@ class Discussion {
             listMessage.innerHTML = "";
 
             addFormMessage.innerHTML = "";
+
+            this.discussionItemActionDelete();
         });
     }
     add (e, url) {
@@ -47,6 +52,8 @@ class Discussion {
         .then(json => {
             new Response().handle(json, newDiscussion);
             ButtonFormDiscussion.classList.remove("disabled");
+            const notyf = new Notification();
+            notyf.show('success', json.message);
         });
     }
     formSearchDiscussion (url) {
@@ -76,6 +83,33 @@ class Discussion {
                 });
             });
         });
+    }
+    discussionItemActionDelete () {
+        window.discussionItemActionDeleteClick = discussionItemActionDeleteClick;
+
+        function discussionItemActionDeleteClick(event)
+        {
+            let idDiscussion = event.target.getAttribute('data-idDiscussion');
+            console.log(idDiscussion);
+            const itemDiscussionBlock = document.getElementById('item-discussion-block-'+idDiscussion);
+            console.log(itemDiscussionBlock);
+            let url = new DiscussionUtils().urlDeleteDiscussion(idDiscussion);
+            console.log(url);
+
+            const options = {
+                method: 'DELETE',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            };
+            fetch(url, options)
+            .then(response => response.json())
+            .then(json => {
+                itemDiscussionBlock.innerHTML = '';
+                const notyf = new Notification();
+                notyf.show('delete', json.message);
+            });
+        }
     }
 }
  

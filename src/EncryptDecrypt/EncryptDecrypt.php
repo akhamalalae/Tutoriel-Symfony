@@ -7,6 +7,8 @@ class EncryptDecrypt
 {
     private $params;
 
+    const METHOD = 'AES-256-CBC';
+
     public function __construct(ParameterBagInterface $params)
     {
         $this->params = $params;
@@ -64,7 +66,7 @@ class EncryptDecrypt
     {
         $key = $this->loadKey();
         $data = $val;
-        $method = "AES-256-CBC";
+        $method = self::METHOD;
         $options = 0;
         $iv = $this->loadIV();
 

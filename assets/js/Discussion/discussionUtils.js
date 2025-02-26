@@ -18,6 +18,13 @@ class DiscussionUtils {
             'criteria': criteria
         });
     }
+    urlDeleteDiscussion (idDiscussion) {
+
+        return Routing.generate('app_delete_discussion', {
+            '_locale': this.locale , 
+            'id': idDiscussion
+        });
+    }
     urlSearchDiscussion (selectedValue) {
 
         return  Routing.generate('app_search_discussion', {

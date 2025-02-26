@@ -5,7 +5,6 @@ namespace App\EventListener\Activity;
 use App\Entity\User;
 use App\EncryptDecrypt\EncryptDecrypt;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
 class ActivityUser
 {
     public function __construct(private EncryptDecrypt $encryptDecrypt)

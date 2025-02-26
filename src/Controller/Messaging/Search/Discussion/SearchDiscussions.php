@@ -64,6 +64,7 @@ class SearchDiscussions extends AbstractController
                     $group1->addShould(new \Elastica\Query\Wildcard('personInvitationRecipient.firstName', $firstName . '*'));
                     $group1->addShould(new \Elastica\Query\Wildcard('personInvitationRecipient.firstName', '*' . $firstName));
                 }
+                
                 $boolQuery->addMust($group1);
 
                 if ($createdThisMonth === true) {
@@ -83,11 +84,7 @@ class SearchDiscussions extends AbstractController
             $boolQuery->setMinimumShouldMatch(1);
 
             $query->addSort([
-                'dateModification' => array('order' => 'ASC'),
-            ]);
-
-            $query->addSort([
-                'dateCreation' => array('order' => 'ASC'),
+                'dateModification' => array('order' => 'DESC'),
             ]);
 
             $query->setQuery($boolQuery);
@@ -114,16 +111,15 @@ class SearchDiscussions extends AbstractController
                 $numberUnreadMessages = $discussion->getPersonInvitationSenderNumberUnreadMessages() + $discussion->getPersonInvitationRecipientNumberUnreadMessages();
 
                 for ($i = 0; $i < $numberUnreadMessages; $i++) {
-                    array_push(
-                        $arrayUnreadMessages, 
-                        $discussionMessageUsers[$i]
-                    );
+                    if (array_key_exists($i, $discussionMessageUsers)) {
+                        array_push($arrayUnreadMessages, $discussionMessageUsers[$i]);
+                    }
                 }
             }
 
             return $arrayUnreadMessages;
         }
-
+        
         return [];
     }
 

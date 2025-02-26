@@ -17,6 +17,9 @@ use App\Controller\Pagination\Pagination;
 use App\Services\File\FileUploader;
 use App\Entity\Discussion;
 use App\Entity\AnswerMessage;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\MessageRealTime\Message\MessageQueue;
+use Symfony\Contracts\Translation\TranslatorInterface;
 class MessageService
 {
     const LIMIT = 5;
@@ -29,7 +32,9 @@ class MessageService
         private Environment $environment,
         private Security $security,
         private Pagination $pagination,
-        private SearchMessages $searchMessages
+        private SearchMessages $searchMessages,
+        private TranslatorInterface $translator,
+        private MessageBusInterface $bus
     ) {}
 
     public function handleMessageFormData(FormInterface $messageForm, Discussion $discussion) : JsonResponse
@@ -63,8 +68,14 @@ class MessageService
             $this->toAnswerMessage($messageDiscussionUser, $toAnswer, $user);
         }
 
+        if ($message) {
+            dump('bus');
+            $this->bus->dispatch(new MessageQueue($message->getMessage()));
+        }
+
         return new JsonResponse([
             'code' => Message::ADDED_SUCCESSFULLY,
+            'message' => $this->translator->trans('Element added successfully'),
             'html' => $this->environment->render('message/message.html.twig', [
                 'item' => $messageDiscussionUser
             ]),

@@ -4,7 +4,11 @@ import ButtonForm from '../Components/buttonForm';
 
 import LoadMore from '../Components/Pagination/loadMore';
 
+import MessageOnClick from './messageOnClick';
+
 import MessageUtils from './messageUtils';
+
+import Notification from '../Components/Notyf/notification';
 class Message {    
     constructor() {
     }
@@ -24,7 +28,7 @@ class Message {
         .then(json => {
             addFormMessage.innerHTML = json.html;
 
-            listMessage.innerHTML = json.messages;
+            listMessage.innerHTML =  json.messages;
 
             this.add(url);
 
@@ -33,6 +37,46 @@ class Message {
             this.messageItemActionAnswer();
 
             this.messageItemActionDelete();
+
+            new MessageOnClick().scroll();
+        });
+    }
+    listScrollable (url) {
+        const paginationScrollable = document.getElementById("pagination-scrollable");
+
+        const paginationScrollableSpinner = document.getElementById("pagination-scrollable-spinner");
+    
+        if (paginationScrollable) {
+            paginationScrollable.remove();
+        }
+
+        const messagesBody = document.querySelector('#messages_body');
+
+        const paginationMessage = document.querySelector('#pagination-message');
+
+        let messagesBodyHtml = messagesBody.innerHTML;
+
+        new Loading().display(paginationScrollableSpinner);
+
+        const options = {
+            method: 'GET',
+        };
+        fetch(url, options)
+        .then(response => response.json())
+        .then(json => {
+            const parser = new DOMParser();
+
+            const doc = parser.parseFromString(json.messages, "text/html");
+
+            const messagesChild = doc.querySelector("#messages_body");
+
+            const paginationChild = doc.querySelector("#pagination-message");
+
+            messagesBody.innerHTML = messagesChild.innerHTML + messagesBodyHtml;
+
+            paginationMessage.innerHTML = paginationChild.innerHTML;
+
+            new LoadMore().pagination();
         });
     }
     add (url) {
@@ -56,6 +100,8 @@ class Message {
                 newMessage.innerHTML += json.html;
                 new ButtonForm().removeDisabled(ButtonFormMessage);
                 new MessageUtils().cleanForm();
+                const notyf = new Notification();
+                notyf.show('success', json.message);
             });
         });
 
@@ -74,16 +120,19 @@ class Message {
         .then(json => {
             searchMessage.innerHTML = json.html;
 
+            const inputDescription = document.getElementById("DivInputDescription");
+
             const checkboxes = document.querySelectorAll('input[name="saveSearch"]');
-            document.getElementById("DivInputDescription").style.display = "none"; 
+            
+            inputDescription.style.display = "none"; 
 
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', (event) => {
                     if (event.target.checked) {
-                        document.getElementById("DivInputDescription").style.display = "block"; 
+                        inputDescription.style.display = "block"; 
                     } else {
-                        document.getElementById("DivInputDescription").style.display = "none"; 
-                        document.getElementById('inputDescription').value = '';
+                        inputDescription.style.display = "none"; 
+                        inputDescription.value = '';
                     }
                 });
             });
@@ -134,6 +183,8 @@ class Message {
             .then(response => response.json())
             .then(json => {
                 itemMessageBlock.innerHTML = '';
+                const notyf = new Notification();
+                notyf.show('delete', json.message);
             });
         }
     }

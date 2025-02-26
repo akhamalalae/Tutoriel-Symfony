@@ -44,7 +44,7 @@ Send: Envoyer
 Previous: Précédente
 Next: Suivante
 New discussion: Nouvelle discussion
-Discussions: Discussion
+Discussions: Discussions
 Messages: Messages
 Message: Message
 New message: Nouveau message
@@ -90,6 +90,11 @@ Terms: Conditions Générales d'Utilisation
 Answer: Répondre
 Delete: Supprimer
 
+Enter your new password: Entrez votre nouveau mot de passe
+Enter your email to reset your password: Entrez votre email pour réinitialiser votre mot de passe
+Reset password: Réinitialiser le mot de passe
+Element added successfully: L'élément est correctement ajouter
+Element deleted successfully: L'élément est correctement supprimé
 Welcome to the help center. Here are the popular topics: Bienvenue au centre d'aide. Voici les sujets populaires
 How do I reset my password?: Comment réinitialiser mon mot de passe ?
 How do I update my profile?: Comment mettre à jour mon profil ?

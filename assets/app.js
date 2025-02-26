@@ -13,6 +13,7 @@ import 'bootstrap-datepicker/dist/css/bootstrap-datepicker.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 import $ from 'jquery';
+import 'notyf/notyf.min.css';
 
 global.$ = global.jQuery = $;
 
@@ -27,6 +28,4 @@ document.addEventListener('DOMContentLoaded', () => {
 $(document).ready(function() {
     $('.select2').select2();
 });
-
-console.log("okii");
 

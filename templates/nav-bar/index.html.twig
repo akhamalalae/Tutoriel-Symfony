@@ -9,7 +9,7 @@
         <ul class="navbar-nav navbar-align">
             {% if app.user %} 
                 {{ render(controller('App\\Controller\\Navbar\\Message\\MessageController::messagesAction')) }}
-                <!-- {{ render(controller('App\\Controller\\Navbar\\Notification\\NotificationController::notificationAction')) }} --> 
+                {# {{ render(controller('App\\Controller\\Navbar\\Notification\\NotificationController::notificationAction')) }} #} 
             {% endif %}
             {% include 'nav-bar/translations.html.twig' %}
             {% if app.user %} 

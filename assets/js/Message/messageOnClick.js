@@ -29,7 +29,7 @@ class MessageOnClick {
 
             elList.forEach(el => el.classList.remove(className));
 
-            var element = document.querySelector('#discussion-click-'+idDiscussion);
+            var element = document.querySelector('#item-discussion-block-'+idDiscussion);
 
             element.classList.add(className);
 
@@ -71,12 +71,52 @@ class MessageOnClick {
 
             let page = event.target.getAttribute('data-page');
 
+            let paginationScrollableMessages = event.target.getAttribute('data-view');
+
             let criteria = utils.criteria();
 
             let url = utils.url(idDiscussion, page, criteria);
 
-            new Message().list(url);
+            if (paginationScrollableMessages == "paginationScrollableMessages") {
+                new Message().listScrollable(url);
+            } else {
+                new Message().list(url);
+            }
         }
+    }
+    scroll () {
+        let scrollableElements = document.querySelectorAll(".scrollable");
+
+        // Parcourir chaque élément et ajouter un écouteur d'événement
+        scrollableElements.forEach(function(element) {
+            element.addEventListener("scroll", function(event) {
+                let utils = new MessageUtils();
+
+                let idDiscussion = event.target.getAttribute('data-idDiscussion');
+
+                let criteria = utils.criteria();
+
+                // Vérifier si l'utilisateur est en haut de l'élément
+                if (element.scrollTop === 0) {
+                    console.log("Un utilisateur est en haut d'un élément !");
+                    
+                    /*
+                    let page = parseInt(event.target.getAttribute('data-page'), 10) + 1;
+
+                    let url = utils.url(idDiscussion, page, criteria);
+                    
+                    console.log(idDiscussion, page);
+                    new Message().list(url);
+                    */
+                }
+
+                // Vérifier si l'utilisateur est en bas de l'élément
+                if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+                    console.log("Un utilisateur est en bas d'un élément !");
+                }
+
+            });
+        });
     }
 }
  

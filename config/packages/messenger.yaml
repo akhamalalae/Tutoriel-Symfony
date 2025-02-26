@@ -1,0 +1,18 @@
+framework:
+  messenger:
+    transports:
+      amqp:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        options:
+          exchange:
+            name: 'symfony_exchange'
+          queues:
+            symfony_queue: ~
+    routing:
+      App\MessageRealTime\Message\MessageQueue: amqp
+
+# Avec Symfony Messenger, RabbitMQ et Mercure , vous pouvez créer un système **perfperformant , asynchrone et temps réel pour votre application Symfony. 🚀
+
+# Messenger s'occupe de la gestion des messages.
+# RabbitMQ agit comme un courtier fiable pour stocker et distribuer les messages.
+# MercuMercure assure les mises à jour en temps réel aux clients.
