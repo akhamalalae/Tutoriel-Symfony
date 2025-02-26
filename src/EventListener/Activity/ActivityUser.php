@@ -70,8 +70,6 @@ class ActivityUser
             ->setEmail($encryptEmail)
             ->setCompany($encryptCompany)
             ->setJob($encryptJob)
-            ->setBrochureFilename($encryptBrochureFilename)
-            ->setMimeType($encryptMimeType)
             ->setStreet($encryptStreet)
             ->setCity($encryptCity)
             ->setPostalCode($encryptPostalCode)
@@ -80,6 +78,11 @@ class ActivityUser
             ->setFacebook($encryptFacebook)
             ->setInstagram($encryptInstagram)
             ->setLinkedIn($encryptLinkedIn);
+
+        if($encryptBrochureFilename) {
+            $user->setBrochureFilename($encryptBrochureFilename)
+            ->setMimeType($encryptMimeType);
+        }
     }
 
     public function encryptPreUpdateUser(User $user, PreUpdateEventArgs $event): void
