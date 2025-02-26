@@ -12,7 +12,7 @@
     {% set numberUnreadMessages = item.personInvitationSenderNumberUnreadMessages  %}
 {% endif %}
 
-<div id="discussion-click-{{ item.id }}" 
+<div id="item-discussion-block-{{ item.id }}" 
     class="discussions-card-click card text-white mb-3 position-relative"
 >
     <div class="card-body">
@@ -31,7 +31,7 @@
             {% endif %}
             class="img-fluid rounded-circle mb-2" 
             alt="{{ person.sensitiveDataName }}" 
-            width="100" height="100" 
+            width="10" height="10"
             onclick="discussionClick(event)" 
             data-idDiscussion="{{ item.id }}" 
             data-page="1"
@@ -40,10 +40,7 @@
         <h5 class="card-title" style="color:black;">
             <br />
             {{ person.sensitiveDataFirstName }} {{ person.sensitiveDataName }}
-
-            <a data-bs-toggle="modal" data-bs-target="#profilInfo{{ person.id }}">
-                <i class="fa fa-info-circle" style="font-size:17px;color:black;"></i>
-            </a>
+            {% include 'discussion/block_content_discussion_actions.html.twig' with {'item': item, 'person': person}%}
         </h5>
     </div>
 </div>

@@ -1,26 +1,24 @@
-<div class="dropdown">
-    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonActions" data-bs-toggle="dropdown" aria-expanded="false">
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonActions">
-        <li>
+<div class="card-actions float-end">
+    <div class="dropdown position-relative">
+        <a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
             <a class="dropdown-item" 
                 id="dropdown-item-actions-answer"
                 onClick="messageItemActionAnswerClick(event)"
                 data-idMessage="{{item.message.id}}"
                 data-idDiscussionMessageUser="{{item.id}}"
             >
-                <i class="fa fa-reply" style="color:#3380ff"></i> {{ 'Answer'|trans }}
+                {{ 'Answer'|trans }}
             </a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
             <a class="dropdown-item"
                 id="dropdown-item-actions-delete"
                 onClick="messageItemActionDeleteClick(event)"
                 data-idDiscussionMessageUser="{{item.id}}"
             >
-                <i class="fa fa-remove" style="color:red"></i> {{ 'Delete'|trans }}
+                {{ 'Delete'|trans }}
             </a>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>

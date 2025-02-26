@@ -31,6 +31,7 @@ Encore
     .addEntry('profil', './assets/js/Profil/profil.js')
     .addEntry('help', './assets/js/Help/help.js')
     .addEntry('settings', './assets/js/Settings/settings.js')
+    .addEntry('dashboard', './assets/js/Dashboard/dashboard.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

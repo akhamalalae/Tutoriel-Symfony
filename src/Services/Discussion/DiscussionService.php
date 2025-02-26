@@ -15,7 +15,7 @@ use App\Entity\SearchDiscussion;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\Messaging\Search\Discussion\SearchDiscussions;
 use App\Controller\Pagination\Pagination;
-
+use Symfony\Contracts\Translation\TranslatorInterface;
 class DiscussionService
 {
     const LIMIT = 2;
@@ -26,7 +26,8 @@ class DiscussionService
         private Security $security,
         private SearchDiscussions $searchDiscussions,
         private ParameterBagInterface $parameters,
-        private Pagination $pagination
+        private Pagination $pagination,
+        private TranslatorInterface $translator
     ) {}
 
     public function handleDiscussionFormData(FormInterface $discussionForm): JsonResponse
@@ -57,6 +58,7 @@ class DiscussionService
 
         return new JsonResponse([
             'code' => Discussion::ADDED_SUCCESSFULLY,
+            'message' => $this->translator->trans('Element added successfully'),
             'html' => $this->environment->render('discussion/discussion.html.twig', [
                 'item' => $discussion
             ])

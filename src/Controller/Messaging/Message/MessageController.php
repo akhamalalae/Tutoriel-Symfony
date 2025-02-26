@@ -21,6 +21,9 @@ use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
 use App\Entity\AnswerMessage;
 use Twig\Environment;
+use App\Services\Mercure\MercureClient;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
 class MessageController extends AbstractController
 {
     #[Route('/user/message/{idDiscussion}/{page}', name: 'app_message', options: ['expose' => true])]
@@ -166,7 +169,11 @@ class MessageController extends AbstractController
     }
 
     #[Route('/user/delete/message/{id}', name: 'app_delete_message', methods: ['DELETE'], options: ['expose' => true])]
-    public function delete(int $id, EntityManagerInterface $em): JsonResponse
+    public function delete(
+        int $id,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
+    ): JsonResponse
     {
         $discussionMessageUser = $em->getRepository(DiscussionMessageUser::class)->find($id);
 
@@ -194,6 +201,6 @@ class MessageController extends AbstractController
 
         $em->flush();
 
-        return new JsonResponse(['message' => 'Message deleted successfully'], 200);
+        return new JsonResponse(['message' => $translator->trans('Element deleted successfully')], 200);
     }
 }

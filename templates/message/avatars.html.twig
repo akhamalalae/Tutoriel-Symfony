@@ -1,0 +1,13 @@
+{% if item.message and item.message.creatorUser.sensitiveDataBrochureFilename %} 
+    {% set subDirectory = 'img/avatars/'  %} 
+    <img 
+        src="data:{{ item.message.creatorUser.sensitiveDataMimeType }};base64,{{ item.message.creatorUser.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
+        width="36" height="36" 
+        class="rounded-circle me-2" 
+        alt="{{ item.message.creatorUser.sensitiveDataName }}"
+    >
+{% else %} 
+    <img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
+{% endif %}
+{{ item.message.creatorUser.sensitiveDataFirstName }} 
+{{ item.message.creatorUser.sensitiveDataName }}

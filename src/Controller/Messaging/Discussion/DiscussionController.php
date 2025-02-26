@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Twig\Environment;
 use App\Controller\Pagination\Pagination;
 use App\Services\Breadcrumb\BreadcrumbService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 class DiscussionController extends AbstractController
 {
     #[Route('/user/discussion', name: 'app_discussion')]
@@ -65,9 +66,9 @@ class DiscussionController extends AbstractController
 
         $criteria = $request->get('criteria');
 
-        $searchDiscussion = $this->saveSearch($user, $criteria, $em);
+        $searchCriteria = $this->saveSearchDiscussionObject($user, $criteria, $em);
 
-        $discussionPaginationInfos = $discussionService->searchDiscussions($page, $searchDiscussion['searchDiscussion'], $searchDiscussion['saveSearch']);
+        $discussionPaginationInfos = $discussionService->searchDiscussions($page, $searchCriteria['searchDiscussion'], $searchCriteria['saveSearch']);
 
         return new JsonResponse([
             'discussions' => $environment->render('discussion/list.html.twig', [
@@ -102,7 +103,7 @@ class DiscussionController extends AbstractController
         ]);
     }
 
-    private function saveSearch(
+    private function saveSearchDiscussionObject(
         User $user,
         array|null $criteria,
         EntityManagerInterface $em) : array
@@ -141,5 +142,31 @@ class DiscussionController extends AbstractController
             'searchDiscussion' => $searchDiscussion,
             'saveSearch' => $saveSearch == 'true' ? true : false
         ];
+    }
+
+    #[Route('/user/delete/discussion/{id}', name: 'app_delete_discussion', methods: ['DELETE'], options: ['expose' => true])]
+    public function delete(
+        int $id,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
+    ): JsonResponse
+    {
+        $discussion = $em->getRepository(Discussion::class)->find($id);
+
+        if (!$discussion) {
+            return new JsonResponse(['message' => 'Message not found'], 404);
+        }
+
+        $discussionMessageUsers = $discussion->getDiscussionMessageUsers();
+
+        foreach ($discussionMessageUsers as $item) {
+            $em->remove($item);
+        }
+
+        $em->remove($discussion);
+
+        $em->flush();
+
+        return new JsonResponse(['message' => $translator->trans('Element deleted successfully')], 200);
     }
 }

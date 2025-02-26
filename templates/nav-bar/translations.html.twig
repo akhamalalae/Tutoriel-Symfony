@@ -1,22 +1,22 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
 <li class="nav-item dropdown">
-    <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
-        <div class="position-relative">
-            <i class="align-middle" data-feather="globe"></i>
-        </div>
+    <a class="nav-flag dropdown-toggle" href="#" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="true">
+        {% if '/en/' in currentPath %}
+            <img src="{{ asset('img/flags/us.png') }}" alt="{{ 'English'|trans }}">
+        {% endif %}
+        {% if '/fr/' in currentPath %}
+            <img src="{{ asset('img/flags/fr.png') }}" alt="{{ 'French'|trans }}">
+        {% endif %}
     </a>
-
-    <div class="dropdown-menu dropdown-menu-end">
-        <a class="dropdown-item" 
-            href="{{ currentPath|replace({'/en/': '/fr/'}) }}"
-        >
-            {{ 'French'|trans }}
+    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown" data-bs-popper="static">
+        <a class="dropdown-item" href="{{ currentPath|replace({'/fr/': '/en/'}) }}">
+            <img src="{{ asset('img/flags/us.png') }}" alt="{{ 'English'|trans }}" width="20" class="align-middle me-1">
+            <span class="align-middle">{{ 'English'|trans }}</span>
         </a>
-        <a class="dropdown-item"
-            href="{{ currentPath|replace({'/fr/': '/en/'}) }}"
-        >
-            {{ 'English'|trans }}
+        <a class="dropdown-item" href="{{ currentPath|replace({'/en/': '/fr/'}) }}">
+            <img src="{{ asset('img/flags/fr.png') }}" alt="{{ 'French'|trans }}" width="20" class="align-middle me-1">
+            <span class="align-middle">{{ 'French'|trans }}</span>
         </a>
     </div>
 </li>

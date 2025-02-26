@@ -13,3 +13,14 @@ body {
     justify-content: center;  /* Centre les éléments */
     overflow-x: hidden;  /* Évite le défilement horizontal */
 }
+
+.scrollable {
+    height: 600px;
+    overflow-y: auto; /* Active la scrollbar verticale uniquement si besoin */
+    padding: 10px;
+    scroll-snap-type: y mandatory;
+}
+
+.scrollable strong {
+    margin-bottom: end;
+}

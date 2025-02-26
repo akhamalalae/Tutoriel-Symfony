@@ -34,7 +34,7 @@ class DiscussionFormType extends AbstractType
                     return $user->getSensitiveDataFirstName() . ' ' . $user->getSensitiveDataName();
                 },
                 'attr' => [
-                    'class' => 'select2'
+                    'class' => 'form-control form-control-lg select2'
                 ],
                 'query_builder' => function (EntityRepository $er) use ($user, $discussions) {
                     return $er->findUsersDiscussionForm($user, $discussions);
@@ -42,7 +42,7 @@ class DiscussionFormType extends AbstractType
             ))
             ->add('save', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary'
+                    'class' => 'btn btn-lg btn-primary'
                 ],
                 'label' => 'Send'
             ]);

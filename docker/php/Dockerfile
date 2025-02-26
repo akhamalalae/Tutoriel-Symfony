@@ -25,6 +25,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
+RUN apt-get update && apt-get install -y librabbitmq-dev libssh-dev \
+    && docker-php-ext-install opcache bcmath sockets \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
+    
 # Nettoyage pour réduire la taille de l'image
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
