@@ -29,19 +29,10 @@
 ## Environnement technique
 
 1. Backend
-  - PHP 8
-  - Symfony 6.4 et son écosystème
-  - Elasticsearch
+  - PHP 8, Symfony 6.4 et son écosystème, Elasticsearch
 
 2. Frontend
-  - Webpack encore
-  - HTML5
-  - CSS3
-  - Bootstrap
-  - Twig
-  - JavaScript
-  - Bibliothèque JavaScript jQuery
-  - Icons Font Awesome
+  - Webpack encore, HTML5, CSS3, Bootstrap, Twig, JavaScript, Bibliothèque JavaScript jQuery, Icons Font Awesome
 
 3. Technologie de conteneurisation
   - Docker
