@@ -13,8 +13,6 @@ class DiscussionFactory extends ModelFactory
     {
         $personInvitationSender = UserFactory::random();
 
-        dump($personInvitationSender->getId());
-
         // Obtenez tous les utilisateurs
         $users = UserFactory::all();
 
@@ -23,8 +21,6 @@ class DiscussionFactory extends ModelFactory
 
         // Sélectionnez un utilisateur aléatoire parmi ceux restants
         $personInvitationRecipient = $filteredUsers[array_rand($filteredUsers)];
-        
-        dump($personInvitationRecipient->getId(), '-----');
         
         return [
             'personInvitationSender' =>$personInvitationSender,

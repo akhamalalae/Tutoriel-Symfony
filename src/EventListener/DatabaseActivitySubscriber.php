@@ -85,7 +85,7 @@ final class DatabaseActivitySubscriber implements EventSubscriberInterface
         }
     }
 
-    public function logActivityPreUpdate(PreUpdateEventArgs $event)
+    public function logActivityPreUpdate(PreUpdateEventArgs $event): void
     {
         $entity = $event->getEntity();
 
