@@ -13,7 +13,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         ini_set('memory_limit', '1G'); // Définit la limite de mémoire à 1 Go
- 
+
         UserFactory::new()->createMany(2);
 
         DiscussionFactory::new()->createMany(1);

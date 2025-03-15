@@ -328,7 +328,7 @@
         "version": "v2.13.2"
     },
     "symfony/validator": {
-        "version": "7.0",
+        "version": "6.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -336,7 +336,7 @@
             "ref": "c32cfd98f714894c4f128bb99aa2530c1227603c"
         },
         "files": [
-            "./config/packages/validator.yaml"
+            "config/packages/validator.yaml"
         ]
     },
     "symfony/web-profiler-bundle": {

@@ -57,6 +57,7 @@ class RegistrationController extends AbstractController
             );
 
             $file = $form->get('image')->getData();
+            
             if ($file) {
                 $mimeType = $file->getMimeType();
 
