@@ -1,10 +1,7 @@
 controllers:
-<<<<<<< HEAD
     prefix: "{_locale}" 
     requirements: 
         _locale: fr|en
-=======
->>>>>>> e0c62b5 (Add initial set of files)
     resource:
         path: ../src/Controller/
         namespace: App\Controller
