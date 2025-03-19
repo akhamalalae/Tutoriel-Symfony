@@ -26,7 +26,7 @@
 
 ![Alt text](<Screenshot.png>)
 
-![Alt text](<Enregistrement.mov>)
+![Aperçu de la vidéo](Enregistrement.gif)
 
 ## Environnement technique
 
