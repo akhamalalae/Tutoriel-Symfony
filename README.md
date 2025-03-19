@@ -24,8 +24,6 @@
   -  Respect des exigences de conformité et des réglementations sur la protection des données (RGPD, ISO 27001).
   - Transparence pour l’utilisateur final avec un système sécurisé et automatique.
 
-![Alt text](<Screenshot.png>)
-
 ![Aperçu de la vidéo](Screens.gif)
 
 ## Environnement technique
