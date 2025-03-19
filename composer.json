@@ -7,6 +7,7 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+<<<<<<< HEAD
         "apalfrey/select2-bootstrap-5-theme": "^1.3",
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
@@ -60,6 +61,16 @@
         "symfonycasts/verify-email-bundle": "^1.17",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
+=======
+        "symfony/console": "7.0.*",
+        "symfony/dotenv": "7.0.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "7.0.*",
+        "symfony/runtime": "7.0.*",
+        "symfony/yaml": "7.0.*"
+    },
+    "require-dev": {
+>>>>>>> e0c62b5 (Add initial set of files)
     },
     "config": {
         "allow-plugins": {
@@ -92,17 +103,24 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
+<<<<<<< HEAD
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
+=======
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+>>>>>>> e0c62b5 (Add initial set of files)
         },
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
+<<<<<<< HEAD
         ],
         "elastica-populate": [
             "php bin/console fos:elastica:populate"
+=======
+>>>>>>> e0c62b5 (Add initial set of files)
         ]
     },
     "conflict": {
@@ -111,6 +129,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
+<<<<<<< HEAD
             "require": "6.4.*"
         }
     },
@@ -125,5 +144,9 @@
         "symfony/stopwatch": "6.4.*",
         "symfony/web-profiler-bundle": "6.4.*",
         "zenstruck/foundry": "^1.36"
+=======
+            "require": "7.0.*"
+        }
+>>>>>>> e0c62b5 (Add initial set of files)
     }
 }

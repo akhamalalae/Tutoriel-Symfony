@@ -1,6 +1,9 @@
 framework:
     cache:
+<<<<<<< HEAD
         app: cache.adapter.filesystem
+=======
+>>>>>>> e0c62b5 (Add initial set of files)
         # Unique name of your app: used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
 
