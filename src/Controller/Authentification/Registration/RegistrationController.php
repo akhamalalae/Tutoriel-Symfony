@@ -3,7 +3,7 @@
 namespace App\Controller\Authentification\Registration;
 
 use App\Entity\User;
-use App\Form\Type\Registration\RegistrationFormType;
+use App\Form\Type\User\UserFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -18,7 +18,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Services\File\FileUploader;
 use Symfony\Component\Mime\Email;
-use App\Form\Type\Registration\ResetPasswordType;
 class RegistrationController extends AbstractController
 {
     const DIRECTORY_AVATARS = 'img/avatars'; 
@@ -38,7 +37,7 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
 
-        $form = $this->createForm(RegistrationFormType::class, $user, [
+        $form = $this->createForm(UserFormType::class, $user, [
             'view' => 'register',
         ]);
 

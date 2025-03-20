@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Security\Core\Security;
-use App\Form\Type\Registration\RegistrationFormType;
+use App\Form\Type\User\UserFormType;
 use App\Services\Breadcrumb\BreadcrumbService;
 
 class UpdateProfileController extends AbstractController
@@ -44,7 +44,7 @@ class UpdateProfileController extends AbstractController
 
         $breadcrumbService->addBreadcrumb('Update profil', $this->generateUrl('app_update_profil'));
 
-        $form = $this->createForm(RegistrationFormType::class, $user, [
+        $form = $this->createForm(UserFormType::class, $user, [
             'view' => 'update',
         ]);
 
