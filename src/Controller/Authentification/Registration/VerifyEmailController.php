@@ -15,7 +15,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Services\File\FileUploader;
 use Symfony\Component\Mime\Email;
-use App\Form\Type\Registration\ResetPasswordType;
 
 class VerifyEmailController extends AbstractController
 {
