@@ -22,11 +22,8 @@ use App\Form\Type\Registration\ResetPasswordType;
 
 class ResetPasswordController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
-
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(private EmailVerifier $emailVerifier)
     {
-        $this->emailVerifier = $emailVerifier;
     }
 
     #[Route('/reset-password/{token}', name: 'reset_password')]

@@ -19,11 +19,8 @@ use App\Form\Type\Registration\ResetPasswordType;
 
 class VerifyEmailController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
-
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(private EmailVerifier $emailVerifier)
     {
-        $this->emailVerifier = $emailVerifier;
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]

@@ -8,11 +8,8 @@ use Twig\TwigFunction;
 
 class BreadcrumbExtension extends AbstractExtension
 {
-    private BreadcrumbService $breadcrumbService;
-
-    public function __construct(BreadcrumbService $breadcrumbService)
+    public function __construct(private BreadcrumbService $breadcrumbService)
     {
-        $this->breadcrumbService = $breadcrumbService;
     }
 
     public function getFunctions(): array

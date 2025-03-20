@@ -11,14 +11,8 @@ use App\EncryptDecrypt\EncryptDecrypt;
 
 class CustomUserProvider implements UserProviderInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    private EncryptDecrypt $encryptDecrypt;
-
-    public function __construct(EntityManagerInterface $entityManager, EncryptDecrypt $encryptDecrypt)
+    public function __construct(private EntityManagerInterface $entityManager, private EncryptDecrypt $encryptDecrypt)
     {
-        $this->entityManager = $entityManager;
-        $this->encryptDecrypt = $encryptDecrypt;
     }
 
     public function loadUserByIdentifier(string $identifier): UserInterface

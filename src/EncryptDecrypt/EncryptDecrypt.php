@@ -5,13 +5,10 @@ namespace App\EncryptDecrypt;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class EncryptDecrypt
 {
-    private $params;
-
     const METHOD = 'AES-256-CBC';
 
-    public function __construct(ParameterBagInterface $params)
+    public function __construct(private ParameterBagInterface $params)
     {
-        $this->params = $params;
     }
 
     public function loadKey() : ?string
