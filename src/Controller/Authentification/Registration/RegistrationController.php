@@ -22,12 +22,9 @@ use App\Form\Type\Registration\ResetPasswordType;
 class RegistrationController extends AbstractController
 {
     const DIRECTORY_AVATARS = 'img/avatars'; 
-
-    private EmailVerifier $emailVerifier;
-
-    public function __construct(EmailVerifier $emailVerifier)
+    
+    public function __construct(private EmailVerifier $emailVerifier)
     {
-        $this->emailVerifier = $emailVerifier;
     }
 
     #[Route('/register', name: 'app_register')]

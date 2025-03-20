@@ -6,11 +6,8 @@ class EncryptDecryptFile
 {
     const FILE_ENCRYPTION_BLOCKS = 10000;
 
-    private $params;
-
-    public function __construct(ParameterBagInterface $params)
+    public function __construct(private ParameterBagInterface $params)
     {
-        $this->params = $params;
     }
 
     public function loadKey() : ?string

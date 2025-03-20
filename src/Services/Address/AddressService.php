@@ -7,16 +7,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class AddressService
 {
-    private HttpClientInterface $httpClient;
-
-    private RequestStack $requestStack;
-
     const URL_API = 'https://nominatim.openstreetmap.org/search';
 
-    public function __construct(HttpClientInterface $httpClient, RequestStack $requestStack)
+    public function __construct(private HttpClientInterface $httpClient, private RequestStack $requestStack)
     {
-        $this->httpClient = $httpClient;
-        $this->requestStack = $requestStack;
     }
 
     public function searchAddress(string $query): array

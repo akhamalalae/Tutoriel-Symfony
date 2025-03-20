@@ -10,18 +10,11 @@ class BreadcrumbService
 {
     private const CACHE_KEY = 'breadcrumbs';
 
-    private RequestStack $requestStack;
-    private TranslatorInterface $translator;
-    private CacheInterface $cache;
-
     public function __construct(
-        CacheInterface $cache,
-        TranslatorInterface $translator,
-        RequestStack $requestStack
+        private CacheInterface $cache,
+        private TranslatorInterface $translator,
+        private RequestStack $requestStack
     ){
-        $this->cache = $cache;
-        $this->requestStack = $requestStack;
-        $this->translator = $translator;
     }
 
     /**
