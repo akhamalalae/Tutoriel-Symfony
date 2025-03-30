@@ -22,185 +22,101 @@ use App\Entity\User;
 use App\Entity\AnswerMessage;
 use Twig\Environment;
 use App\Services\Mercure\MercureClient;
-
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Services\User\UserService;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Services\Message\MessageSearchService;
+
+#[IsGranted('ROLE_USER')]
 class MessageController extends AbstractController
 {
+    public function __construct(
+        private readonly MessageService $messageService,
+        private readonly Environment $environment,
+        private readonly EntityManagerInterface $em,
+        private readonly TranslatorInterface $translator,
+        private readonly UserService $userService,
+        private readonly MessageSearchService $messageSearchService
+    ) {}
+
     #[Route('/user/message/{idDiscussion}/{page}', name: 'app_message', options: ['expose' => true])]
-    public function index(
-        Request $request,
-        RequestStack $requestStack, 
-        MessageService $messageService, 
-        Environment $environment,
-        EntityManagerInterface $em,
-        Security $security,
-        int $idDiscussion = 0,
-        int $page = 1) : JsonResponse
+    public function index(Request $request, int $idDiscussion = 0, int $page = 1): JsonResponse
     {
-        $user = $security->getUser();
+        try {
+            $user = $this->userService->getAuthenticatedUser();
+            $message = new Message();
+            $idDiscussion = $request->get('idDiscussion'); 
+            $page = $request->get('page'); 
+            $criteria = $request->get('criteria');
 
-        $message = new Message();
+            $searchMessage = $this->messageSearchService->saveSearch($user, $criteria);
+            $discussion = $this->em->getRepository(Discussion::class)->find($idDiscussion); 
 
-        $idDiscussion = $request->get('idDiscussion'); 
+            $this->messageService->setDiscussioReadingMessageStatus($discussion, $user);
 
-        $page = $request->get('page'); 
+            $messagesPaginationInfos = $this->messageSearchService->messagesPaginationInfos(
+                $user, 
+                $discussion, 
+                $page, 
+                $searchMessage['searchMessage'], 
+                $searchMessage['saveSearch']
+            );
 
-        $criteria = $request->get('criteria');
+            $messageForm = $this->createForm(MessageFormType::class, $message);
+            $messageForm->handleRequest($request);
 
-        $searchMessage = $this->saveSearch($user, $criteria, $em);
+            if ($messageForm->isSubmitted() && $messageForm->isValid()) {
+                return $this->messageService->handleMessageFormData($messageForm, $discussion);
+            }
 
-        $discussion = $em->getRepository(Discussion::class)->find($idDiscussion); 
-
-        $this->setDiscussioReadingMessageStatus($em, $discussion, $user);
-
-        $messagesPaginationInfos = $messageService->messagesPaginationInfos($user, $discussion, $page, $searchMessage['searchMessage'], $searchMessage['saveSearch']);
-
-        $request = $requestStack->getMainRequest();
-
-        $messageForm = $this->createForm(MessageFormType::class, $message);
-
-        $messageForm->handleRequest($request);
-
-        if ($messageForm->isSubmitted() && $messageForm->isValid()) {
-            return $messageService->handleMessageFormData($messageForm, $discussion);
+            return new JsonResponse([
+                'html' => $this->environment->render('message/form_message.html.twig', [
+                    'formMessage' => $messageForm->createView(),
+                ]),
+                'messages' => $this->environment->render('message/list.html.twig', [
+                    'discussion' => $discussion,
+                    'page' => $page,
+                    'numbrePagesPagination' => $messagesPaginationInfos['numbrePagesPagination'],
+                    'messages' => $messagesPaginationInfos['data'],
+                ]),
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $this->translator->trans('An error occurred')], 500);
         }
-
-        return new JsonResponse([
-            'html' => $environment->render('message/form_message.html.twig', [
-                'formMessage' => $messageForm->createView(),
-            ]),
-            'messages' => $environment->render('message/list.html.twig', [
-                'discussion' => $discussion,
-                'page' => $page,
-                'numbrePagesPagination' => $messagesPaginationInfos['numbrePagesPagination'],
-                'messages' => $messagesPaginationInfos['data'],
-            ]),
-        ]);
-    }
-
-    #[Route('/user/search/message', name: 'app_search_message', options: ['expose' => true])]
-    public function searchMessage(
-        Request $request,
-        EntityManagerInterface $em,
-        Environment $environment,
-        Security $security,
-    ) : Response
-    {        
-        $user = $security->getUser();
-
-        $idDiscussion = $request->get('idDiscussion'); 
-
-        $page = $request->get('page'); 
-
-        $idSearchMessage = $request->get('idSearchMessage');
-
-        $selectedSearchMessage = $idSearchMessage ? $em->getRepository(SearchMessage::class)->find($idSearchMessage) : null;
-
-        $searchMessage = $em->getRepository(SearchMessage::class)->findBy(['creatorUser' => $user]);
-
-        return new JsonResponse([
-            'html' => $environment->render('message/search_message_with_criteria.html.twig', [
-                'searchMessage' => $searchMessage,
-                'selectedSearchMessage' => $selectedSearchMessage,
-                'idDiscussion' => $idDiscussion,
-                'page' => $page
-            ]),
-        ]);
-    }
-
-    private function saveSearch(
-        User $user,
-        array|null $criteria,
-        EntityManagerInterface $em) : array
-    {
-        $searchMessage = null;
-
-        $saveSearch = false;
-
-        if ($criteria) {
-            $saveSearch = $criteria['saveSearch'];
-
-            $searchMessage = new SearchMessage();
-
-            $message = $criteria['message'];
-
-            $fileName = $criteria['fileName'];
-
-            $createdThisMonth = $criteria['createdThisMonth'] == 'true' ? true : false;
-
-            $description = $criteria['description'];
-
-            $searchMessage->setCreatorUser($user)
-                ->setCreatedThisMonth($createdThisMonth)
-                ->setDateCreation(new \DateTime())
-                ->setFileName($fileName)
-                ->setMessage($message)
-                ->setDescription($description)
-            ;
-
-            $em->persist($searchMessage);
-
-            $em->flush();
-        }
-
-        return [
-            'searchMessage' => $searchMessage,
-            'saveSearch' => $saveSearch == 'true' ? true : false
-        ];
-    }
-
-    private function setDiscussioReadingMessageStatus(
-        EntityManagerInterface $em, 
-        Discussion $discussion, 
-        User $user) : void
-    {
-        if ($user == $discussion->getPersonInvitationSender()) {
-            $discussion->setPersonInvitationRecipientNumberUnreadMessages(null);
-        } else {
-            $discussion->setPersonInvitationSenderNumberUnreadMessages(null);
-        }
-
-        $discussion->setModifierUser($user)
-            ->setDateModification(new \DateTime());
-
-        $em->persist($discussion);
-
-        $em->flush();
     }
 
     #[Route('/user/delete/message/{id}', name: 'app_delete_message', methods: ['DELETE'], options: ['expose' => true])]
-    public function delete(
-        int $id,
-        EntityManagerInterface $em,
-        TranslatorInterface $translator
-    ): JsonResponse
+    public function delete(int $id): JsonResponse
     {
-        $discussionMessageUser = $em->getRepository(DiscussionMessageUser::class)->find($id);
+        try {
+            $discussionMessageUser = $this->em->getRepository(DiscussionMessageUser::class)->find($id);
 
-        $message = $discussionMessageUser->getMessage();
+            if (!$discussionMessageUser) {
+                return new JsonResponse(['message' => $this->translator->trans('Message not found')], 404);
+            }
 
-        $fileMessages = $message->getFileMessages();
+            $message = $discussionMessageUser->getMessage();
+            $fileMessages = $message->getFileMessages();
+            $answerMessages = $discussionMessageUser->getAnswerMessages();
 
-        $answerMessages = $discussionMessageUser->getAnswerMessages();
+            // Suppression des fichiers associés
+            foreach ($fileMessages as $file) {
+                $this->em->remove($file);
+            }
 
-        if (!$discussionMessageUser) {
-            return new JsonResponse(['message' => 'Message not found'], 404);
+            // Suppression des réponses associées
+            foreach ($answerMessages as $answer) {
+                $this->em->remove($answer);
+            }
+
+            // Suppression du message et de la relation
+            $this->em->remove($message);
+            $this->em->remove($discussionMessageUser);
+            $this->em->flush();
+
+            return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $this->translator->trans('An error occurred while deleting the message')], 500);
         }
-
-        foreach ($fileMessages as $file) {
-            $em->remove($file);
-        }
-
-        $em->remove($message);
-
-        foreach ($answerMessages as $answer) {
-            $em->remove($answer);
-        }
-
-        $em->remove($discussionMessageUser);
-
-        $em->flush();
-
-        return new JsonResponse(['message' => $translator->trans('Element deleted successfully')], 200);
     }
 }

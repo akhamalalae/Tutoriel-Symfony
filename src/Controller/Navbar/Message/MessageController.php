@@ -3,24 +3,22 @@
 namespace App\Controller\Navbar\Message;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
-use App\Services\Discussion\DiscussionService;
-use App\Entity\Discussion;
+use App\Services\Discussion\DiscussionSearchService;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 class MessageController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $em, 
-        private DiscussionService $discussionService,
-        private Security $security) 
-    {}
+        private readonly DiscussionSearchService $discussionSearchService
+    ) {}
 
-    public function messagesAction()
+    #[Route('/navbar/messages', name: 'app_navbar_messages')]
+    public function messagesAction(): Response
     {
-        $user = $this->security->getUser();
-
-        $unreadMessages = $this->discussionService->searchMessagesNavBar();
+        $unreadMessages = $this->discussionSearchService->searchMessagesNavBar();
 
         return $this->render('nav-bar/messages.html.twig', [
             'messages' => $unreadMessages,

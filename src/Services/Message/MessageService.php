@@ -2,74 +2,87 @@
 
 namespace App\Services\Message;
 
-use App\Entity\Message;
-use App\Entity\FileMessage;
-use Doctrine\ORM\EntityManagerInterface;
-use Twig\Environment;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Security;
-use App\Controller\Messaging\Search\Message\SearchMessages;
 use App\Entity\User;
-use App\Entity\SearchMessage;
-use App\Entity\DiscussionMessageUser;
-use App\Controller\Pagination\Pagination;
-use App\Services\File\FileUploader;
+use Twig\Environment;
+use App\Entity\Message;
 use App\Entity\Discussion;
-use App\Entity\AnswerMessage;
-use Symfony\Component\Messenger\MessageBusInterface;
+use App\Entity\DiscussionMessageUser;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Services\Form\FormErrorExtractor;
+use Symfony\Component\Form\FormInterface;
 use App\MessageRealTime\Message\MessageQueue;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Messenger\MessageBusInterface;
+use App\Services\Message\FilesMessageUploaderService;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Entity\AnswerMessage;
+use App\Services\Message\AnswerToMessageService;
+
 class MessageService
 {
-    const LIMIT = 5;
-
-    const DIRECTORY_FILES_MESSAGE = 'files/message';
-
     public function __construct(
-        private EntityManagerInterface $em,
-        private FileUploader $fileUploader,
-        private Environment $environment,
-        private Security $security,
-        private Pagination $pagination,
-        private SearchMessages $searchMessages,
-        private TranslatorInterface $translator,
-        private MessageBusInterface $bus
+        private readonly EntityManagerInterface $em,
+        private readonly Environment $environment,
+        private readonly Security $security,
+        private readonly TranslatorInterface $translator,
+        private readonly MessageBusInterface $bus,
+        private readonly FormErrorExtractor $getErrorForm,
+        private readonly FilesMessageUploaderService $filesMessageUploader,
+        private readonly AnswerToMessageService $answerToMessageService
     ) {}
 
-    public function handleMessageFormData(FormInterface $messageForm, Discussion $discussion) : JsonResponse
+    /**
+     * Handle the message form submission
+     *
+     * @param FormInterface $messageForm The submitted form
+     * @param Discussion $discussion The discussion to add the message to
+     * @return JsonResponse The response containing the result
+     * @throws \Exception When message processing fails
+     */
+    public function handleMessageFormData(FormInterface $messageForm, Discussion $discussion): JsonResponse
     {
-        if ($messageForm->isValid()) {
-            return $this->handleValidForm($messageForm, $discussion);
-        } else {
+        try {
+            if ($messageForm->isValid()) {
+                return $this->handleValidForm($messageForm, $discussion);
+            }
             return $this->handleInvalidForm($messageForm);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'code' => Message::ERROR,
+                'message' => $this->translator->trans('An error occurred while processing the message')
+            ], 500);
         }
     }
 
-    private function handleValidForm(FormInterface $messageForm, Discussion $discussion) : JsonResponse
+    /**
+     * Handle a valid form submission
+     *
+     * @param FormInterface $messageForm The valid form
+     * @param Discussion $discussion The discussion
+     * @return JsonResponse The success response
+     */
+    private function handleValidForm(FormInterface $messageForm, Discussion $discussion): JsonResponse
     {
         /** @var Message $message */
         $message = $messageForm->getData();
-
         $toAnswerId = $messageForm->get('toAnswer')->getData();
-
         $user = $this->security->getUser();
 
         $message = $this->setMessageObject($message, $user);
-
-        $this->filesMessageUploader($user, $messageForm, $message);
+        $this->filesMessageUploader->uploader($user, $messageForm);
 
         $messageDiscussionUser = $this->setMessageDiscussionUser($message, $discussion, $user);
-        
         $this->setDiscussion($discussion, $user);
 
         if ($toAnswerId) {
             $toAnswer = $this->em->getRepository(Message::class)->find($toAnswerId);
-            $this->toAnswerMessage($messageDiscussionUser, $toAnswer, $user);
+            if ($toAnswer) {
+                $this->answerToMessageService->answerMessage($messageDiscussionUser, $toAnswer, $user);
+            }
         }
 
-        if ($message) {
-            dump('bus');
+        if ($message->getMessage()) {
             $this->bus->dispatch(new MessageQueue($message->getMessage()));
         }
 
@@ -82,69 +95,36 @@ class MessageService
         ]);
     }
 
-    public function filesMessageUploader(User $user, FormInterface $messageForm, Message $message) : void
-    {
-        $files = $messageForm->get('files')->getData();
-
-        foreach ($files as $file) {
-            if ($file) {
-                $fileUploader = $this->fileUploader->upload($file, self::DIRECTORY_FILES_MESSAGE);
-
-                $fileName = $fileUploader['name'];
-
-                $FileOriginalName = $fileUploader['originalName'];
-
-                $fileMimeType = $fileUploader['mimeType'];
-
-                $fileMessage = new FileMessage();
-
-                $fileMessage->setName($fileName)
-                    ->setMimeType($fileMimeType)
-                    ->setOriginalName($FileOriginalName)
-                    ->setMessage($message)
-                    ->setCreatorUser($user) 
-                    ->setDateCreation(new \DateTime())
-                    ->setDateModification(new \DateTime());
-                
-                $this->em->persist($fileMessage);
-
-                $message->addFileMessage($fileMessage);
-
-                $this->em->persist($message);
-
-                $this->em->flush();
-            }
-        }
-    }
-
-    public function messagesPaginationInfos(User $user, Discussion $discussion, int $page, SearchMessage|null $criteria, bool $saveSearch) : array
-    {
-        //$limit = $discussion->getPersonInvitationRecipientNumberUnreadMessages() + $discussion->getPersonInvitationSenderNumberUnreadMessages();
-
-        return $this->pagination->getPagination(
-            $this->searchMessages->findMessages($user, $discussion, $criteria, $saveSearch),
-            $page,
-            self::LIMIT
-        );
-    }
-
-    private function setMessageObject(Message $message, User $user) : Message
+    /**
+     * Set up the message object with basic information
+     *
+     * @param Message $message The message to set up
+     * @param User $user The user creating the message
+     * @return Message The configured message
+     */
+    private function setMessageObject(Message $message, User $user): Message
     {
         $message->setCreatorUser($user)
             ->setDateCreation(new \DateTime())
             ->setDateModification(new \DateTime());
         
         $this->em->persist($message);
-
         $this->em->flush();
 
         return $message;
     }
 
-    private function setMessageDiscussionUser(Message $message, Discussion $discussion, User $user) : DiscussionMessageUser
+    /**
+     * Create and set up the message discussion user relationship
+     *
+     * @param Message $message The message
+     * @param Discussion $discussion The discussion
+     * @param User $user The user
+     * @return DiscussionMessageUser The created relationship
+     */
+    private function setMessageDiscussionUser(Message $message, Discussion $discussion, User $user): DiscussionMessageUser
     {
         $messageDiscussionUser = new DiscussionMessageUser();
-
         $messageDiscussionUser->setMessage($message)
             ->setDiscussion($discussion)
             ->setCreatorUser($user)
@@ -152,33 +132,22 @@ class MessageService
             ->setDateModification(new \DateTime());
         
         $this->em->persist($messageDiscussionUser);
-
         $this->em->flush();
 
         return $messageDiscussionUser;
     }
 
-    private function toAnswerMessage(DiscussionMessageUser $messageDiscussionUser, Message $toAnswer, User $user) : void
+    /**
+     * Update the discussion with new message information
+     *
+     * @param Discussion $discussion The discussion to update
+     * @param User $user The user making the update
+     */
+    private function setDiscussion(Discussion $discussion, User $user): void
     {
-        $answerMessage = new AnswerMessage();
-
-        $answerMessage->setDiscussionMessageUser($messageDiscussionUser)
-            ->setCreatorUser($user)
-            ->setDateCreation(new \DateTime())
-            ->setMessage($toAnswer);
-
-        $this->em->persist($answerMessage);
-
-        $messageDiscussionUser->addAnswerMessage($answerMessage);
-
-        $this->em->persist($messageDiscussionUser);
-
-        $this->em->flush();
-    }
-
-    private function setDiscussion(Discussion $discussion, User $user) : void
-    {
-        if ($user == $discussion->getPersonInvitationSender()) {
+        $isSender = $user === $discussion->getPersonInvitationSender();
+        
+        if ($isSender) {
             $discussion->setPersonInvitationSenderNumberUnreadMessages(
                 $discussion->getPersonInvitationSenderNumberUnreadMessages() + 1
             );
@@ -195,28 +164,32 @@ class MessageService
         $this->em->flush();
     }
 
-    private function handleInvalidForm(FormInterface $messageForm) : JsonResponse
+    public function setDiscussioReadingMessageStatus(Discussion $discussion, User $user): void
+    {
+        if ($user === $discussion->getPersonInvitationSender()) {
+            $discussion->setPersonInvitationRecipientNumberUnreadMessages(null);
+        } else {
+            $discussion->setPersonInvitationSenderNumberUnreadMessages(null);
+        }
+
+        $discussion->setModifierUser($user)
+            ->setDateModification(new \DateTime());
+
+        $this->em->persist($discussion);
+        $this->em->flush();
+    }
+
+    /**
+     * Handle an invalid form submission
+     *
+     * @param FormInterface $messageForm The invalid form
+     * @return JsonResponse The error response
+     */
+    private function handleInvalidForm(FormInterface $messageForm): JsonResponse
     {
         return new JsonResponse([
             'code' => Message::MESSAGE_INVALID_FORM,
-            'errors' => $this->getErrorMessages($messageForm)
+            'errors' => $this->getErrorForm->extractErrors($messageForm)
         ]);
-    }
-
-    private function getErrorMessages(FormInterface $messageForm): array
-    {
-        $errors = [];
-
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $child) {
-            if (!$child->isValid()) {
-                $errors[$child->getName()] = $this->getErrorMessages($child);
-            }
-        }
-
-        return $errors;
     }
 }

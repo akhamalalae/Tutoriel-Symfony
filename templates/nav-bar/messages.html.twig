@@ -7,13 +7,13 @@
             {% endif %}
         </div>
     </a>
-    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+    <div class="dropdown-menu w-100 dropdown-menu-lg dropdown-menu-end" aria-labelledby="messagesDropdown">
         <div class="dropdown-menu-header">
             <div class="position-relative">
                 {{ numbreMessages }} {{ 'New Messages'|trans }}
             </div>
         </div>
-        <div class="list-group">
+        <div {% if numbreMessages != 0 %} class="list-group scrollable" {% else %} class="list-group" {% endif %}>
             {% for item in messages %}
                 {% if item.discussion.personInvitationSender != app.user %}  
                     {% set person = item.discussion.personInvitationSender  %} 
@@ -28,27 +28,37 @@
                         <div class="col-2">
                             {% if person.brochureFilename %} 
                                 {% set subDirectory = 'img/avatars/'  %} 
-                                <img src="data:{{ person.sensitiveDataMimeType }};base64,{{ person.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" class="avatar img-fluid rounded-circle" alt="{{ person.sensitiveDataName }}">
+                                <img 
+                                    src="data:{{ person.sensitiveDataMimeType }};base64,{{ person.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
+                                    class="avatar img-fluid rounded-circle" 
+                                    alt="{{ person.sensitiveDataName }}"
+                                >
                             {% else %} 
                                 <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded-circle" alt="{{ person.sensitiveDataName }}">
                             {% endif %}
                         </div>
 
                         <div class="col-10 ps-2">
-                            <div class="text-dark">{{ person.sensitiveDataFirstName }} {{ person.sensitiveDataName }}</div>
+                            <div class="text-dark">
+                                {{ person.sensitiveDataFirstName }} {{ person.sensitiveDataName }}
+                            </div>
                             <div class="text-muted small mt-1">
                                 {% if item.message.message %} 
                                     {{ item.message.sensitiveDataMessage }}
                                 {% endif %}
                             </div>
-                            <div class="text-muted small mt-1">{{ item.dateCreation|date("F j, Y : H:i") }}</div>
+                            <div class="text-muted small mt-1">
+                                {{ item.dateCreation|date("F j, Y : H:i") }}
+                            </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
         <div class="dropdown-menu-footer">
-            <a href="{{ path('app_discussion') }}" class="text-muted">{{ 'Show all messages'|trans }}</a>
+            <a href="{{ path('app_discussion') }}" class="text-muted">
+                {{ 'Show all messages'|trans }}
+            </a>
         </div>
     </div>
 </li>

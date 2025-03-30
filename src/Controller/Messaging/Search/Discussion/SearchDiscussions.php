@@ -18,6 +18,7 @@ use App\Controller\Messaging\Search\Interface\SearchDiscussionsInterface;
 use Elastica\Query\Term;
 use Elastica\Query\Wildcard;
 use Elastica\Query\Exists;
+use Elastica\Query\Nested;
 
 class SearchDiscussions extends AbstractController implements SearchDiscussionsInterface
 {
