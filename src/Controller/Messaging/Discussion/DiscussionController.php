@@ -7,41 +7,37 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Type\Discussion\DiscussionFormType;
 use App\Services\Discussion\DiscussionService;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\User;
-use App\Entity\Message;
-use App\Entity\SearchDiscussion;
 use App\Entity\Discussion;
-use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Twig\Environment;
-use App\Controller\Pagination\Pagination;
 use App\Services\Breadcrumb\BreadcrumbService;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Services\User\UserService;
+
+#[IsGranted('ROLE_USER')]
 class DiscussionController extends AbstractController
 {
-    #[Route('/user/discussion', name: 'app_discussion')]
-    public function index(
-        Request $request,
-        RequestStack $requestStack, 
-        DiscussionService $discussionService, 
-        BreadcrumbService $breadcrumbService
-    ) : Response
-    {      
-        $breadcrumbService->addBreadcrumb('Discussion', $this->generateUrl('app_discussion'));
+    public function __construct(
+        private DiscussionService $discussionService,
+        private BreadcrumbService $breadcrumbService,
+        private EntityManagerInterface $em,
+        private TranslatorInterface $translator,
+        private Environment $environment
+    ) {}
 
-        $request = $requestStack->getMainRequest();
+    #[Route('/user/discussion', name: 'app_discussion')]
+    public function index(Request $request): Response
+    {      
+        $this->breadcrumbService->addBreadcrumb('Discussion', $this->generateUrl('app_discussion'));
 
         $discussion = new Discussion();
-
         $discussionForm = $this->createForm(DiscussionFormType::class, $discussion);
-
         $discussionForm->handleRequest($request);
 
         if ($discussionForm->isSubmitted() && $discussionForm->isValid()) {
-            return $discussionService->handleDiscussionFormData($discussionForm);
+            return $this->discussionService->handleDiscussionFormData($discussionForm);
         }
 
         return $this->render('discussion/index.html.twig', [
@@ -49,124 +45,23 @@ class DiscussionController extends AbstractController
         ]);
     }
 
-    #[Route('/user/list/discussion/{page}', name: 'app_list_discussion', options: ['expose' => true])]
-    public function listDiscussions(
-        Request $request,
-        EntityManagerInterface $em,
-        Environment $environment,
-        DiscussionService $discussionService, 
-        Security $security,
-        Pagination $pagination,
-        int $page = 1,
-    ) : Response
-    {        
-        $user = $security->getUser();
-
-        $page = $request->get('page'); 
-
-        $criteria = $request->get('criteria');
-
-        $searchCriteria = $this->saveSearchDiscussionObject($user, $criteria, $em);
-
-        $discussionPaginationInfos = $discussionService->searchDiscussions($page, $searchCriteria['searchDiscussion'], $searchCriteria['saveSearch']);
-
-        return new JsonResponse([
-            'discussions' => $environment->render('discussion/list.html.twig', [
-                'page' => $page,
-                'numbrePagesPagination' => $discussionPaginationInfos['numbrePagesPagination'],
-                'discussions' => $discussionPaginationInfos['data'],
-            ]),
-        ]);
-    }
-
-    #[Route('/user/search/discussion', name: 'app_search_discussion', options: ['expose' => true])]
-    public function searchDiscussion(
-        Request $request,
-        EntityManagerInterface $em,
-        Environment $environment,
-        Security $security,
-    ) : Response
-    {        
-        $user = $security->getUser();
-
-        $idSearchDiscussion = $request->get('idSearchDiscussion');
-        
-        $selectedSearchDiscussion = $idSearchDiscussion ? $em->getRepository(SearchDiscussion::class)->find($idSearchDiscussion) : null;
-
-        $searchDiscussion = $em->getRepository(SearchDiscussion::class)->findBy(['creatorUser' => $user]);
-
-        return new JsonResponse([
-            'html' => $environment->render('discussion/search_discussion_with_criteria.html.twig', [
-                'searchDiscussion' => $searchDiscussion,
-                'selectedSearchDiscussion' => $selectedSearchDiscussion
-            ]),
-        ]);
-    }
-
-    private function saveSearchDiscussionObject(
-        User $user,
-        array|null $criteria,
-        EntityManagerInterface $em) : array
-    {
-        $searchDiscussion = null;
-
-        $saveSearch = false;
-
-        if ($criteria) {
-            $saveSearch = $criteria['saveSearch'];
-
-            $searchDiscussion = new SearchDiscussion();
-
-            $name = $criteria['name'];
-
-            $firstName = $criteria['firstName'];
-
-            $createdThisMonth = $criteria['createdThisMonth'] == 'true' ? true : false;
-
-            $description = $criteria['description'];
-
-            $searchDiscussion->setCreatorUser($user)
-                ->setCreatedThisMonth($createdThisMonth)
-                ->setDateCreation(new \DateTime())
-                ->setName($name)
-                ->setFirstName($firstName)
-                ->setDescription($description)
-            ;
-
-            $em->persist($searchDiscussion);
-
-            $em->flush();
-        }
-
-        return [
-            'searchDiscussion' => $searchDiscussion,
-            'saveSearch' => $saveSearch == 'true' ? true : false
-        ];
-    }
-
     #[Route('/user/delete/discussion/{id}', name: 'app_delete_discussion', methods: ['DELETE'], options: ['expose' => true])]
-    public function delete(
-        int $id,
-        EntityManagerInterface $em,
-        TranslatorInterface $translator
-    ): JsonResponse
+    public function delete(int $id): JsonResponse
     {
-        $discussion = $em->getRepository(Discussion::class)->find($id);
+        $discussion = $this->em->getRepository(Discussion::class)->find($id);
 
         if (!$discussion) {
             return new JsonResponse(['message' => 'Message not found'], 404);
         }
 
         $discussionMessageUsers = $discussion->getDiscussionMessageUsers();
-
         foreach ($discussionMessageUsers as $item) {
-            $em->remove($item);
+            $this->em->remove($item);
         }
 
-        $em->remove($discussion);
+        $this->em->remove($discussion);
+        $this->em->flush();
 
-        $em->flush();
-
-        return new JsonResponse(['message' => $translator->trans('Element deleted successfully')], 200);
+        return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
     }
 }
