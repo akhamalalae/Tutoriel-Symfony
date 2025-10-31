@@ -2,12 +2,14 @@
 {% set message = '' %} 
 {% set fileName = '' %} 
 {% set createdThisMonth = '' %}
+{% set idSelectedSearchMessage = '' %} 
 
 {% if selectedSearchMessage is not empty %}
     {% set description = selectedSearchMessage.sensitiveDataDescription  %} 
     {% set message = selectedSearchMessage.sensitiveDataMessage  %} 
-    {% set fileName = selectedSearchMessage.fileName  %} 
+    {% set fileName = selectedSearchMessage.sensitiveDataFileName  %} 
     {% set createdThisMonth = selectedSearchMessage.createdThisMonth %} 
+    {% set idSelectedSearchMessage = selectedSearchMessage.id %} 
 {% endif %}
 
 <div class="card-header">
@@ -37,8 +39,10 @@
                     <label class="form-check-label">{{ 'Created This Month'|trans }}</label>
                 </div>
             </div>
+
+            <input type="hidden" id="idSelectedSearchMessage" value='{{ idSelectedSearchMessage }}'>
     
-            {% include 'components/submit_search_criteria.html.twig' with { 'view': 'message', 'page': page, 'idDiscussion': idDiscussion } %}
+            {% include 'components/submit_search_criteria.html.twig' with { 'view': 'message', 'page': page, 'idDiscussion': idDiscussion, 'description': description } %}
         </div>
     </div>
 </div>

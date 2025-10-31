@@ -31,7 +31,7 @@
 	data-page="{{ page }}" 
 >
 	<div id="messages_body">
-		{% if numbrePagesPagination > page %}
+		{% if totalPages > page %}
 			<div id="pagination-scrollable-spinner">
 				<center id="pagination-scrollable">
 					<a 	onclick="paginationClick(event)"
@@ -56,7 +56,7 @@
 </div>
 <br>
 {% include 'pagination/message/message_pagination.html.twig' with {
-	'numbrePagesPagination': numbrePagesPagination,
+	'totalPages': totalPages,
 	'page': page,
 	'discussion': discussion
 }%}

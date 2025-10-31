@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Message;
+use App\Entity\Discussion;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +21,45 @@ class MessageRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Message::class);
+    }
+
+    /**
+     * get unread messages of a discussion for the current user.
+     *
+     * @param Discussion $discussion
+     * @param User $currentUser
+     * @return Message[] Messages
+     */
+    public function getUnreadMessages(Discussion $discussion, User $currentUser): array
+    {
+        $isSender = $discussion->getPersonInvitationSender() === $currentUser;
+        $targetUser = $isSender
+            ? $discussion->getPersonInvitationRecipient()
+            : $discussion->getPersonInvitationSender();
+
+        if (!$targetUser) {
+            return [];
+        }
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('m')
+            ->from(Message::class, 'm')
+            ->join('App\Entity\DiscussionMessageUser', 'dmu', 'WITH', 'dmu.message = m')
+            ->where('dmu.discussion = :discussion')
+            ->andWhere('m.isRead = false')
+            ->andWhere('m.creatorUser = :targetUser')
+            ->setParameters([
+                'discussion' => $discussion,
+                'targetUser' => $targetUser,
+            ]);
+
+        $unreadMessages = $qb->getQuery()->getResult();
+
+        if (empty($unreadMessages)) {
+            return [];
+        }
+
+        return $unreadMessages;
     }
 
 //    /**

@@ -2,6 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
+use App\Entity\Discussion;
+use App\Entity\SearchMessage;
 use App\Entity\DiscussionMessageUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

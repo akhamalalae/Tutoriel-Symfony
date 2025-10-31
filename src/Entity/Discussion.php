@@ -19,10 +19,10 @@ class Discussion
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'discussionsPersonInvitationSender')]
+    #[ORM\ManyToOne(inversedBy: 'discussionsPersonInvitationSender', fetch: 'EAGER')]
     private ?User $personInvitationSender = null;
 
-    #[ORM\ManyToOne(inversedBy: 'discussionsPersonInvitationRecipient')]
+    #[ORM\ManyToOne(inversedBy: 'discussionsPersonInvitationRecipient', fetch: 'EAGER')]
     private ?User $personInvitationRecipient = null;
 
     #[ORM\ManyToOne(inversedBy: 'discussionsCreatorUser')]
@@ -39,12 +39,6 @@ class Discussion
 
     #[ORM\OneToMany(mappedBy: 'discussion', targetEntity: DiscussionMessageUser::class)]
     private Collection $discussionMessageUsers;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $personInvitationSenderNumberUnreadMessages = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $personInvitationRecipientNumberUnreadMessages = null;
 
     public function __construct()
     {
@@ -154,30 +148,6 @@ class Discussion
                 $discussionMessageUser->setDiscussion(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPersonInvitationSenderNumberUnreadMessages(): ?int
-    {
-        return $this->personInvitationSenderNumberUnreadMessages;
-    }
-
-    public function setPersonInvitationSenderNumberUnreadMessages(?int $personInvitationSenderNumberUnreadMessages): static
-    {
-        $this->personInvitationSenderNumberUnreadMessages = $personInvitationSenderNumberUnreadMessages;
-
-        return $this;
-    }
-
-    public function getPersonInvitationRecipientNumberUnreadMessages(): ?int
-    {
-        return $this->personInvitationRecipientNumberUnreadMessages;
-    }
-
-    public function setPersonInvitationRecipientNumberUnreadMessages(?int $personInvitationRecipientNumberUnreadMessages): static
-    {
-        $this->personInvitationRecipientNumberUnreadMessages = $personInvitationRecipientNumberUnreadMessages;
 
         return $this;
     }

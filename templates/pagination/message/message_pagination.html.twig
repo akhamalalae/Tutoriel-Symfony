@@ -1,4 +1,4 @@
-{% if numbrePagesPagination > 1 %}
+{% if totalPages > 1 %}
 	<br/>
 	<div id="pagination-message" class="pagination-wrapper">
 		<nav aria-label="Page navigation">
@@ -31,7 +31,7 @@
 
 				{% set className = '' %} 
 
-				{% for pagination in 1..numbrePagesPagination %}
+				{% for pagination in 1..totalPages %}
 					{% if index > numberOfPagesDisplayed %} 
 						{% set className = 'd-none more-pages' %} 
 					{% endif %}
@@ -54,7 +54,7 @@
 					{% set index = index + 1 %} 
 				{% endfor %}
 				<li
-					{% if page == numbrePagesPagination %} 
+					{% if page == totalPages %} 
 						class="page-item disabled" 
 					{% else %}
 						class="page-item" 
@@ -70,7 +70,7 @@
 						&raquo;
 					</p>
 				</li>
-				{% if numbrePagesPagination > page %}
+				{% if totalPages > page %}
 					<a id="load-more">
 						&nbsp; &nbsp; <i class="fa fa-plus-circle" style="font-size:24px;color:#3380ff"></i>
 					</a>

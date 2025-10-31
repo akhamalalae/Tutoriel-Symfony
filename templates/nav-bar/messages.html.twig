@@ -14,45 +14,42 @@
             </div>
         </div>
         <div {% if numbreMessages != 0 %} class="list-group scrollable" {% else %} class="list-group" {% endif %}>
-            {% for item in messages %}
-                {% if item.discussion.personInvitationSender != app.user %}  
-                    {% set person = item.discussion.personInvitationSender  %} 
-                {% endif %}
+            {% for d in messages %}
+                {% for item in d.unreadMessages %}
+                    {% set person = item.creatorUser  %} 
 
-                {% if item.discussion.personInvitationRecipient != app.user %}  
-                    {% set person = item.discussion.personInvitationRecipient  %} 
-                {% endif %}
-
-                <div class="list-group-item">
-                    <div class="row g-0 align-items-center">
-                        <div class="col-2">
-                            {% if person.brochureFilename %} 
-                                {% set subDirectory = 'img/avatars/'  %} 
-                                <img 
-                                    src="data:{{ person.sensitiveDataMimeType }};base64,{{ person.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
-                                    class="avatar img-fluid rounded-circle" 
-                                    alt="{{ person.sensitiveDataName }}"
-                                >
-                            {% else %} 
-                                <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded-circle" alt="{{ person.sensitiveDataName }}">
-                            {% endif %}
-                        </div>
-
-                        <div class="col-10 ps-2">
-                            <div class="text-dark">
-                                {{ person.sensitiveDataFirstName }} {{ person.sensitiveDataName }}
-                            </div>
-                            <div class="text-muted small mt-1">
-                                {% if item.message.message %} 
-                                    {{ item.message.sensitiveDataMessage }}
+                    <div class="list-group-item">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-2">
+                                {% if person.brochureFilename %} 
+                                    {% set subDirectory = 'img/avatars/'  %} 
+                                    <img 
+                                        src="data:{{ person.sensitiveDataMimeType }};base64,{{ person.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
+                                        class="avatar img-fluid rounded-circle" 
+                                        alt="{{ person.sensitiveDataName }}"
+                                    >
+                                {% else %} 
+                                    <img src="{{asset('img/avatars/avatar.jpg')}}" class="avatar img-fluid rounded-circle" alt="{{ person.sensitiveDataName }}">
                                 {% endif %}
                             </div>
-                            <div class="text-muted small mt-1">
-                                {{ item.dateCreation|date("F j, Y : H:i") }}
+
+                            <div class="col-10 ps-2">
+                                <div class="text-dark">
+                                    {{ person.sensitiveDataFirstName }} {{ person.sensitiveDataName }}
+                                </div>
+                                <div class="text-muted small mt-1">
+                                    {% if item.message %} 
+                                        {% set sensitiveDataMessage = item.sensitiveDataMessage|split(' ')|slice(0, 10)|join(' ') ~ '...'  %}
+                                        {{ sensitiveDataMessage| raw }}
+                                    {% endif %}
+                                </div>
+                                <div class="text-muted small mt-1">
+                                    {{ item.dateCreation|date("F j, Y : H:i") }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             {% endfor %}
         </div>
         <div class="dropdown-menu-footer">

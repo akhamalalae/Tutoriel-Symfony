@@ -49,18 +49,19 @@ class MessageController extends AbstractController
             $page = $request->get('page'); 
             $criteria = $request->get('criteria');
 
-            $searchMessage = $this->messageSearchService->saveSearch($user, $criteria);
-            $discussion = $this->em->getRepository(Discussion::class)->find($idDiscussion); 
+            $searchMessage = $this->messageSearchService
+                ->saveSearch($user, $criteria);
 
-            $this->messageService->setDiscussioReadingMessageStatus($discussion, $user);
+            $discussion = $this->em->getRepository(Discussion::class)
+                ->find($idDiscussion); 
 
-            $messagesPaginationInfos = $this->messageSearchService->messagesPaginationInfos(
-                $user, 
-                $discussion, 
-                $page, 
-                $searchMessage['searchMessage'], 
-                $searchMessage['saveSearch']
-            );
+            $unreadMessages = $this->em->getRepository(Message::class)
+                ->getUnreadMessages($discussion, $user);
+
+            $this->messageService->markUnreadMessagesAsRead($unreadMessages);
+
+            $messages = $this->messageSearchService
+                ->messages($discussion, $page, $searchMessage);
 
             $messageForm = $this->createForm(MessageFormType::class, $message);
             $messageForm->handleRequest($request);
@@ -76,8 +77,8 @@ class MessageController extends AbstractController
                 'messages' => $this->environment->render('message/list.html.twig', [
                     'discussion' => $discussion,
                     'page' => $page,
-                    'numbrePagesPagination' => $messagesPaginationInfos['numbrePagesPagination'],
-                    'messages' => $messagesPaginationInfos['data'],
+                    'totalPages' => $messages['totalPages'],
+                    'messages' => $messages['data'],
                 ]),
             ]);
         } catch (\Exception $e) {

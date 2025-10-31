@@ -2,12 +2,14 @@
 {% set name = '' %} 
 {% set firstName = '' %} 
 {% set createdThisMonth = '' %}
+{% set IdSelectedSearchDiscussion = '' %}
 
 {% if selectedSearchDiscussion is not empty %}
     {% set description = selectedSearchDiscussion.sensitiveDataDescription  %} 
     {% set name = selectedSearchDiscussion.sensitiveDataName  %} 
     {% set firstName = selectedSearchDiscussion.sensitiveDataFirstName %} 
     {% set createdThisMonth = selectedSearchDiscussion.createdThisMonth %} 
+    {% set IdSelectedSearchDiscussion = selectedSearchDiscussion.id %} 
 {% endif %}
 
 <div class="card-header">
@@ -37,6 +39,8 @@
                     <label class="form-check-label">{{ 'Created This Month'|trans }}</label>
                 </div>
             </div>
+
+            <input type="hidden" id="IdSelectedSearchDiscussion" value='{{ IdSelectedSearchDiscussion }}'>
 
             {% include 'components/submit_search_criteria.html.twig' with { 'view': 'discussion' } %}
         </div>

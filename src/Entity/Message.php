@@ -24,7 +24,7 @@ class Message
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateModification = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messagesCreatorUser')]
+    #[ORM\ManyToOne(inversedBy: 'messagesCreatorUser', fetch: 'EAGER')]
     private ?User $creatorUser = null;
 
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: DiscussionMessageUser::class)]
@@ -49,6 +49,9 @@ class Message
      */
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: AnswerMessage::class)]
     private Collection $answerMessages;
+
+    #[ORM\Column]
+    private ?bool $isRead = null;
 
     public function __construct()
     {
@@ -239,6 +242,18 @@ class Message
                 $answerMessage->setMessage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isRead(): ?bool
+    {
+        return $this->isRead;
+    }
+
+    public function setIsRead(bool $isRead): static
+    {
+        $this->isRead = $isRead;
 
         return $this;
     }

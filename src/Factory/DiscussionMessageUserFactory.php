@@ -8,17 +8,23 @@ use Zenstruck\Foundry\Proxy;
 use App\Factory\UserFactory;
 use App\Factory\MessageFactory;
 use App\Factory\DiscussionFactory;
+use App\Factory\SharedFixtureData;
 
 class DiscussionMessageUserFactory extends ModelFactory
 {
     protected function getDefaults(): array
     {   
+        $date = SharedFixtureData::getNextDate();
+
         return [
-            'message' => MessageFactory::random(),
+            'message' => MessageFactory::new([
+                'dateCreation' => $date,
+                'dateModification' => $date,
+            ]),
             'discussion' => DiscussionFactory::random(),
             'creatorUser' => UserFactory::random(),
-            'dateCreation' => self::faker()->dateTime(),
-            'dateModification' => self::faker()->dateTime(),
+            'dateCreation' => $date,
+            'dateModification' => $date,
         ];
     }
 

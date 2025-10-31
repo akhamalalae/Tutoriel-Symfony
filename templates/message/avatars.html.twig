@@ -1,4 +1,4 @@
-{% if item.message and item.message.creatorUser.sensitiveDataBrochureFilename %} 
+{% if item.message and item.message.creatorUser.sensitiveDataBrochureFilename is not empty %} 
     {% set subDirectory = 'img/avatars/'  %} 
     <img 
         src="data:{{ item.message.creatorUser.sensitiveDataMimeType }};base64,{{ item.message.creatorUser.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 

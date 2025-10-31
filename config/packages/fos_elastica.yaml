@@ -21,6 +21,10 @@ fos_elastica:
                         id: ~
                         message: ~
                         sensitiveDataMessage: ~
+                        dateCreation:
+                            type: date
+                        dateModification:
+                            type: date
                         fileMessages:
                             type: object
                             properties:
@@ -37,8 +41,6 @@ fos_elastica:
                     type: object
                     properties:
                         id: ~
-                        personInvitationSenderNumberUnreadMessages: ~
-                        personInvitationRecipientNumberUnreadMessages: ~
                         personInvitationSender:
                             type: object
                             properties:
@@ -57,9 +59,10 @@ fos_elastica:
                             type: date
                 dateCreation:
                     type: date
+                    format: "strict_date_optional_time||epoch_millis"
                 dateModification:
                     type: date
-
+                    format: "strict_date_optional_time||epoch_millis"
         discussion:
             persistence:
                 # the driver can be orm, mongodb or phpcr
@@ -69,20 +72,26 @@ fos_elastica:
                 finder: ~
             properties:
                 id: ~
-                personInvitationSenderNumberUnreadMessages: ~
-                personInvitationRecipientNumberUnreadMessages: ~
                 personInvitationSender:
                     type: object
                     properties:
                         id: ~
-                        name: ~
-                        firstName: ~
+                        sensitiveDataName:
+                            type: text
+                            analyzer: standard
+                        sensitiveDataFirstName:
+                            type: text
+                            analyzer: standard
                 personInvitationRecipient:
                     type: object
                     properties:
                         id: ~
-                        name: ~
-                        firstName: ~
+                        sensitiveDataName:
+                            type: text
+                            analyzer: standard
+                        sensitiveDataFirstName:
+                            type: text
+                            analyzer: standard
                 creatorUser:
                     type: object
                     properties:

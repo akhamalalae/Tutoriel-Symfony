@@ -93,6 +93,16 @@ final class DatabaseActivitySubscriber implements EventSubscriberInterface
             $this->activityUser->encryptPreUpdateUser($entity, $event);
             return;
         }
+
+        if ($entity instanceof SearchMessage) {
+            $this->activitySearchMessage->encryptSearchMessage($entity);
+            return;
+        }
+
+        if ($entity instanceof SearchDiscussion) {
+            $this->activitySearchDiscussion->encryptSearchDiscussion($entity);
+            return;
+        }
     }
 
     private function logActivityPostPersist(LifecycleEventArgs $args): void

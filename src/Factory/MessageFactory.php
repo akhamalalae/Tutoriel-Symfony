@@ -6,6 +6,7 @@ use App\Entity\Message;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use App\Factory\UserFactory;
+use App\Factory\SharedFixtureData;
 
 class MessageFactory extends ModelFactory
 {
@@ -14,8 +15,8 @@ class MessageFactory extends ModelFactory
         return [
             'message' => self::faker()->text(200),
             'creatorUser' => UserFactory::random(),
-            'dateCreation' => self::faker()->dateTime(),
-            'dateModification' => self::faker()->dateTime(),
+            'dateCreation' => new \DateTimeImmutable(),
+            'dateModification' => new \DateTimeImmutable(),
         ];
     }
 

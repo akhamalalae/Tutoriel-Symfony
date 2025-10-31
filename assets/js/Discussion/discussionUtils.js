@@ -53,13 +53,15 @@ class DiscussionUtils {
         const elementDescription = document.getElementById('inputDescription');
         const elementName = document.getElementById('inputName');
         const elementFirstName = document.getElementById('inputFirstName');
+        const IdSelectedSearchDiscussion = document.getElementById('IdSelectedSearchDiscussion');
         
         return  {
             'saveSearch': saveSearch,
             'description': elementDescription ? elementDescription.value : '',
             'createdThisMonth': createdThisMonth,
             'name': elementName ? elementName.value : '', 
-            'firstName': elementFirstName ? elementFirstName.value : ''
+            'firstName': elementFirstName ? elementFirstName.value : '',
+            'IdSelectedSearchDiscussion': IdSelectedSearchDiscussion ? IdSelectedSearchDiscussion.value : '', 
         };
     }
     cleanCriteria () {

@@ -105,6 +105,7 @@ class MessageService
     private function setMessageObject(Message $message, User $user): Message
     {
         $message->setCreatorUser($user)
+            ->setIsRead(false)
             ->setDateCreation(new \DateTime())
             ->setDateModification(new \DateTime());
         
@@ -145,18 +146,6 @@ class MessageService
      */
     private function setDiscussion(Discussion $discussion, User $user): void
     {
-        $isSender = $user === $discussion->getPersonInvitationSender();
-        
-        if ($isSender) {
-            $discussion->setPersonInvitationSenderNumberUnreadMessages(
-                $discussion->getPersonInvitationSenderNumberUnreadMessages() + 1
-            );
-        } else {
-            $discussion->setPersonInvitationRecipientNumberUnreadMessages(
-                $discussion->getPersonInvitationRecipientNumberUnreadMessages() + 1
-            );
-        }
-
         $discussion->setModifierUser($user)
             ->setDateModification(new \DateTime());
 
@@ -164,18 +153,18 @@ class MessageService
         $this->em->flush();
     }
 
-    public function setDiscussioReadingMessageStatus(Discussion $discussion, User $user): void
+    /**
+     * Mark all unread messages as read
+     *
+     * @param array $unreadMessages The unread messages to mark as read
+     */
+    public function markUnreadMessagesAsRead(array $unreadMessages): void
     {
-        if ($user === $discussion->getPersonInvitationSender()) {
-            $discussion->setPersonInvitationRecipientNumberUnreadMessages(null);
-        } else {
-            $discussion->setPersonInvitationSenderNumberUnreadMessages(null);
+        foreach ($unreadMessages as $message) {
+            $message->setIsRead(true);
+            $this->em->persist($message);
         }
 
-        $discussion->setModifierUser($user)
-            ->setDateModification(new \DateTime());
-
-        $this->em->persist($discussion);
         $this->em->flush();
     }
 

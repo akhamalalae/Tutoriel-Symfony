@@ -6,19 +6,13 @@
     {% set person = item.personInvitationRecipient  %} 
 {% endif %}
 
-{% if item.personInvitationSender == app.user %}  
-    {% set numberUnreadMessages = item.personInvitationRecipientNumberUnreadMessages  %}
-{% else %} 
-    {% set numberUnreadMessages = item.personInvitationSenderNumberUnreadMessages  %}
-{% endif %}
-
 <div id="item-discussion-block-{{ item.id }}" 
     class="discussions-card-click card text-white mb-3 position-relative"
 >
     <div class="card-body">
-        {% if numberUnreadMessages %}  
+        {% if unreadMessages is defined and unreadMessages > 0 %}
             <span class="position-absolute translate-middle badge rounded-pill bg-danger">
-                {{ numberUnreadMessages }}
+                {{ unreadMessages }}
             </span>
         {% endif %}
         {% set subDirectory = 'img/avatars/'  %} 

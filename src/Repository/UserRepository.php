@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Doctrine\ORM\QueryBuilder;
 
-
 /**
  * @extends ServiceEntityRepository<User>
  *
@@ -54,49 +53,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-    * @return QueryBuilder Returns an QueryBuilder of User objects
-    */
-    public function findUsersDiscussionForm(User $user, array $discussions): QueryBuilder
+     * Query to find users for the discussion form, excluding the current user
+     * and users who already have a discussion with the current user.
+     */
+    public function findUsersDiscussionForm(User $currentUser): QueryBuilder
     {
-        $findExistUsers = $this->findExistUsersDiscussion($discussions);
+        //$subQb1 retourne les destinataires avec lesquels l’utilisateur courant a déjà une discussion.
+        $subQb1 = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(d1.personInvitationRecipient)')
+            ->from('App\Entity\Discussion', 'd1')
+            ->where('d1.personInvitationSender = :currentUser');
 
-        $createQueryBuilder = $this->createQueryBuilder('u')
-            ->leftJoin('u.discussionsPersonInvitationSender', 'dPersonInvitationSender')
-            ->leftJoin('u.discussionsPersonInvitationRecipient', 'dPersonInvitationRecipient')
-            ->leftJoin('dPersonInvitationRecipient.personInvitationRecipient', 'pTwo')
-            ->leftJoin('dPersonInvitationSender.personInvitationSender', 'pOne')
-        ;
+        $subQb2 = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(d2.personInvitationSender)')
+            ->from('App\Entity\Discussion', 'd2')
+            ->where('d2.personInvitationRecipient = :currentUser');
 
-        if ($findExistUsers) {
-            $createQueryBuilder->andwhere('u NOT IN (:existUsers)')
-                ->setParameter('existUsers', $findExistUsers)
-            ;
-        }
+        // le QueryBuilder principal
+        $qb = $this->createQueryBuilder('u');
 
-        return $createQueryBuilder;
-    }
+        $qb->where('u != :currentUser')
+            // Ne sélectionne aucun utilisateur (u) dont l’ID se trouve dans le résultat de la sous-requête $subQb1.
+            ->andWhere($qb->expr()->notIn('u.id', $subQb1->getDQL()))
+            ->andWhere($qb->expr()->notIn('u.id', $subQb2->getDQL()))
+            ->setParameter('currentUser', $currentUser)
+            ->orderBy('u.firstName', 'ASC');
 
-    /**
-    * @return array Returns an array of Id User
-    */
-    public function findExistUsersDiscussion(array $discussions): array
-    {
-        $existUsersDiscussion = array();
+        // Résultat : retourne tous les utilisateurs sauf : 
+        //le user connecté (u != :user)les users avec qui une discussion existe déjà.
 
-        foreach ($discussions as $item) {
-            $personInvitationSender = $item->getPersonInvitationSender()->getId();
-            $personInvitationRecipient = $item->getPersonInvitationRecipient()->getId();
-
-            if (! in_array($personInvitationSender, $existUsersDiscussion)) {
-                array_push($existUsersDiscussion, $personInvitationSender);
-            }
-
-            if (! in_array($personInvitationRecipient, $existUsersDiscussion)) {
-                array_push($existUsersDiscussion, $personInvitationRecipient);
-            }
-        }
-
-        return $existUsersDiscussion;
+        return $qb;
     }
 
 //    /**

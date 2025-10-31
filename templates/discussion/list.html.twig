@@ -1,11 +1,18 @@
 {% if discussions is not empty %}
 	{% for item in discussions %}
-        {% include 'discussion/discussion.html.twig' with {'item': item} %}
+                {% set unreadMessagesForDiscussion = [] %}
+                {% for dum in discussionUnreadMessages %}
+                        {% if dum.discussionId == item.id %}
+                                {% set unreadMessagesForDiscussion = dum.unreadMessages %}
+                        {% endif %}
+                {% endfor %}
+
+                {% include 'discussion/discussion.html.twig' with {'item': item, 'unreadMessages': unreadMessagesForDiscussion|length } %}
 	{% endfor %}
 {% endif %}
 
 {% include 'pagination/discussion/discussion_pagination.html.twig' with {
-        'numbrePagesPagination': numbrePagesPagination,
+        'totalPages': totalPages,
         'page': page
     }
 %}

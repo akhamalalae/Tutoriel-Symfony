@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Discussion;
 use App\Entity\User;
+use App\Entity\SearchDiscussion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -29,19 +30,6 @@ class DiscussionRepository extends ServiceEntityRepository
     public function findDiscussion(User $user): array
     {
         $discussions = $this->createQueryBuilder('d');
-
-        $activeDiscussions = $this->messagesNavBar($user);
-
-        if ($activeDiscussions) {
-            $array = array();
-    
-            foreach ($activeDiscussions as $item) {
-                array_push($array, $item->getId());
-            }
-
-            $discussions->andWhere('d.id NOT IN (:array)')
-            ->setParameter('array', $array);
-        }
         
         $discussions->andWhere('d.personInvitationSender = :user')
             ->orWhere('d.personInvitationRecipient = :user')
@@ -49,29 +37,7 @@ class DiscussionRepository extends ServiceEntityRepository
             ->orderBy('d.dateCreation', 'DESC')
         ;
 
-        return [
-            "discussions" => array_merge($activeDiscussions, $discussions->getQuery()->getResult()),
-            "countActiveDiscussions" => count($activeDiscussions)
-        ];
-    }
-
-    public function messagesNavBar(User $user) : array
-    {
-        return $this->createQueryBuilder('discussion')
-            ->andWhere('
-                :user = discussion.personInvitationSender
-                AND
-                discussion.personInvitationRecipientNumberUnreadMessages IS NOT NULL
-            ')
-            ->orWhere('
-                :user = discussion.personInvitationRecipient
-                AND
-                discussion.personInvitationSenderNumberUnreadMessages IS NOT NULL
-            ')
-            ->setParameter('user', $user->getId())
-            ->orderBy('discussion.dateCreation', 'DESC')
-            ->getQuery()
-            ->getResult();
+        return $discussions->getQuery()->getResult();
     }
 
 //    /**

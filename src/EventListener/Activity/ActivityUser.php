@@ -44,8 +44,6 @@ class ActivityUser
             ->setSensitiveDataFacebook($decryptFacebook)
             ->setSensitiveDataInstagram($decryptInstagram)
             ->setSensitiveDataLinkedIn($decryptLinkedIn);
-
-        dump('decryptUser', $user);
     }
 
     public function encryptUser(User $user): void

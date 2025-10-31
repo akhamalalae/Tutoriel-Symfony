@@ -1,6 +1,11 @@
 <div role="alert" class="{{ alert }}">
     {% if item.message.message is not empty %}
-        {{ item.message.sensitiveDataMessage| raw  }} 
+        <i class="fa fa-check-double" 
+            {% if item.message.isRead == true %} 
+                style="color: #4169E1;" 
+            {% endif %}>
+        </i> 
+        {{ item.message.sensitiveDataMessage| raw  }}
     {% endif %}
     <br/>
     {% if item.message.fileMessages is not empty %}

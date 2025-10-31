@@ -18,7 +18,6 @@ class MessageQueueHandler implements MessageHandlerInterface
 
     public function __invoke(MessageQueue $message)
     {
-        dump('MessageQueueHandler');
         // Diffuser le message via WebSockets (Mercure)
         $update = new Update(
             "/messages",

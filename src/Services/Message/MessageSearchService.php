@@ -7,6 +7,7 @@ use App\Entity\Discussion;
 use App\Entity\SearchMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\Pagination\Pagination;
+use App\Services\User\UserService;
 use App\Controller\Messaging\Search\Message\SearchMessages;
 
 class MessageSearchService
@@ -16,67 +17,76 @@ class MessageSearchService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SearchMessages $searchMessages, 
+        private UserService $userService,
         private readonly Pagination $pagination
     ) {}
 
     /**
-     * Save search criteria for messages
+     * Get pagination information for messages
      *
-     * @param User $user The authenticated user
-     * @param array|null $criteria The search criteria
-     * @return array Contains the search message entity and save flag
-     * @throws \InvalidArgumentException When criteria are invalid
+     * @param Discussion $discussion The discussion to search in
+     * @param int $page The current page number
+     * @param SearchMessage|null $criteria The search criteria
+     *
+     * @return array The pagination information
      */
-    public function saveSearch(User $user, ?array $criteria): array
+    public function messages(Discussion $discussion, int $page, ?SearchMessage $criteria): array 
     {
-        if (!$criteria) {
-            return [
-                'searchMessage' => null,
-                'saveSearch' => false
-            ];
+        $user = $this->userService
+            ->getAuthenticatedUser();
+
+        return $this->pagination
+            ->paginationMessage($page, self::LIMIT, $discussion, $criteria);
+    }
+
+    /**
+     * Save search criteria for a user
+     *
+     * @param User $user The user saving the search
+     * @param array|null $criteria The search criteria
+     *
+     * @return SearchMessage|null The saved SearchMessage entity or null
+     */
+    public function saveSearch(User $user, ?array $criteria): ?SearchMessage
+    {
+        if (empty($criteria)) {
+            return null;
         }
 
         $this->validateCriteria($criteria);
 
-        $searchMessage = new SearchMessage();
+        $saveSearch = ($criteria['saveSearch'] ?? 'false') === 'true';
+        $fileName = $criteria['fileName'] ?? '';
+        $message = $criteria['message'] ?? '';
+        $description = $criteria['description'] ?? '';
+        $createdThisMonth = ($criteria['createdThisMonth'] ?? 'false') === 'true';
+        $IdSearchMessage = $criteria['IdSelectedSearchMessage'] ?? '';
+
+        // Cherche une entité existante
+        $existing = $this->em->getRepository(SearchMessage::class)->find($IdSearchMessage);
+
+        $searchMessage = $existing ?: new SearchMessage();
+
         $searchMessage->setCreatorUser($user)
-            ->setCreatedThisMonth($criteria['createdThisMonth'] === 'true')
+            ->setCreatedThisMonth($createdThisMonth)
             ->setDateCreation(new \DateTime())
-            ->setFileName($criteria['fileName'])
-            ->setMessage($criteria['message'])
-            ->setDescription($criteria['description']);
+            ->setFileName($fileName)
+            ->setMessage($message)
+            ->setDescription($description)
+            ->setSensitiveDataMessage($message)
+            ->setSensitiveDataFileName($fileName);
 
-        $this->em->persist($searchMessage);
-        $this->em->flush();
+        // Persiste uniquement si c'est une nouvelle entité
+        if (!$existing && $description !== '' && $saveSearch) {
+            $this->em->persist($searchMessage);
+        }
 
-        return [
-            'searchMessage' => $searchMessage,
-            'saveSearch' => $criteria['saveSearch'] === 'true'
-        ];
-    }
+        // Flush si saveSearch activé et description renseignée
+        if ($description !== '' && $saveSearch) {
+            $this->em->flush();
+        }
 
-    /**
-     * Get pagination information for messages
-     *
-     * @param User $user The authenticated user
-     * @param Discussion $discussion The discussion to search in
-     * @param int $page The current page number
-     * @param SearchMessage|null $criteria The search criteria
-     * @param bool $saveSearch Whether to save the search
-     * @return array The pagination information
-     */
-    public function messagesPaginationInfos(
-        User $user, 
-        Discussion $discussion, 
-        int $page, 
-        ?SearchMessage $criteria, 
-        bool $saveSearch
-    ): array {
-        return $this->pagination->getPagination(
-            $this->searchMessages->findMessages($user, $discussion, $criteria, $saveSearch),
-            $page,
-            self::LIMIT
-        );
+        return $searchMessage;
     }
 
     /**

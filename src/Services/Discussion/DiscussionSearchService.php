@@ -19,64 +19,90 @@ class DiscussionSearchService
         private UserService $userService,
         private EntityManagerInterface $em
     ) {}
-
-    public function discussions(int $page, SearchDiscussion|null $criteria, bool $saveSearch): array
+    
+    /**
+     * Get pagination information for discussions
+     *
+     * @param int $page The current page number
+     * @param SearchDiscussion|null $criteria The search criteria
+     *
+     * @return array The pagination information
+     */
+    public function discussions(int $page, SearchDiscussion|null $criteria): array
     {
-        $user = $this->userService->getAuthenticatedUser();
+        $user = $this->userService
+            ->getAuthenticatedUser();
 
-        $discussions = $this->searchDiscussions->findDiscussions($user, $criteria, $saveSearch);
-
-        return $this->pagination->getPaginationDiscussion(
-            $discussions['discussions'],
-            $page,
-            $discussions['countActiveDiscussions'] + self::LIMIT
-        );
+        return $this->pagination
+            ->paginationDiscussion($page, self::LIMIT, $criteria);
     }
 
-    public function searchMessagesNavBar(): array
+    /**
+     * Save search criteria for a user
+     *
+     * @param array|null $criteria The search criteria
+     *
+     * @return SearchDiscussion|null The saved SearchDiscussion entity or null
+     * 
+     * @throws \InvalidArgumentException When criteria are invalid
+     */
+    public function saveSearch(?array $criteria): ?SearchDiscussion
     {
-        $user = $this->userService->getAuthenticatedUser();
+        if (empty($criteria)) {
+            return null;
+        }
 
-        return $this->searchDiscussions->findMessagesNavBar($user);
-    }
+        $this->validateCriteria($criteria);
 
-    public function saveSearchDiscussion(?array $criteria): array 
-    {
-        $searchDiscussion = null;
+        $user               = $this->userService->getAuthenticatedUser();
+        $saveSearch         = $criteria['saveSearch'] === 'true' ? true : false;
+        $firstName          = $criteria['firstName'] ?? '';
+        $name               = $criteria['name'] ?? '';
+        $description        = $criteria['description'] ?? '';
+        $createdThisMonth   = $criteria['createdThisMonth'] == 'true' ? true : false;
+        $IdSearchDiscussion = $criteria['IdSelectedSearchDiscussion'] ?? '';
 
-        $saveSearch = false;
+        // Cherche une entité existante
+        $existing = $this->em->getRepository(SearchDiscussion::class)->find($IdSearchDiscussion);
 
-        if ($criteria) {
-            $user = $this->userService->getAuthenticatedUser();
-        
-            $saveSearch = $criteria['saveSearch'];
+        $searchDiscussion = $existing ?: new SearchDiscussion();
 
-            $searchDiscussion = new SearchDiscussion();
+        $searchDiscussion->setCreatorUser($user)
+            ->setCreatedThisMonth($createdThisMonth)
+            ->setDateCreation(new \DateTime())
+            ->setName($name)
+            ->setFirstName($firstName)
+            ->setDescription($description)
+            ->setSensitiveDataName($name)
+            ->setSensitiveDataFirstName($firstName);
 
-            $name = $criteria['name'];
-
-            $firstName = $criteria['firstName'];
-
-            $createdThisMonth = $criteria['createdThisMonth'] == 'true' ? true : false;
-
-            $description = $criteria['description'];
-
-            $searchDiscussion->setCreatorUser($user)
-                ->setCreatedThisMonth($createdThisMonth)
-                ->setDateCreation(new \DateTime())
-                ->setName($name)
-                ->setFirstName($firstName)
-                ->setDescription($description)
-            ;
-
+        // Persiste uniquement si c'est une nouvelle entité
+        if (!$existing && $description !== '' && $saveSearch) {
             $this->em->persist($searchDiscussion);
+        }
 
+        // Flush si saveSearch activé et description renseignée
+        if ($description !== '' && $saveSearch) {
             $this->em->flush();
         }
 
-        return [
-            'searchDiscussion' => $searchDiscussion,
-            'saveSearch' => $saveSearch == 'true' ? true : false
-        ];
+        return $searchDiscussion;
+    }
+
+    /**
+     * Validate search criteria
+     *
+     * @param array $criteria The criteria to validate
+     * @throws \InvalidArgumentException When criteria are invalid
+     */
+    private function validateCriteria(array $criteria): void
+    {
+        $requiredFields = ['saveSearch', 'createdThisMonth', 'name', 'description'];
+        
+        foreach ($requiredFields as $field) {
+            if (!isset($criteria[$field])) {
+                throw new \InvalidArgumentException("Missing required field: {$field}");
+            }
+        }
     }
 }

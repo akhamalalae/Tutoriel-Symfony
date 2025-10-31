@@ -1,4 +1,4 @@
-{% if numbrePagesPagination > 1 %}
+{% if totalPages > 1 %}
 	<br/>
 	<div class="pagination-wrapper">
 		<nav aria-label="Page navigation">
@@ -19,7 +19,7 @@
 						&laquo;
 					</p>
 				</li>
-				{% for pagination in 1..numbrePagesPagination %}
+				{% for pagination in 1..totalPages %}
 					<li
 						{% if page == pagination %} 
 							class="page-item active" 
@@ -37,7 +37,7 @@
 					</li>
 				{% endfor %}
 				<li
-					{% if page == numbrePagesPagination %} 
+					{% if page == totalPages %} 
 						class="page-item disabled" 
 					{% else %}
 						class="page-item" 

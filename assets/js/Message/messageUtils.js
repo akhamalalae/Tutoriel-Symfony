@@ -57,6 +57,7 @@ class MessageUtils {
         const elementDescription = document.getElementById('inputDescription');
         const elementMessage = document.getElementById('inputMessage');
         const elementFile = document.getElementById('inputFile');
+        const elementIdSelectedSearchMessage = document.getElementById('idSelectedSearchMessage');
 
         return  {
             'saveSearch': saveSearch,
@@ -64,6 +65,7 @@ class MessageUtils {
             'message': elementMessage ? elementMessage.value : '',
             'fileName': elementFile ? elementFile.value : '', 
             'createdThisMonth': createdThisMonth,
+            'IdSelectedSearchMessage': elementIdSelectedSearchMessage ? elementIdSelectedSearchMessage.value : '', 
         };
     }
     cleanCriteria () {

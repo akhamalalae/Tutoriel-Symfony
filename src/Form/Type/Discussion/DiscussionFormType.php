@@ -9,21 +9,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
-use App\Controller\Messaging\Search\Discussion\SearchDiscussions;
 
 class DiscussionFormType extends AbstractType
 {
     public function __construct(
-        private Security $security,
-        private SearchDiscussions $searchDiscussions, 
+        private Security $security
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $user = $this->security->getUser();
         
-        $discussions = $this->searchDiscussions->findDiscussions($user, null, true)['discussions'];
-
         $builder
             ->add('personInvitationRecipient', EntityType::class, array(
                 'label' => false,
@@ -36,8 +32,8 @@ class DiscussionFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control form-control-lg select2'
                 ],
-                'query_builder' => function (EntityRepository $er) use ($user, $discussions) {
-                    return $er->findUsersDiscussionForm($user, $discussions);
+                'query_builder' => function (EntityRepository $er) use ($user) {
+                    return $er->findUsersDiscussionForm($user);
                 },
             ))
             ->add('save', SubmitType::class, [
