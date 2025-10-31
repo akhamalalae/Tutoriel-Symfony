@@ -37,8 +37,7 @@ yarn-error.log
 
 /config/secrets/
 
-/docker/commande.txt
-
 .DS_Store
 /public/files/
 /public/img/avatars/
+docker/commande.txt
