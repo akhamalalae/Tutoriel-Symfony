@@ -5,7 +5,10 @@
                 style="color: #4169E1;" 
             {% endif %}>
         </i> 
-        {{ item.message.sensitiveDataMessage| raw  }}
+        {% set text = item.message.sensitiveDataMessage %}
+        {% set search = searchMessage is not empty ? searchMessage.sensitiveDataMessage : null %}
+
+        <p>{{ text | highlight(search) | raw }}</p>
     {% endif %}
     <br/>
     {% if item.message.fileMessages is not empty %}

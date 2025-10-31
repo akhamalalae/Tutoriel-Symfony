@@ -48,7 +48,7 @@
 
 		{% if messages is not empty %}
 			{% for item in messages %}
-				{% include 'message/message.html.twig' with {'item': item} %}
+				{% include 'message/message.html.twig' with {'item': item, 'searchMessage': searchMessage} %}
 			{% endfor %}
 		{% endif %}
 	</div>

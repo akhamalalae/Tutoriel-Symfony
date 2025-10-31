@@ -30,6 +30,8 @@ clickDiscussion.newDiscussion();
 
 clickDiscussion.searchWithCriteria();
 
+clickDiscussion.removeSearch();
+
 clickDiscussion.submitSearchDiscussuionCriteria();
 
 clickDiscussion.paginationDiscussion();

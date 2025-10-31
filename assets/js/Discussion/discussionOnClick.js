@@ -10,7 +10,7 @@ import Message from "../Message/message";
 
 import MessageUtils from "../Message/messageUtils";
 
-class DiscussionOnClick {  
+class DiscussionOnClick {
     constructor() {
     }
 
@@ -27,7 +27,9 @@ class DiscussionOnClick {
     searchWithCriteria () {
         window.searchWithCriteriaClick = function searchWithCriteriaClick(event)
         {
-            let view = event.target.getAttribute('data-view');
+            const button = event.currentTarget;
+
+            const view = button.getAttribute('data-view');
 
             document.getElementById('search_message_with_criteria').innerHTML = '';
 
@@ -54,9 +56,9 @@ class DiscussionOnClick {
             if (view == "message") {
                 let messageUtils = new MessageUtils();
 
-                let idDiscussion = event.target.getAttribute('data-idDiscussion');
-
-                let page = event.target.getAttribute('data-page');
+                const idDiscussion = button.getAttribute('data-idDiscussion');
+                
+                const page = button.getAttribute('data-page');
 
                 let url = messageUtils.urlSearchMessage(idDiscussion, page, '');
 
@@ -73,6 +75,22 @@ class DiscussionOnClick {
 
                     new Message().formSearchMessage(url);
                 }
+            }
+        }
+    }
+    removeSearch () {
+        window.removeSearchhWithCriteriaClick = function removeSearchhWithCriteriaClick(event)
+        {
+            const button = event.currentTarget;
+
+            const view = button.getAttribute('data-view');
+
+            if (view == "discussion") {
+                document.getElementById('search_discussion_with_criteria').innerHTML = '';
+            }
+
+            if (view == "message") {
+                document.getElementById('search_message_with_criteria').innerHTML = '';
             }
         }
     }

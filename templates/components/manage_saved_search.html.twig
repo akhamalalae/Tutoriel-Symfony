@@ -1,0 +1,16 @@
+<button type="button" class="btn btn-outline-light"
+    onclick="removeSearchhWithCriteriaClick(event)"
+    data-view="{{ view}}"
+>
+    <i class="fas fa-times-circle" style="color: #4169E1;" ></i>
+</button>
+<button type="button" class="btn btn-outline-light"
+    onclick="searchWithCriteriaClick(event)"
+    data-view="{{ view}}"
+    {% if idDiscussion is defined %}
+        data-idDiscussion="{{ idDiscussion}}" 
+        data-page="1"
+    {% endif %}
+>
+    <i class="fas fa-sync-alt" style="color: #4169E1;" ></i>
+</button>

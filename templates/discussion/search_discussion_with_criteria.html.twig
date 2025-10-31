@@ -19,6 +19,7 @@
         </small>
         <h5 class="card-title mb-0">
             {{ 'Search Discussion'|trans }}
+            {% include 'components/manage_saved_search.html.twig' with { 'view': 'discussion' } %}
         </h5><br />
     </div>
     <div class="card-body">

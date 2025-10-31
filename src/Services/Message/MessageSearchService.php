@@ -46,6 +46,8 @@ class MessageSearchService
      * @param array|null $criteria The search criteria
      *
      * @return SearchMessage|null The saved SearchMessage entity or null
+     * 
+     * @throws \InvalidArgumentException When criteria are invalid
      */
     public function saveSearch(User $user, ?array $criteria): ?SearchMessage
     {
@@ -55,12 +57,12 @@ class MessageSearchService
 
         $this->validateCriteria($criteria);
 
-        $saveSearch = ($criteria['saveSearch'] ?? 'false') === 'true';
-        $fileName = $criteria['fileName'] ?? '';
-        $message = $criteria['message'] ?? '';
-        $description = $criteria['description'] ?? '';
-        $createdThisMonth = ($criteria['createdThisMonth'] ?? 'false') === 'true';
-        $IdSearchMessage = $criteria['IdSelectedSearchMessage'] ?? '';
+        $saveSearch         = ($criteria['saveSearch'] ?? 'false') === 'true';
+        $fileName           = $criteria['fileName'] ?? '';
+        $message            = $criteria['message'] ?? '';
+        $description        = $criteria['description'] ?? '';
+        $createdThisMonth   = ($criteria['createdThisMonth'] ?? 'false') === 'true';
+        $IdSearchMessage    = $criteria['IdSelectedSearchMessage'] ?? '';
 
         // Cherche une entité existante
         $existing = $this->em->getRepository(SearchMessage::class)->find($IdSearchMessage);

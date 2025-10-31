@@ -69,6 +69,8 @@ class MessageController extends AbstractController
             if ($messageForm->isSubmitted() && $messageForm->isValid()) {
                 return $this->messageService->handleMessageFormData($messageForm, $discussion);
             }
+            dump($searchMessage);
+            dump($messages['data']);
 
             return new JsonResponse([
                 'html' => $this->environment->render('message/form_message.html.twig', [
@@ -79,6 +81,7 @@ class MessageController extends AbstractController
                     'page' => $page,
                     'totalPages' => $messages['totalPages'],
                     'messages' => $messages['data'],
+                    'searchMessage' => $searchMessage,
                 ]),
             ]);
         } catch (\Exception $e) {

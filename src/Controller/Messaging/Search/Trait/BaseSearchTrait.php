@@ -23,10 +23,10 @@ trait BaseSearchTrait
      * @return BoolQuery The updated BoolQuery with added search terms
      *
      * Exemple :
-     *   "chat noir; chien blanc"
+     *   "term 1 term 2; term 3"
      * lancera deux recherches :
-     *   - "chat noir"
-     *   - "chien blanc"
+     *   - "term 1 term 2"
+     *   - "term 3"
      */
     private function multiTermSearchQuery(BoolQuery $multiFieldGroup, string $field, string $value): BoolQuery
     {
