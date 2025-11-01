@@ -49,6 +49,7 @@ Messages: Messages
 Message: Message
 New message: Nouveau message
 New Messages: Nouveau messages
+Enter a term, then press ; or Enter to add it as a tag: Saisissez un terme, puis appuyez sur ; ou Entrée pour l’ajouter comme tag
 French: Français
 English: Anglais
 Discussion: Discussion
@@ -89,6 +90,9 @@ Choose the Recipient person: Choisissez la personne destinataire
 Terms: Conditions Générales d'Utilisation
 Answer: Répondre
 Delete: Supprimer
+
+Hidden: Masqué
+Remove: Supprimer
 
 Enter your new password: Entrez votre nouveau mot de passe
 Enter your email to reset your password: Entrez votre email pour réinitialiser votre mot de passe

@@ -68,12 +68,14 @@ class MessageUtils {
             'IdSelectedSearchMessage': elementIdSelectedSearchMessage ? elementIdSelectedSearchMessage.value : '', 
         };
     }
-    cleanCriteria () {
-        document.getElementById('inputMessage').value = '';
-        document.getElementById('inputFile').value  = '';
-        document.getElementById("createdThisMonth").value  = '';
-        document.getElementById('saveSearch').value = '';
-        document.getElementById('inputDescription').value = '';
+    cleanForm () {
+        document.getElementById('message_form_message').value = '';
+        document.getElementById('message_form_toAnswer').value  = '';
+        document.getElementById('message_form_files').value  = '';
+        const htmlBlock = document.getElementById('add_message_to_answer');
+        if (htmlBlock) {
+            htmlBlock.innerHTML = '';
+        }
     }
     cleanForm () {
         document.getElementById('message_form_message').value = '';

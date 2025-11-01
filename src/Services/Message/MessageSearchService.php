@@ -79,12 +79,12 @@ class MessageSearchService
             ->setSensitiveDataFileName($fileName);
 
         // Persiste uniquement si c'est une nouvelle entité
-        if (!$existing && $description !== '' && $saveSearch) {
+        if (!$existing && $description !== '' && $saveSearch == true) {
             $this->em->persist($searchMessage);
         }
 
         // Flush si saveSearch activé et description renseignée
-        if ($description !== '' && $saveSearch) {
+        if ($description !== '' && $saveSearch == true) {
             $this->em->flush();
         }
 

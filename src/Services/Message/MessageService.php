@@ -17,6 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use App\Services\Message\FilesMessageUploaderService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Entity\AnswerMessage;
+use App\Entity\SearchMessage;
 use App\Services\Message\AnswerToMessageService;
 
 class MessageService
@@ -48,6 +49,7 @@ class MessageService
             }
             return $this->handleInvalidForm($messageForm);
         } catch (\Exception $e) {
+
             return new JsonResponse([
                 'code' => Message::ERROR,
                 'message' => $this->translator->trans('An error occurred while processing the message')
@@ -161,11 +163,13 @@ class MessageService
     public function markUnreadMessagesAsRead(array $unreadMessages): void
     {
         foreach ($unreadMessages as $message) {
-            $message->setIsRead(true);
-            $this->em->persist($message);
+            if ($message instanceof SearchMessage) {
+                $message->setIsRead(true);
+                
+                $this->em->persist($message);
+                $this->em->flush();
+            }
         }
-
-        $this->em->flush();
     }
 
     /**

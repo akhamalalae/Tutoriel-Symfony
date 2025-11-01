@@ -8,6 +8,10 @@ import MessageOnClick from '../Message/messageOnClick';
 
 import DiscussionUtils from './discussionUtils';
 
+import SearchMessage from '../SearchMessage/searchMessage';
+
+import SearchDiscussion from '../SearchDiscussion/searchDiscussion';
+
 const formDiscussion = document.querySelector('#form_discussion');
 
 let url = new DiscussionUtils().url(1, {});
@@ -41,3 +45,11 @@ let clickMessage = new MessageOnClick();
 clickMessage.discussion();
 
 clickMessage.pagination();
+
+let searchMessage = new SearchMessage();
+
+searchMessage.removeSearch();
+
+let searchDiscussion = new SearchDiscussion();
+
+searchDiscussion.removeSearch();

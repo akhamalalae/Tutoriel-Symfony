@@ -9,6 +9,9 @@ import MessageOnClick from './messageOnClick';
 import MessageUtils from './messageUtils';
 
 import Notification from '../Components/Notyf/notification';
+
+import TagsInput from '../Components/tagsInput';
+
 class Message {    
     constructor() {
     }
@@ -135,6 +138,20 @@ class Message {
                         inputDescription.value = '';
                     }
                 });
+            });
+            
+            // Tags pour le champ Message
+            new TagsInput({
+                inputId: 'tag-input-message',
+                containerId: 'tags-message',
+                hiddenId: 'inputMessage'
+            });
+        
+            // Tags pour le champ File Name
+            new TagsInput({
+                inputId: 'tag-input-file',
+                containerId: 'tags-file',
+                hiddenId: 'inputFile'
             });
         });
     }

@@ -5,10 +5,10 @@
                 style="color: #4169E1;" 
             {% endif %}>
         </i> 
-        {% set text = item.message.sensitiveDataMessage %}
-        {% set search = searchMessage is not empty ? searchMessage.sensitiveDataMessage : null %}
+        {% set textMessage = item.message.sensitiveDataMessage %}
+        {% set searchTextMessage = searchMessage is not empty ? searchMessage.sensitiveDataMessage : null %}
 
-        <p>{{ text | highlight(search) | raw }}</p>
+        <p>{{ textMessage | highlight(searchTextMessage) | raw }}</p>
     {% endif %}
     <br/>
     {% if item.message.fileMessages is not empty %}
@@ -16,10 +16,12 @@
         <br/>
         {% for file in item.message.fileMessages %}
             {% set subDirectory = 'files/message/'  %} 
-            <span class="badge rounded-pill bg-primary text-dark">
+            <span class="badge rounded-pill bg-light text-dark">
                 <a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
-                    {% set originalName = file.sensitiveDataOriginalName|split('.')[0] %}
-                    {{ originalName }}
+                    {% set textoriginalName = file.sensitiveDataOriginalName|split('.')[0] %}
+                    {% set search = searchMessage is not empty ? searchMessage.sensitiveDataFileName : null %}
+
+                    {{ textoriginalName | highlight(search) }}
                 </a>
             </span>
         {% endfor %}

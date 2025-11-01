@@ -40,7 +40,7 @@ class SearchMessages extends AbstractController
     public function messages(Discussion $discussion, ?SearchMessage $criteria): array {
         
         $boolQuery = new BoolQuery();
-
+        
         // Add discussion filter if specified
         if ($discussion) {
             $boolQuery->addFilter(new MatchQuery('discussion.id', $discussion->getId()));
@@ -50,7 +50,7 @@ class SearchMessages extends AbstractController
         if ($criteria) {
             $this->addSearchCriteria($boolQuery, $criteria);
         }
-
+        
         return $this->executeSearch($boolQuery);
     }
 

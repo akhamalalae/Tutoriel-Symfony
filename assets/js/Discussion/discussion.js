@@ -5,6 +5,7 @@ import Response from '../Components/formResponse';
 import DiscussionUtils from './discussionUtils';
 
 import Notification from '../Components/Notyf/notification';
+import TagsInput from '../Components/tagsInput';
 class Discussion {    
     constructor() {
     }
@@ -81,6 +82,18 @@ class Discussion {
                         document.getElementById('inputDescription').value = '';
                     }
                 });
+            });
+
+            new TagsInput({
+                containerId: "tags-name",
+                inputId: "tag-input-name",
+                hiddenId: "inputName"
+            });
+        
+            new TagsInput({
+                containerId: "tags-firstname",
+                inputId: "tag-input-firstname",
+                hiddenId: "inputFirstName"
             });
         });
     }

@@ -13,26 +13,54 @@
 {% endif %}
 
 <div class="card-header">
-    <div class="flex-grow-1">
-        <small class="float-end text-navy">
-            {% include 'components/choose_saved_search.html.twig' with { 'view': 'message', 'searchMessage': searchMessage, 'description': description } %}
-        </small>
-        <h5 class="card-title mb-0">
-            {{ 'Search Message'|trans }}
-            {% include 'components/manage_saved_search.html.twig' with { 'view': 'message', 'idDiscussion': idDiscussion } %}
-        </h5>
-        <br />
-    </div>
+	<div class="flex-grow-1">
+		<small class="float-end text-navy">
+			<div class="card-actions float-end">
+				<div class="dropdown position-relative">
+					<a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+					</a>
+					<div class="dropdown-menu dropdown-menu-end">
+                        {% include 'components/manage_saved_search.html.twig' with { 'view': 'message', 'idDiscussion': idDiscussion, 'idSelectedSearch': idSelectedSearchMessage } %}
+					</div>
+				</div>
+			</div>
+		</small>
+
+        <div class="container mb-3">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <h6 class="mb-0">{{ 'Search Message'|trans }}</h6>
+                </div>
+                <div class="col-auto ms-2">
+                    {% include 'components/choose_saved_search.html.twig' with { 
+                        'view': 'message', 
+                        'searchMessage': searchMessage, 
+                        'description': description 
+                    } %}
+                </div>
+            </div>
+        </div>
+	</div>
+
     <div class="card-body">
         <div class="row">
+            <!-- Champ Message -->
             <div class="mb-3 col-6">
                 <label for="message" class="form-label">{{ 'Message'|trans }}</label>
-                <input type="Message" value='{{ message }}' class="form-control" id="inputMessage" placeholder="{{ 'Message'|trans }}">
+                <div id="tags-message" class="d-flex flex-wrap gap-2 mt-2"></div>
+                <input id="tag-input-message" type="text" class="form-control form-control-sm mt-2"
+                    placeholder="{{ 'Enter a term, then press ; or Enter to add it as a tag'|trans }}">
+                <input type="hidden" id="inputMessage" name="inputMessage" value="{{ message|e }}">
             </div>
 
+            <!-- Champ File Name -->
             <div class="mb-3 col-6">
                 <label for="fileName" class="form-label">{{ 'Name file'|trans }}</label>
-                <input type="Message" value='{{ fileName }}' class="form-control" id="inputFile" placeholder="{{ 'Name file'|trans }}">
+                <div id="tags-file" class="d-flex flex-wrap gap-2 mt-2"></div>
+                <input id="tag-input-file" type="text" class="form-control form-control-sm mt-2"
+                    placeholder="{{ 'Enter a term, then press ; or Enter to add it as a tag'|trans }}">
+                <input type="hidden" id="inputFile" name="inputFile" value="{{ fileName|e }}">
             </div>
 
             <div class="mb-3 col-6">

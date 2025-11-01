@@ -1,16 +1,37 @@
-<button type="button" class="btn btn-outline-light"
+<a class="dropdown-item" 
     onclick="removeSearchhWithCriteriaClick(event)"
-    data-view="{{ view}}"
+    data-view="{{ view }}"
 >
-    <i class="fas fa-times-circle" style="color: #4169E1;" ></i>
-</button>
-<button type="button" class="btn btn-outline-light"
+    <i class="fas fa-times-circle" style="color: #4169E1;"></i>
+    {{ 'Hidden'|trans }}
+</a>
+
+<a class="dropdown-item" 
     onclick="searchWithCriteriaClick(event)"
-    data-view="{{ view}}"
+    data-view="{{ view }}"
+    id="btn-refresh-search"
     {% if idDiscussion is defined %}
         data-idDiscussion="{{ idDiscussion}}" 
         data-page="1"
     {% endif %}
 >
-    <i class="fas fa-sync-alt" style="color: #4169E1;" ></i>
-</button>
+    <i class="fas fa-sync-alt" style="color: #4169E1;"></i>
+    {{ 'Reset'|trans }}
+</a>
+
+{% if idSelectedSearch is defined and idSelectedSearch is not empty %}
+    <a class="dropdown-item" 
+        {% if view == 'message' %}
+            onclick="removeSearchMessageClick(event)"
+        {% endif %}
+        
+        {% if view == 'discussion' %}
+            onclick="removeSearchDiscussionClick(event)"
+        {% endif %}
+
+        data-id="{{ idSelectedSearch }}"
+    >
+        <i class="fas fa-trash" style="color: #4169E1;"></i>
+        {{ 'Remove'|trans }}
+    </a>
+{% endif %}

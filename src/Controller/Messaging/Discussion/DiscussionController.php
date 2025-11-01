@@ -9,6 +9,7 @@ use App\Form\Type\Discussion\DiscussionFormType;
 use App\Services\Discussion\DiscussionService;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Discussion;
+use App\Entity\SearchDiscussion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Twig\Environment;
@@ -63,5 +64,20 @@ class DiscussionController extends AbstractController
         $this->em->flush();
 
         return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
+    }
+
+    #[Route('/user/delete/search/discussion/{id}', name: 'app_delete_search_discussion', methods: ['DELETE'], options: ['expose' => true])]
+    public function deleteSearchDiscussion(int $id): JsonResponse
+    {
+        try {
+            $searchDiscussion = $this->em->getRepository(SearchDiscussion::class)->find($id);
+
+            $this->em->remove($searchDiscussion);
+            $this->em->flush();
+
+            return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $this->translator->trans('An error occurred while deleting the message')], 500);
+        }
     }
 }

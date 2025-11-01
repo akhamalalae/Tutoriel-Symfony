@@ -10,6 +10,7 @@
 
 			{% include 'message/message_answer.html.twig' with {'item': item} %}
 
+			{% set searchMessage = searchMessage is defined ? searchMessage : null %}
 			{% include 'message/block_content_message.html.twig' with {'item': item, 'alert': 'alert alert-secondary', 'searchMessage': searchMessage} %}
 		</div>
 	</div>

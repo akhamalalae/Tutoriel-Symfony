@@ -69,8 +69,6 @@ class MessageController extends AbstractController
             if ($messageForm->isSubmitted() && $messageForm->isValid()) {
                 return $this->messageService->handleMessageFormData($messageForm, $discussion);
             }
-            dump($searchMessage);
-            dump($messages['data']);
 
             return new JsonResponse([
                 'html' => $this->environment->render('message/form_message.html.twig', [
@@ -116,6 +114,21 @@ class MessageController extends AbstractController
             // Suppression du message et de la relation
             $this->em->remove($message);
             $this->em->remove($discussionMessageUser);
+            $this->em->flush();
+
+            return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $this->translator->trans('An error occurred while deleting the message')], 500);
+        }
+    }
+
+    #[Route('/user/delete/search/message/{id}', name: 'app_delete_search_message', methods: ['DELETE'], options: ['expose' => true])]
+    public function deleteSearchMessage(int $id): JsonResponse
+    {
+        try {
+            $searchMessage = $this->em->getRepository(SearchMessage::class)->find($id);
+
+            $this->em->remove($searchMessage);
             $this->em->flush();
 
             return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
