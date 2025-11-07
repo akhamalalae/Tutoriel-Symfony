@@ -58,7 +58,7 @@ class MessageOnClick {
             new Message().list(url);
 
             btnSubmit.removeDisabled(btn);
-
+            
             //utils.cleanCriteria();
         }
     }

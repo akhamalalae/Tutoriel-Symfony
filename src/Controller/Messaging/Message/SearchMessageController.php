@@ -13,6 +13,7 @@ use Twig\Environment;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Services\User\UserService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Contracts\Error\ErrorResponseInterface;
 
 #[IsGranted('ROLE_USER')]
 class SearchMessageController extends AbstractController
@@ -21,7 +22,8 @@ class SearchMessageController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly Environment $environment,
         private readonly TranslatorInterface $translator,
-        private readonly UserService $userService
+        private readonly UserService $userService,
+        private readonly ErrorResponseInterface $errorResponseService,
     ) {}
 
     /**
@@ -43,7 +45,7 @@ class SearchMessageController extends AbstractController
             $searchMessage = $this->em->getRepository(SearchMessage::class)->findBy(['creatorUser' => $user]);
 
             return new JsonResponse([
-                'html' => $this->environment->render('message/search_message_with_criteria.html.twig', [
+                'html' => $this->environment->render('message/message_search.html.twig', [
                     'searchMessage' => $searchMessage,
                     'selectedSearchMessage' => $selectedSearchMessage,
                     'idDiscussion' => $idDiscussion,
@@ -51,9 +53,7 @@ class SearchMessageController extends AbstractController
                 ]),
             ]);
         } catch (\Exception $e) {
-            return new JsonResponse([
-                'error' => $this->translator->trans('An error occurred while searching messages')
-            ], 500);
+            return $this->errorResponseService->createErrorResponse($e);
         }
     }
 }

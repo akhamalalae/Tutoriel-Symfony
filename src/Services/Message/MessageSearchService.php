@@ -8,103 +8,116 @@ use App\Entity\SearchMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\Pagination\Pagination;
 use App\Services\User\UserService;
-use App\Controller\Messaging\Search\Message\SearchMessages;
+use App\Contracts\Message\MessageSearchServiceInterface;
+use App\Contracts\Message\MessageSearchInterface;
+use App\Contracts\Message\PaginationInterface;
+use Elastica\Query\BoolQuery;
+use Elastica\Query;
+use Elastica\Query\MatchQuery;
+use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Elastica\Query\Range;
+use DateTimeImmutable;
+use Elastica\Query\Wildcard;
+use Elastica\Query\MatchPhrase;
+use Elastica\Query\MultiMatch;
+use App\Controller\Messaging\Search\Trait\BaseSearchTrait;
 
-class MessageSearchService
+class MessageSearchService implements MessageSearchInterface
 {
-    private const LIMIT = 5;
+    use BaseSearchTrait;
+
+    private const SEARCH_RESULT_LIMIT = 1000;
+    private const ITEMS_PER_PAGE = 5;
 
     public function __construct(
+        private readonly PaginatedFinderInterface $finder,
         private readonly EntityManagerInterface $em,
-        private readonly SearchMessages $searchMessages, 
-        private UserService $userService,
-        private readonly Pagination $pagination
+        private readonly UserService $userService,
+        private readonly PaginationInterface $pagination
     ) {}
 
     /**
      * Get pagination information for messages
      *
-     * @param Discussion $discussion The discussion to search in
+     * @param int $idDiscussion The discussion to search in
      * @param int $page The current page number
      * @param SearchMessage|null $criteria The search criteria
      *
      * @return array The pagination information
      */
-    public function messages(Discussion $discussion, int $page, ?SearchMessage $criteria): array 
+    public function messages(int $idDiscussion, int $page, ?SearchMessage $criteria): array 
     {
-        $user = $this->userService
-            ->getAuthenticatedUser();
+        $discussion = $this->em
+            ->getRepository(Discussion::class)->find($idDiscussion); 
 
-        return $this->pagination
-            ->paginationMessage($page, self::LIMIT, $discussion, $criteria);
+        $boolQuery = new BoolQuery();
+    
+        // Add discussion filter if specified
+        if ($discussion) {
+            $boolQuery->addFilter(new MatchQuery('discussion.id', $discussion->getId()));
+        }
+
+        // Add search criteria if specified
+        if ($criteria) {
+            $this->addSearchCriteria($boolQuery, $criteria);
+        }
+
+        $data = $this->executeSearch($boolQuery);
+
+        return $this->pagination->pagination($page, self::ITEMS_PER_PAGE, $data);
     }
 
-    /**
-     * Save search criteria for a user
-     *
-     * @param User $user The user saving the search
-     * @param array|null $criteria The search criteria
-     *
-     * @return SearchMessage|null The saved SearchMessage entity or null
+     /**
+     * Add search criteria to the query
      * 
-     * @throws \InvalidArgumentException When criteria are invalid
+     * @param BoolQuery $boolQuery The boolean query to modify
+     * @param SearchMessage $criteria The search criteria
+     * 
+     * @return void
      */
-    public function saveSearch(User $user, ?array $criteria): ?SearchMessage
+    private function addSearchCriteria(BoolQuery $boolQuery, SearchMessage $criteria): void
     {
-        if (empty($criteria)) {
-            return null;
+        $message = $criteria->getSensitiveDataMessage();
+        $fileName = $criteria->getSensitiveDataFileName();
+        $createdThisMonth = $criteria->isCreatedThisMonth();
+
+        $multiFieldGroup = new BoolQuery();
+
+        if ($message !== '') {
+            $this->multiTermSearchQuery($multiFieldGroup, 'message.sensitiveDataMessage', $message);
         }
 
-        $this->validateCriteria($criteria);
-
-        $saveSearch         = ($criteria['saveSearch'] ?? 'false') === 'true';
-        $fileName           = $criteria['fileName'] ?? '';
-        $message            = $criteria['message'] ?? '';
-        $description        = $criteria['description'] ?? '';
-        $createdThisMonth   = ($criteria['createdThisMonth'] ?? 'false') === 'true';
-        $IdSearchMessage    = $criteria['IdSelectedSearchMessage'] ?? '';
-
-        // Cherche une entité existante
-        $existing = $this->em->getRepository(SearchMessage::class)->find($IdSearchMessage);
-
-        $searchMessage = $existing ?: new SearchMessage();
-
-        $searchMessage->setCreatorUser($user)
-            ->setCreatedThisMonth($createdThisMonth)
-            ->setDateCreation(new \DateTime())
-            ->setFileName($fileName)
-            ->setMessage($message)
-            ->setDescription($description)
-            ->setSensitiveDataMessage($message)
-            ->setSensitiveDataFileName($fileName);
-
-        // Persiste uniquement si c'est une nouvelle entité
-        if (!$existing && $description !== '' && $saveSearch == true) {
-            $this->em->persist($searchMessage);
+        if ($fileName !== '') {
+            $this->multiTermSearchQuery($multiFieldGroup, 'message.fileMessages.sensitiveDataName', $fileName);
         }
 
-        // Flush si saveSearch activé et description renseignée
-        if ($description !== '' && $saveSearch == true) {
-            $this->em->flush();
-        }
+        $boolQuery->addMust($multiFieldGroup);
 
-        return $searchMessage;
+        if ($createdThisMonth) {
+            $this->addDateRangeFilter($boolQuery, 'dateCreation');
+        }
     }
 
     /**
-     * Validate search criteria
-     *
-     * @param array $criteria The criteria to validate
-     * @throws \InvalidArgumentException When criteria are invalid
+     * Execute the search query
+     * 
+     * @param BoolQuery $boolQuery The boolean query to execute
+     * 
+     * @return array The search results
      */
-    private function validateCriteria(array $criteria): void
+    private function executeSearch(BoolQuery $boolQuery): array
     {
-        $requiredFields = ['saveSearch', 'createdThisMonth', 'fileName', 'message', 'description'];
+        $query = new Query();
         
-        foreach ($requiredFields as $field) {
-            if (!isset($criteria[$field])) {
-                throw new \InvalidArgumentException("Missing required field: {$field}");
-            }
-        }
+        // Add sorting by date in descending order
+        $query->addSort([
+            'dateCreation' => ['order' => 'DESC']
+        ]);
+
+        // Set the query and execute search
+        $query->setQuery($boolQuery);
+
+        return $this->finder->find($query, self::SEARCH_RESULT_LIMIT);
     }
 }

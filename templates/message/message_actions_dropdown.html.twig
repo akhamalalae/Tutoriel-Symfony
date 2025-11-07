@@ -1,0 +1,17 @@
+<div class="card-actions float-end">
+<div class="dropdown position-relative">
+    <a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
+        {% include 'components/feather_icons/more-horizontal.html.twig' %}
+    </a>
+    <div class="dropdown-menu dropdown-menu-end">
+        <a class="dropdown-item" 
+            onclick="searchWithCriteriaClick(event)"
+            data-view="message"
+            data-idDiscussion="{{ discussion.id }}" 
+            data-page="1"
+        >
+            {{ 'Search Message'|trans }}
+        </a>
+    </div>
+</div>
+</div>

@@ -18,14 +18,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Controller\Messaging\Search\Message\SearchMessages:
+    App\Services\Message\MessageSearchService:
         tags:
             - controller_service_arguments
         public: true
         arguments:
             - '@fos_elastica.finder.message'
 
-    App\Controller\Messaging\Search\Discussion\SearchDiscussions:
+    App\Services\Discussion\DiscussionSearchService:
         tags:
             - controller_service_arguments
         public: true

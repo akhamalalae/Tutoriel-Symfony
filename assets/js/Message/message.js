@@ -42,6 +42,13 @@ class Message {
             this.messageItemActionDelete();
 
             new MessageOnClick().scroll();
+
+            let searchMessage = json.searchMessage;
+
+            if (searchMessage) {
+                const elementIdSelectedSearchMessage = document.getElementById('idSelectedSearchMessage');
+                elementIdSelectedSearchMessage.value = searchMessage;
+            }
         });
     }
     listScrollable (url) {
@@ -139,7 +146,8 @@ class Message {
                     }
                 });
             });
-            
+            console.log('formSearchMessage');
+
             // Tags pour le champ Message
             new TagsInput({
                 inputId: 'tag-input-message',

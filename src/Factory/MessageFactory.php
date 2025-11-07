@@ -15,6 +15,7 @@ class MessageFactory extends ModelFactory
         return [
             'message' => self::faker()->text(200),
             'creatorUser' => UserFactory::random(),
+            'is_read' => false,
             'dateCreation' => new \DateTimeImmutable(),
             'dateModification' => new \DateTimeImmutable(),
         ];

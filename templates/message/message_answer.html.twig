@@ -1,7 +1,7 @@
 {% if item.answerMessages is not empty %}
 	{% for answer in item.answerMessages %}
 		{% include 'message/avatars.html.twig' with {'item': answer} %}
-		{% include 'message/block_content_message.html.twig' with {'item': answer, 'alert': 'alert alert-warning'} %}
+		{% include 'message/message_content.html.twig' with {'item': answer, 'alert': 'alert alert-warning'} %}
 	{% endfor %}
 {% endif %}
 

@@ -23,7 +23,13 @@
         </button>        
     </small>
     <div class="form-check form-check-inline form-switch">
-        <label class="form-check-label">{{ 'Save Search'|trans }}</label>
+        <label class="form-check-label">
+            {% if idSelectedSearch == '' %} 
+                {{ 'Save Search'|trans }}
+            {% else %}
+                {{ 'Edit Search'|trans }}
+            {% endif %} 
+        </label>
         <input class="form-check-input" type="checkbox" name="saveSearch">
     </div>
     <div id="DivInputDescription">            

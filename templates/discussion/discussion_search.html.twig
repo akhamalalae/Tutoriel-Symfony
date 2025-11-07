@@ -18,10 +18,10 @@
 			<div class="card-actions float-end">
 				<div class="dropdown position-relative">
 					<a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+						{% include 'components/feather_icons/more-horizontal.html.twig' %}
 					</a>
 					<div class="dropdown-menu dropdown-menu-end">
-                        {% include 'components/manage_saved_search.html.twig' with { 'view': 'discussion', 'idSelectedSearch': IdSelectedSearchDiscussion} %}
+                        {% include 'components/search_dropdown_actions.html.twig' with { 'view': 'discussion', 'idSelectedSearch': IdSelectedSearchDiscussion} %}
 					</div>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
                     <h6 class="mb-0">{{ 'Search Discussion'|trans }}</h6>
                 </div>
                 <div class="col-auto ms-2">
-                    {% include 'components/choose_saved_search.html.twig' with { 'view': 'discussion', 'searchDiscussion': searchDiscussion, 'description': description } %}
+                    {% include 'components/search_select.html.twig' with { 'view': 'discussion', 'searchDiscussion': searchDiscussion, 'description': description } %}
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
 
             <input type="hidden" id="IdSelectedSearchDiscussion" value='{{ IdSelectedSearchDiscussion }}'>
 
-            {% include 'components/submit_search_criteria.html.twig' with { 'view': 'discussion' } %}
+            {% include 'components/search_submit_section.html.twig' with { 'view': 'discussion', 'idSelectedSearch': IdSelectedSearchDiscussion } %}
         </div>
     </div>
 </div>

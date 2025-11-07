@@ -2,30 +2,34 @@
 
 namespace App\Controller\Messaging\Discussion;
 
+use App\Entity\Message;
+use App\Entity\Discussion;
+use App\Entity\SearchDiscussion;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Type\Discussion\DiscussionFormType;
-use App\Services\Discussion\DiscussionService;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Discussion;
-use App\Entity\SearchDiscussion;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Twig\Environment;
 use App\Services\Breadcrumb\BreadcrumbService;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Services\User\UserService;
+use App\Contracts\Discussion\DiscussionHandlerInterface;
+use App\Contracts\Discussion\DiscussionRendererInterface;
+use App\Contracts\Discussion\SaveDiscussionSearchInterface;
+use App\Contracts\Discussion\DiscussionDeleterInterface;
+use App\Contracts\Error\ErrorResponseInterface;
 
 #[IsGranted('ROLE_USER')]
 class DiscussionController extends AbstractController
 {
     public function __construct(
-        private DiscussionService $discussionService,
-        private BreadcrumbService $breadcrumbService,
-        private EntityManagerInterface $em,
-        private TranslatorInterface $translator,
-        private Environment $environment
+        private readonly BreadcrumbService $breadcrumbService,
+        private readonly UserService $userService,
+        private readonly DiscussionHandlerInterface $discussionHandler,
+        private readonly DiscussionRendererInterface $renderer,
+        private readonly SaveDiscussionSearchInterface $saveDiscussionSearchService,
+        private readonly DiscussionDeleterInterface $discussionDeleter,
+        private readonly ErrorResponseInterface $errorResponseService,
     ) {}
 
     #[Route('/user/discussion', name: 'app_discussion')]
@@ -38,46 +42,44 @@ class DiscussionController extends AbstractController
         $discussionForm->handleRequest($request);
 
         if ($discussionForm->isSubmitted() && $discussionForm->isValid()) {
-            return $this->discussionService->handleDiscussionFormData($discussionForm);
+            return $this->discussionHandler->handleDiscussionFormData($discussionForm);
         }
 
-        return $this->render('discussion/index.html.twig', [
-            'formDiscussion' => $discussionForm->createView()
-        ]);
+        return $this->renderer->renderDiscussionForm($discussionForm);
+    }
+
+    #[Route('/user/list/discussion/{page}', name: 'app_list_discussion', options: ['expose' => true])]
+    public function list(Request $request, int $page = 1) : Response
+    {    
+        try {
+            $user = $this->userService->getAuthenticatedUser();
+
+            $page = $request->get('page'); 
+
+            $criteria = $request->get('criteria');
+
+            $searchDiscussion = $this->saveDiscussionSearchService
+                ->saveSearch($criteria);
+
+            return new JsonResponse([
+                'discussions' => $this->renderer->renderListDiscussion($page, $searchDiscussion),
+                'searchDiscussion' => $searchDiscussion ? $searchDiscussion->getId() : null,
+            ]);
+
+        } catch (\Exception $e) {
+            return $this->errorResponseService->createErrorResponse($e);
+        }    
     }
 
     #[Route('/user/delete/discussion/{id}', name: 'app_delete_discussion', methods: ['DELETE'], options: ['expose' => true])]
-    public function delete(int $id): JsonResponse
+    public function deleteDiscussion(int $id): JsonResponse
     {
-        $discussion = $this->em->getRepository(Discussion::class)->find($id);
-
-        if (!$discussion) {
-            return new JsonResponse(['message' => 'Message not found'], 404);
-        }
-
-        $discussionMessageUsers = $discussion->getDiscussionMessageUsers();
-        foreach ($discussionMessageUsers as $item) {
-            $this->em->remove($item);
-        }
-
-        $this->em->remove($discussion);
-        $this->em->flush();
-
-        return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
+        $this->discussionDeleter->deleteDiscussion($id);
     }
 
     #[Route('/user/delete/search/discussion/{id}', name: 'app_delete_search_discussion', methods: ['DELETE'], options: ['expose' => true])]
     public function deleteSearchDiscussion(int $id): JsonResponse
     {
-        try {
-            $searchDiscussion = $this->em->getRepository(SearchDiscussion::class)->find($id);
-
-            $this->em->remove($searchDiscussion);
-            $this->em->flush();
-
-            return new JsonResponse(['message' => $this->translator->trans('Element deleted successfully')], 200);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $this->translator->trans('An error occurred while deleting the message')], 500);
-        }
+        $this->discussionDeleter->deleteSearchDiscussion($id);
     }
 }

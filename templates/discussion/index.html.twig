@@ -11,7 +11,7 @@
 			<div id="search_message_with_criteria">
 			</div>
 			<div id="DivNewDiscussion" style="display:none;">
-				{% include 'discussion/add_new_discussion.html.twig' with {'formDiscussion': formDiscussion} %}
+				{% include 'discussion/discussion_form.html.twig' with {'formDiscussion': formDiscussion} %}
 			</div>
 		</div>
 	</div>
@@ -24,7 +24,7 @@
 						<div class="card-actions float-end">
 							<div class="dropdown position-relative">
 								<a href="#" data-bs-toggle="dropdown" style="color:black;" data-bs-display="static" aria-expanded="false" class="">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+									{% include 'components/feather_icons/more-horizontal.html.twig' %}
 								</a>
 
 								<div class="dropdown-menu dropdown-menu-end">

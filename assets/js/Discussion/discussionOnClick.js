@@ -10,7 +10,7 @@ import Message from "../Message/message";
 
 import MessageUtils from "../Message/messageUtils";
 
-class DiscussionOnClick {
+class DiscussionOnClick {  
     constructor() {
     }
 

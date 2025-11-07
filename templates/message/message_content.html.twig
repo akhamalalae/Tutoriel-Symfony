@@ -1,14 +1,13 @@
 <div role="alert" class="{{ alert }}">
     {% if item.message.message is not empty %}
-        <i class="fa fa-check-double" 
-            {% if item.message.isRead == true %} 
-                style="color: #4169E1;" 
-            {% endif %}>
-        </i> 
+        <i class="fa fa-check-double"
+        {% if item.message.isRead == true %}
+            style="color: #4169E1;"
+        {% endif %}
+        ></i>
         {% set textMessage = item.message.sensitiveDataMessage %}
         {% set searchTextMessage = searchMessage is not empty ? searchMessage.sensitiveDataMessage : null %}
-
-        <p>{{ textMessage | highlight(searchTextMessage) | raw }}</p>
+        <span class="ms-1">{{ textMessage | highlight(searchTextMessage) | raw }}</span>
     {% endif %}
     <br/>
     {% if item.message.fileMessages is not empty %}

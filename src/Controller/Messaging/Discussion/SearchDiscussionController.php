@@ -41,7 +41,7 @@ class SearchDiscussionController extends AbstractController
         $searchDiscussion = $this->em->getRepository(SearchDiscussion::class)->findBy(['creatorUser' => $user]);
 
         return new JsonResponse([
-            'html' => $this->environment->render('discussion/search_discussion_with_criteria.html.twig', [
+            'html' => $this->environment->render('discussion/discussion_search.html.twig', [
                 'searchDiscussion' => $searchDiscussion,
                 'selectedSearchDiscussion' => $selectedSearchDiscussion
             ]),

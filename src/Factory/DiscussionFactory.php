@@ -16,6 +16,8 @@ class DiscussionFactory extends ModelFactory
         // Obtenez tous les utilisateurs
         $users = UserFactory::all();
 
+        dump($users);
+
         // Filtrez l'utilisateur à exclure
         $filteredUsers = array_filter($users, fn($user) => $user->getId() !== $personInvitationSender->getId());
 

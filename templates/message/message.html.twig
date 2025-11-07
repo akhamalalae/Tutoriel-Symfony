@@ -2,7 +2,7 @@
 	<div class="flex-grow-1">
 		<strong>
 			{% include 'message/avatars.html.twig' with {'item': item} %}
-			{% include 'message/block_content_message_actions.html.twig' with {'item': item} %}
+			{% include 'message/message_item_dropdown.html.twig' with {'item': item} %}
 		</strong>
 		<br />
 		<div id="item-message-block-for-answer-{{item.id}}">
@@ -11,7 +11,7 @@
 			{% include 'message/message_answer.html.twig' with {'item': item} %}
 
 			{% set searchMessage = searchMessage is defined ? searchMessage : null %}
-			{% include 'message/block_content_message.html.twig' with {'item': item, 'alert': 'alert alert-secondary', 'searchMessage': searchMessage} %}
+			{% include 'message/message_content.html.twig' with {'item': item, 'alert': 'alert alert-secondary', 'searchMessage': searchMessage} %}
 		</div>
 	</div>
 </div>

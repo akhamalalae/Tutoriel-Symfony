@@ -21,12 +21,6 @@ trait BaseSearchTrait
      * @param string $value The search value containing multiple terms separated by ";"
      * 
      * @return BoolQuery The updated BoolQuery with added search terms
-     *
-     * Exemple :
-     *   "term 1 term 2; term 3"
-     * lancera deux recherches :
-     *   - "term 1 term 2"
-     *   - "term 3"
      */
     private function multiTermSearchQuery(BoolQuery $multiFieldGroup, string $field, string $value): BoolQuery
     {
@@ -73,6 +67,11 @@ trait BaseSearchTrait
 
     /**
      * Add date range filter for current month
+     * 
+     * @param BoolQuery $boolQuery The BoolQuery to add the filter to
+     * @param string $field The date field to filter on
+     * 
+     * @return void
      */
     private function addDateRangeFilter(BoolQuery $boolQuery, string $field): void
     {

@@ -50,7 +50,7 @@ class UserFactory extends ModelFactory
             'name' => self::faker()->Name,
             'firstName' => self::faker()->FirstName,
             'email' => self::faker()->email,
-            'password' => '$2y$13$DHxRe.l4Tcj/SAwqyxsWT.S7zDUGoi7tf29WU0.lRV3FCk608GzGC',
+            'password' => '$2y$13$BmSspONuY9x0VPzAsnbcveQ8kG6BaIGSFZYIGERCMw/pFiw8yZcZi',
             'dateOfBirth' => self::faker()->dateTime(),
             'brochureFilename' => $fileInfo['name'],
             'mimeType' => $fileInfo['mimeType']

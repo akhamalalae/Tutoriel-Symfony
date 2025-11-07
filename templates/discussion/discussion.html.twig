@@ -34,7 +34,7 @@
         <h5 class="card-title" style="color:black;">
             <br />
             {{ person.sensitiveDataFirstName }} {{ person.sensitiveDataName }}
-            {% include 'discussion/block_content_discussion_actions.html.twig' with {'item': item, 'person': person}%}
+            {% include 'discussion/discussion_actions_dropdown.html.twig' with {'item': item, 'person': person}%}
         </h5>
     </div>
 </div>

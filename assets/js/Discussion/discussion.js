@@ -5,7 +5,9 @@ import Response from '../Components/formResponse';
 import DiscussionUtils from './discussionUtils';
 
 import Notification from '../Components/Notyf/notification';
+
 import TagsInput from '../Components/tagsInput';
+
 class Discussion {    
     constructor() {
     }
@@ -32,6 +34,13 @@ class Discussion {
             addFormMessage.innerHTML = "";
 
             this.discussionItemActionDelete();
+
+            let searchDiscussion = json.searchDiscussion;
+
+            if (searchDiscussion) {
+                const elementIdSelectedSearch = document.getElementById('IdSelectedSearchDiscussion');
+                elementIdSelectedSearch.value = searchDiscussion;
+            }
         });
     }
     add (e, url) {
@@ -103,11 +112,10 @@ class Discussion {
         function discussionItemActionDeleteClick(event)
         {
             let idDiscussion = event.target.getAttribute('data-idDiscussion');
-            console.log(idDiscussion);
+
             const itemDiscussionBlock = document.getElementById('item-discussion-block-'+idDiscussion);
-            console.log(itemDiscussionBlock);
+
             let url = new DiscussionUtils().urlDeleteDiscussion(idDiscussion);
-            console.log(url);
 
             const options = {
                 method: 'DELETE',

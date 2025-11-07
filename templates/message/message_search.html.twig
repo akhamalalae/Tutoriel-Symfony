@@ -18,10 +18,10 @@
 			<div class="card-actions float-end">
 				<div class="dropdown position-relative">
 					<a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+						{% include 'components/feather_icons/more-horizontal.html.twig' %}
 					</a>
 					<div class="dropdown-menu dropdown-menu-end">
-                        {% include 'components/manage_saved_search.html.twig' with { 'view': 'message', 'idDiscussion': idDiscussion, 'idSelectedSearch': idSelectedSearchMessage } %}
+                        {% include 'components/search_dropdown_actions.html.twig' with { 'view': 'message', 'idDiscussion': idDiscussion, 'idSelectedSearch': idSelectedSearchMessage } %}
 					</div>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
                     <h6 class="mb-0">{{ 'Search Message'|trans }}</h6>
                 </div>
                 <div class="col-auto ms-2">
-                    {% include 'components/choose_saved_search.html.twig' with { 
+                    {% include 'components/search_select.html.twig' with { 
                         'view': 'message', 
                         'searchMessage': searchMessage, 
                         'description': description 
@@ -47,20 +47,28 @@
         <div class="row">
             <!-- Champ Message -->
             <div class="mb-3 col-6">
-                <label for="message" class="form-label">{{ 'Message'|trans }}</label>
-                <div id="tags-message" class="d-flex flex-wrap gap-2 mt-2"></div>
-                <input id="tag-input-message" type="text" class="form-control form-control-sm mt-2"
-                    placeholder="{{ 'Enter a term, then press ; or Enter to add it as a tag'|trans }}">
-                <input type="hidden" id="inputMessage" name="inputMessage" value="{{ message|e }}">
+                <div class="card shadow-sm border-0 mb-4 card border-primary border-2 shadow-sm mb-4">
+                    <div class="card-header bg-light fw-bold text-primary">
+                        {{ 'Message'|trans }}
+                    </div>
+                    <div id="tags-message" class="d-flex flex-wrap gap-2 mt-2"></div>
+                    <input id="tag-input-message" type="text" class="form-control form-control-sm mt-2"
+                        placeholder="{{ 'Enter a term, then press ; or Enter to add it as a tag'|trans }}">
+                    <input type="hidden" id="inputMessage" name="inputMessage" value="{{ message|e }}">
+                </div>
             </div>
 
             <!-- Champ File Name -->
             <div class="mb-3 col-6">
-                <label for="fileName" class="form-label">{{ 'Name file'|trans }}</label>
-                <div id="tags-file" class="d-flex flex-wrap gap-2 mt-2"></div>
-                <input id="tag-input-file" type="text" class="form-control form-control-sm mt-2"
-                    placeholder="{{ 'Enter a term, then press ; or Enter to add it as a tag'|trans }}">
-                <input type="hidden" id="inputFile" name="inputFile" value="{{ fileName|e }}">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-light fw-bold text-primary">
+                        {{ 'Name file'|trans }}
+                    </div>
+                    <div id="tags-file" class="d-flex flex-wrap gap-2 mt-2"></div>
+                    <input id="tag-input-file" type="text" class="form-control form-control-sm mt-2"
+                        placeholder="{{ 'Enter a term, then press ; or Enter to add it as a tag'|trans }}">
+                    <input type="hidden" id="inputFile" name="inputFile" value="{{ fileName|e }}">
+                </div>
             </div>
 
             <div class="mb-3 col-6">
@@ -72,7 +80,7 @@
 
             <input type="hidden" id="idSelectedSearchMessage" value='{{ idSelectedSearchMessage }}'>
     
-            {% include 'components/submit_search_criteria.html.twig' with { 'view': 'message', 'page': page, 'idDiscussion': idDiscussion, 'description': description } %}
+            {% include 'components/search_submit_section.html.twig' with { 'view': 'message', 'page': page, 'idDiscussion': idDiscussion, 'description': description, 'idSelectedSearch': idSelectedSearchMessage } %}
         </div>
     </div>
 </div>

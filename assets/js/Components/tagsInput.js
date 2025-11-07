@@ -47,7 +47,7 @@ class TagsInput {
             this.tags.push(text);
 
             const tagEl = document.createElement('span');
-            tagEl.className = 'badge rounded-pill bg-primary d-flex align-items-center';
+            tagEl.className = 'badge bg-primary d-flex align-items-center';
             tagEl.innerHTML = `
                 <span class="me-1">${text}</span>
                 <button type="button" class="btn-close btn-close-white btn-sm ms-1" 

@@ -2,37 +2,26 @@
 
 namespace App\Controller\Pagination;
 
-use App\Entity\User;
-use App\Entity\Discussion;
-use App\Entity\SearchMessage;
-use App\Entity\SearchDiscussion;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\DiscussionMessageUser;
-use App\Controller\Messaging\Search\Discussion\SearchDiscussions;
-use App\Controller\Messaging\Search\Message\SearchMessages;
+use App\Contracts\Message\PaginationInterface;
 
-class Pagination
+class Pagination implements PaginationInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly SearchDiscussions $searchDiscussions,
-        private readonly SearchMessages $searchMessages
+        private readonly EntityManagerInterface $em
     ) {}
     
     /**
-     * Get pagination for discussion messages
+     * Get pagination information
      *
      * @param int $page The current page number
      * @param int $limit The number of items per page
-     * @param Discussion $discussion The discussion to paginate
-     * @param SearchMessage|null $criteria Optional search criteria
-     * 
-     * @return array Contains paginated data and pagination info
+     * @param array $data The full dataset to paginate
+     *
+     * @return array The pagination information
      */
-    public function paginationMessage(int $page, int $limit, Discussion $discussion, ?SearchMessage $criteria): array
+    public function pagination(int $page, int $limit, array $data): array
     {
-        $data = $this->searchMessages->messages($discussion, $criteria);
-
         $totalPages = $this->totalPages(count($data), $limit);
 
         return [
@@ -43,32 +32,26 @@ class Pagination
     }
 
     /**
-     * Get pagination for discussion
-     *
-     * @param int $page The current page number
-     * @param int $limit The number of items per page
-     * @param SearchDiscussion|null $criteria Optional search criteria
+     * Calculate the offset for pagination
      * 
-     * @return array Contains paginated data and pagination info
+     * @param int $page The current page number
+     * @param int $limit The number of items per page 
+     * 
+     * @return int The calculated offset
      */
-    public function paginationDiscussion(int $page, int $limit, ?SearchDiscussion $criteria): array
-    {
-        $data = $this->searchDiscussions->discussions($criteria);
-
-        $totalPages = $this->totalPages(count($data), $limit);
-
-        return [
-            'data' => array_slice($data, $this->offset($page, $limit), $limit),
-            'limit' => $limit,
-            'totalPages' => $totalPages
-        ];
-    }
-
     public function offset(int $page, int $limit): int
     {
         return ($page - 1) * $limit;
     }
 
+    /**
+     * Calculate the total number of pages
+     * 
+     * @param int $num The total number of items
+     * @param int $limit The number of items per page
+     * 
+     * @return int The total number of pages
+     */
     public function totalPages(int $num, int $limit): int
     {
         return ceil($num / $limit);

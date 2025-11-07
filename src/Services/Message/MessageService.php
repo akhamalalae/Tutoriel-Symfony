@@ -19,8 +19,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Entity\AnswerMessage;
 use App\Entity\SearchMessage;
 use App\Services\Message\AnswerToMessageService;
+use App\Form\Type\Message\MessageFormType;
+use App\Contracts\Message\MessageHandlerInterface;
 
-class MessageService
+class MessageService implements MessageHandlerInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -37,14 +39,15 @@ class MessageService
      * Handle the message form submission
      *
      * @param FormInterface $messageForm The submitted form
-     * @param Discussion $discussion The discussion to add the message to
+     * @param int $discussion The discussion to add the message to
      * @return JsonResponse The response containing the result
      * @throws \Exception When message processing fails
      */
-    public function handleMessageFormData(FormInterface $messageForm, Discussion $discussion): JsonResponse
+    public function handleMessageFormData(FormInterface $messageForm, int $idDiscussion): JsonResponse
     {
         try {
             if ($messageForm->isValid()) {
+                $discussion = $this->em->getRepository(Discussion::class)->find($idDiscussion); 
                 return $this->handleValidForm($messageForm, $discussion);
             }
             return $this->handleInvalidForm($messageForm);
@@ -98,10 +101,25 @@ class MessageService
     }
 
     /**
+     * Handle an invalid form submission
+     *
+     * @param FormInterface $messageForm The invalid form
+     * @return JsonResponse The error response
+     */
+    private function handleInvalidForm(FormInterface $messageForm): JsonResponse
+    {
+        return new JsonResponse([
+            'code' => Message::MESSAGE_INVALID_FORM,
+            'errors' => $this->getErrorForm->extractErrors($messageForm)
+        ]);
+    }
+
+    /**
      * Set up the message object with basic information
      *
      * @param Message $message The message to set up
      * @param User $user The user creating the message
+     * 
      * @return Message The configured message
      */
     private function setMessageObject(Message $message, User $user): Message
@@ -123,6 +141,7 @@ class MessageService
      * @param Message $message The message
      * @param Discussion $discussion The discussion
      * @param User $user The user
+     * 
      * @return DiscussionMessageUser The created relationship
      */
     private function setMessageDiscussionUser(Message $message, Discussion $discussion, User $user): DiscussionMessageUser
@@ -145,6 +164,8 @@ class MessageService
      *
      * @param Discussion $discussion The discussion to update
      * @param User $user The user making the update
+     * 
+     * @return void
      */
     private function setDiscussion(Discussion $discussion, User $user): void
     {
@@ -158,10 +179,18 @@ class MessageService
     /**
      * Mark all unread messages as read
      *
-     * @param array $unreadMessages The unread messages to mark as read
+     * @param int $discussion The discussion containing the messages
+     * @param User $user The user marking the messages as read
+     * 
+     * @return void
      */
-    public function markUnreadMessagesAsRead(array $unreadMessages): void
+    public function markUnreadMessagesAsRead(int $idDiscussion, User $user): void
     {
+        $discussion = $this->em
+            ->getRepository(Discussion::class)->find($idDiscussion); 
+
+        $unreadMessages = $this->unreadMessages($discussion, $user);
+
         foreach ($unreadMessages as $message) {
             if ($message instanceof SearchMessage) {
                 $message->setIsRead(true);
@@ -172,17 +201,9 @@ class MessageService
         }
     }
 
-    /**
-     * Handle an invalid form submission
-     *
-     * @param FormInterface $messageForm The invalid form
-     * @return JsonResponse The error response
-     */
-    private function handleInvalidForm(FormInterface $messageForm): JsonResponse
+    public function unreadMessages(Discussion $discussion, User $user): array
     {
-        return new JsonResponse([
-            'code' => Message::MESSAGE_INVALID_FORM,
-            'errors' => $this->getErrorForm->extractErrors($messageForm)
-        ]);
+        return $this->em->getRepository(Message::class)
+                ->getUnreadMessages($discussion, $user);
     }
 }

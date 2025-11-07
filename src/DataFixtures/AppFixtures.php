@@ -18,7 +18,7 @@ class AppFixtures extends Fixture
 
         DiscussionFactory::new()->createMany(1);
 
-        //MessageFactory::new()->createMany(100);
+        MessageFactory::new()->createMany(1000);
 
         DiscussionMessageUserFactory::new()->createMany(1000);
 
