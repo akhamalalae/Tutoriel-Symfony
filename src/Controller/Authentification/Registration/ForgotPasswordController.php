@@ -13,7 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use App\EncryptDecrypt\EncryptDecrypt;
+use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+
 class ForgotPasswordController extends AbstractController
 {
     #[Route('/forgot-password', name: 'forgot_password')]
@@ -21,7 +22,7 @@ class ForgotPasswordController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         MailerInterface $mailer,
-        EncryptDecrypt $encryptDecrypt
+        EncryptDecryptInterface $encryptDecrypt
     ): Response {
         $form = $this->createForm(ForgotPasswordType::class);
         $form->handleRequest($request);

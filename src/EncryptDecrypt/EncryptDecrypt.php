@@ -3,7 +3,9 @@
 namespace App\EncryptDecrypt;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-class EncryptDecrypt
+use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+
+class EncryptDecrypt implements EncryptDecryptInterface
 {
     const METHOD = 'AES-256-CBC';
 

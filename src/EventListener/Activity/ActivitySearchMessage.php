@@ -3,11 +3,12 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\SearchMessage;
-use App\EncryptDecrypt\EncryptDecrypt;
+use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\EventListener\Contracts\Activity\ActivitySearchMessageInterface;
 
-class ActivitySearchMessage
+class ActivitySearchMessage implements ActivitySearchMessageInterface
 {
-    public function __construct(private EncryptDecrypt $encryptDecrypt)
+    public function __construct(private EncryptDecryptInterface $encryptDecrypt)
     {
     }
 

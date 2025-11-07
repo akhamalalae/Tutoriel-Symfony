@@ -3,11 +3,12 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\Message;
-use App\EncryptDecrypt\EncryptDecrypt;
+use App\EventListener\Contracts\Activity\ActivityMessageInterface;
+use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 
-class ActivityMessage
+class ActivityMessage implements ActivityMessageInterface
 {
-    public function __construct(private EncryptDecrypt $encryptDecrypt)
+    public function __construct(private EncryptDecryptInterface $encryptDecrypt)
     {
     }
 

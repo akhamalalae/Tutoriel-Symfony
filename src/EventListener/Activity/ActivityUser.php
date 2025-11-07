@@ -3,12 +3,13 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\User;
-use App\EncryptDecrypt\EncryptDecrypt;
+use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use App\EventListener\Contracts\Activity\ActivityUserInterface;
 
-class ActivityUser
+class ActivityUser implements ActivityUserInterface
 {
-    public function __construct(private EncryptDecrypt $encryptDecrypt)
+    public function __construct(private EncryptDecryptInterface $encryptDecrypt)
     {}
 
     public function decryptUser(User $user): void
