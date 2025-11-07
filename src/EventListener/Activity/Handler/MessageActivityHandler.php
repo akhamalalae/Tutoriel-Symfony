@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener\Activity;
+namespace App\EventListener\Activity\Handler;
 
 use App\Entity\Message;
 use Doctrine\ORM\Event\PreUpdateEventArgs;

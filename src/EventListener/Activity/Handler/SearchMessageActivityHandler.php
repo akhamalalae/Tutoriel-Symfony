@@ -1,42 +1,42 @@
 <?php
 
-namespace App\EventListener\Activity;
+namespace App\EventListener\Activity\Handler;
 
-use App\Entity\User;
+use App\Entity\SearchMessage;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use App\EventListener\Contracts\Activity\EntityActivityHandlerInterface;
-use App\EventListener\Contracts\Activity\ActivityUserInterface;
+use App\EventListener\Contracts\Activity\ActivitySearchMessageInterface;
 
-final class UserActivityHandler implements EntityActivityHandlerInterface
+final class SearchMessageActivityHandler implements EntityActivityHandlerInterface
 {
     public function __construct(
-        private ActivityUserInterface $activity,
+        private ActivitySearchMessageInterface $activity,
     ) {}
 
     public function supports(object $entity): bool
     {
-        return $entity instanceof User;
+        return $entity instanceof SearchMessage;
     }
 
     public function handlePrePersist(object $entity): void
     {
-        $this->activity->encryptUser($entity);
+        $this->activity->encryptSearchMessage($entity);
     }
 
     public function handlePostPersist(object $entity): void
     {
-        $this->activity->decryptUser($entity);
+        $this->activity->decryptSearchMessage($entity);
     }
 
     public function handlePostLoad(object $entity): void
     {
-        $this->activity->decryptUser($entity);
+        $this->activity->decryptSearchMessage($entity);
     }
 
     public function handlePreUpdate(object $entity, PreUpdateEventArgs $event): void
     {
         // Si User a besoin d'une logique spécifique pour preUpdate
-        $this->activity->encryptPreUpdateUser($entity, $event);
+        $this->activity->encryptSearchMessage($entity);
     }
 }
 

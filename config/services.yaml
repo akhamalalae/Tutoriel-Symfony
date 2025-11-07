@@ -19,23 +19,23 @@ services:
             - '../src/Kernel.php'
 
     # Déclaration des handlers
-    App\EventListener\Activity\MessageActivityHandler:
+    App\EventListener\Activity\Handler\MessageActivityHandler:
         arguments:
             $activity: '@App\EventListener\Contracts\Activity\ActivityMessageInterface'
 
-    App\EventListener\Activity\UserActivityHandler:
+    App\EventListener\Activity\Handler\UserActivityHandler:
         arguments:
             $activity: '@App\EventListener\Contracts\Activity\ActivityUserInterface'
 
-    App\EventListener\Activity\FileMessageActivityHandler:
+    App\EventListener\Activity\Handler\FileMessageActivityHandler:
         arguments:
             $activity: '@App\EventListener\Contracts\Activity\ActivityFileMessageInterface'
 
-    App\EventListener\Activity\SearchDiscussionActivityHandler:
+    App\EventListener\Activity\Handler\SearchDiscussionActivityHandler:
         arguments:
             $activity: '@App\EventListener\Contracts\Activity\ActivitySearchDiscussionInterface'
 
-    App\EventListener\Activity\SearchMessageActivityHandler:
+    App\EventListener\Activity\Handler\SearchMessageActivityHandler:
         arguments:
             $activity: '@App\EventListener\Contracts\Activity\ActivitySearchMessageInterface'
 
@@ -43,11 +43,11 @@ services:
     App\EventListener\Router\ActivityRouter:
         arguments:
             $handlers:
-                - '@App\EventListener\Activity\MessageActivityHandler'
-                - '@App\EventListener\Activity\UserActivityHandler'
-                - '@App\EventListener\Activity\FileMessageActivityHandler'
-                - '@App\EventListener\Activity\SearchDiscussionActivityHandler'
-                - '@App\EventListener\Activity\SearchMessageActivityHandler'
+                - '@App\EventListener\Activity\Handler\MessageActivityHandler'
+                - '@App\EventListener\Activity\Handler\UserActivityHandler'
+                - '@App\EventListener\Activity\Handler\FileMessageActivityHandler'
+                - '@App\EventListener\Activity\Handler\SearchDiscussionActivityHandler'
+                - '@App\EventListener\Activity\Handler\SearchMessageActivityHandler'
                 # Ajoute ici tous les autres handlers
 
     App\Services\Message\MessageSearchService:
