@@ -1,22 +1,26 @@
 ## Messagerie Sécurisée avec Chiffrement de Données
 
-#### Pour garantir des échanges confidentiels et protéger la vie privée des utilisateurs, notre système de messagerie interne intègre un chiffrement de bout en bout (end-to-end encryption). Ce mécanisme assure que seuls l’expéditeur et le destinataire peuvent lire les messages, empêchant ainsi tout accès non autorisé, même par les administrateurs du système.
+#### Pour garantir la confidentialité des échanges entre utilisateurs, notre système de messagerie implémente un chiffrement de bout en bout (E2EE).Seuls l’expéditeur et le destinataire peuvent lire les messages.
 
 ## Chiffrement et Déchiffrement des Données en Base
 
 1. Fonctionnalités principales :
 
-  -  Interception des événements de Doctrine
-      - Utilisation d’un Event Subscriber pour écouter et réagir automatiquement aux événements liés aux entités Doctrine.
-      - Garantit un traitement en temps réel des modifications effectuées sur les données sensibles.
+  -  Interception des événements Doctrine
+      - EventSubscriber dédié pour écouter le cycle de vie des entités sensibles.
+      - Chiffrement avant l’écriture (prePersist, preUpdate) et déchiffrement lors de la lecture (postLoad)
 
-  -  Automatisation du chiffrement et du déchiffrement
-      - Chiffrement des données avant leur persistance en base (événement prePersist).
-      - Déchiffrement des données lors de leur récupération pour garantir leur lisibilité uniquement aux utilisateurs autorisés.
-      - Application des opérations lors des événements Doctrine : Création d'une entité (persist), Mise à jour d'une entité (update), Suppression d'une entité (delete)
+  -  Automatisation complète
+      - prePersist et preUpdate → chiffrement du contenu avant stockage.
+      - postLoad → déchiffrement à la récupération.
+      - Support complet des opérations Doctrine : création, mise à jour et suppression.
+
+  -  Gestion des clés et secrets
+      - Les clés et vecteurs d’initialisation sont stockés via le système de secrets Symfony
 
   -  Architecture et gestion des événements
       - L'Event Subscriber dédié au chiffrement des données est placé dans le répertoire suivant : /src/EventListener/DatabaseActivitySubscriber.php
+      - Rotation des clés possible sans altération de la logique métier.
 
 2. Bénéfices de cette approche :
 
