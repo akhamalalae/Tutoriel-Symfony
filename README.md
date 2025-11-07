@@ -18,9 +18,19 @@
   -  Gestion des clés et secrets
       - Les clés et vecteurs d’initialisation sont stockés via le système de secrets Symfony
 
-  -  Architecture et gestion des événements
-      - L'Event Subscriber dédié au chiffrement des données est placé dans le répertoire suivant : /src/EventListener/DatabaseActivitySubscriber.php
-      - Rotation des clés possible sans altération de la logique métier.
+2. Architecture Globale et Flux de Données :
+  -  Séparation claire des responsabilités
+      - EventListener/DatabaseActivitySubscriber.php : Écoute les événements Doctrine (prePersist, postPersist, postLoad, preUpdate) et délègue le traitement à ActivityRouter.
+      - EventListener/Router/ActivityRouter.php : Route les événements vers le handler approprié et parcourt la liste des handlers et appelle le premier qui supporte l'entité par exemple User.
+      - EventListener\Activity\Handler\UserActivityHandler.php : Gère le cycle de vie de l'entité et délègue les appels à ActivityUser.
+      - EventListener\Activity\ActivityUser.php : Contient la logique métier d'encryptage/décryptage.
+  -  Extensibilité
+      - Ajouter une nouvelle entité = ajouter un handler + sa logique métier.
+      - Pas de modification de ActivityRouter ou DatabaseActivitySubscriber.
+  -  Respect des principes SOLID
+      - SRP : Chaque classe a une seule responsabilité.
+      - OCP : Ouvert à l'extension, fermé à la modification.
+      - DIP : Dépendances injectées via des interfaces.
 
 2. Bénéfices de cette approche :
 
