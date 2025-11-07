@@ -18,6 +18,15 @@ final class ActivityRouter
         $this->handlers = $handlers;
     }
 
+    /**
+     * Route l'action vers le gestionnaire approprié en fonction de l'entité.
+     * 
+     * @param string $action
+     * @param object $entity
+     * @param PreUpdateEventArgs|null $event
+     * 
+     * @return void
+     */
     public function route(string $action, object $entity, ?PreUpdateEventArgs $event = null): void
     {
         foreach ($this->handlers as $handler) {

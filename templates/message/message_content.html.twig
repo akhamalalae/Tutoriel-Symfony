@@ -14,6 +14,7 @@
         <hr class="my-0" />
         <br/>
         {% for file in item.message.fileMessages %}
+            {% if file.sensitiveDataMimeType and file.sensitiveDataName %}
             {% set subDirectory = 'files/message/'  %} 
             <span class="badge rounded-pill bg-light text-dark">
                 <a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
@@ -23,6 +24,7 @@
                     {{ textoriginalName | highlight(search) }}
                 </a>
             </span>
+            {% endif %}
         {% endfor %}
     {% endif %}
 </div>

@@ -3,69 +3,79 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\User;
+use App\EventListener\Contracts\Activity\ActivityUserInterface;
 use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Contracts\Activity\ActivityUserInterface;
+use App\EventListener\Activity\Trait\GenericActivityEntityTrait;
 
+/**
+ * Gestion des activités liées à l'entité User.
+ */
 class ActivityUser implements ActivityUserInterface
 {
-    private const FIELDS = [
-        'Name', 'FirstName', 'Email', 'Company', 'Job',
-        'Street', 'City', 'PostalCode', 'Country',
-        'Twitter', 'Facebook', 'Instagram', 'LinkedIn',
-        'BrochureFilename', 'MimeType'
-    ];
+    use GenericActivityEntityTrait;
 
-    private const FILE_FIELDS = ['BrochureFilename', 'MimeType'];
+    public function __construct(EncryptDecryptInterface $encryptDecrypt)
+    {
+        $this->encryptDecrypt = $encryptDecrypt;
+        $this->entityClass = User::class;
+    }
 
-    public function __construct(private EncryptDecryptInterface $encryptDecrypt) {}
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getFields(): array
+    {
+        return [
+            'name', 'firstName', 'email', 'company', 'job',
+            'street', 'city', 'postalCode', 'country',
+            'twitter', 'facebook', 'instagram', 'linkedIn',
+            'brochureFilename', 'mimeType'
+        ];
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getSpecialFields(): array
+    {
+        return ['brochureFilename', 'mimeType'];
+    }
+
+    /**
+     * Décrypte les informations d'un utilisateur.
+     *
+     * @param User $user L'entité User à décrypter.
+     * 
+     * @return void
+     */
     public function decryptUser(User $user): void
     {
-        $this->processFields($user, fn($value) => $this->encryptDecrypt->decrypt($value), 'setSensitiveData');
+        $this->decrypt($user);
     }
 
+    /**
+     * Encrypte les informations d'un utilisateur.
+     *
+     * @param User $user L'entité User à encrypter.
+     * 
+     * @return void
+     */
     public function encryptUser(User $user): void
     {
-        $this->processFields($user, fn($value) => $this->encryptDecrypt->encrypt($value), 'set');
-        
-        // Traitement spécifique pour les champs de fichier
-        foreach (self::FILE_FIELDS as $field) {
-            $getter = 'get' . $field;
-            $setter = 'set' . $field;
-            if (method_exists($user, $getter) && $user->$getter()) {
-                $user->$setter($this->encryptDecrypt->encrypt($user->$getter()));
-            }
-        }
+        $this->encrypt($user);
     }
 
-    private function processFields(User $user, callable $processor, string $setterPrefix): void
-    {
-        foreach (self::FIELDS as $field) {
-            $getter = 'get' . $field;
-            $setter = $setterPrefix . $field;
-            if (method_exists($user, $getter) && method_exists($user, $setter)) {
-                $value = $user->$getter();
-                $user->$setter($processor($value));
-            }
-        }
-    }
-
+    /**
+     * Encrypte les informations d'un utilisateur avant la mise à jour.
+     *
+     * @param User $user L'entité User à encrypter.
+     * @param PreUpdateEventArgs $event Les arguments de l'événement de pré-mise à jour.
+     * 
+     * @return void
+     */
     public function encryptPreUpdateUser(User $user, PreUpdateEventArgs $event): void
     {
-        $fields = array_merge(self::FIELDS, self::FILE_FIELDS);
-        foreach ($fields as $field) {
-            $this->encryptFieldIfChanged($event, $user, lcfirst($field));
-        }
-    }
-
-    private function encryptFieldIfChanged(PreUpdateEventArgs $event, User $user, string $field): void
-    {
-        if ($event->hasChangedField($field)) {
-            $newValue = $event->getNewValue($field);
-            $encrypted = $this->encryptDecrypt->encrypt($newValue);
-            $setter = 'set' . ucfirst($field);
-            $user->$setter($encrypted);
-        }
+        $this->encryptPreUpdate($user, $event);
     }
 }
