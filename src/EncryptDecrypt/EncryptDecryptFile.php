@@ -19,8 +19,10 @@ class EncryptDecryptFile implements EncryptDecryptFileInterface
     }
 
     /**
-     * @param  $source  Path of the unencrypted file
-     * @param  $dest  Path of the encrypted file to created
+     * @param  $source  Path of the file to encrypt
+     * @param  $dest    Path of the encrypted file
+     * 
+     * @return void
     */
     public function encryptFile($source, $dest) : void
     {
@@ -53,6 +55,8 @@ class EncryptDecryptFile implements EncryptDecryptFileInterface
 
     /**
      * @param  $source  Path of the encrypted file
+     * 
+     * @return string  Decrypted file content
     */
     public function decryptFile($source) : string
     {
