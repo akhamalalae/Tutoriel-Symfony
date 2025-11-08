@@ -10,20 +10,21 @@
         <span class="ms-1">{{ textMessage | highlight(searchTextMessage) | raw }}</span>
     {% endif %}
     <br/>
+    
     {% if item.message.fileMessages is not empty %}
         <hr class="my-0" />
         <br/>
         {% for file in item.message.fileMessages %}
             {% if file.sensitiveDataMimeType and file.sensitiveDataName %}
-            {% set subDirectory = 'files/message/'  %} 
-            <span class="badge rounded-pill bg-light text-dark">
-                <a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
-                    {% set textoriginalName = file.sensitiveDataOriginalName|split('.')[0] %}
-                    {% set search = searchMessage is not empty ? searchMessage.sensitiveDataFileName : null %}
+                {% set subDirectory = 'files/message/'  %} 
+                <span class="badge rounded-pill bg-light text-dark">
+                    <a download style="color:black;" href="data:{{ file.sensitiveDataMimeType }};base64,{{ file.sensitiveDataName|decrypt(subDirectory) }}">
+                        {% set textoriginalName = file.sensitiveDataOriginalName %}
+                        {% set search = searchMessage is not empty ? searchMessage.sensitiveDataFileName : null %}
 
-                    {{ textoriginalName | highlight(search) }}
-                </a>
-            </span>
+                        {{ textoriginalName | highlight(search) }}
+                    </a>
+                </span>
             {% endif %}
         {% endfor %}
     {% endif %}

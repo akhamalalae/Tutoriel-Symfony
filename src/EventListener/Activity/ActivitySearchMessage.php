@@ -1,13 +1,12 @@
 <?php
-// src/EventListener/Activity/ActivitySearchMessage.php
 
 namespace App\EventListener\Activity;
 
 use App\Entity\SearchMessage;
-use App\EventListener\Contracts\Activity\ActivitySearchMessageInterface;
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\Activity\ActivitySearchMessageInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Activity\Trait\GenericActivityEntityTrait;
+use App\Trait\Activity\GenericActivityEntityTrait;
 
 /**
  * Classe gérant l'activité liée aux messages de recherche.

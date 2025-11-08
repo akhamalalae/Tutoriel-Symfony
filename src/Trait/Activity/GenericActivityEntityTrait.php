@@ -1,8 +1,8 @@
 <?php
 
-namespace App\EventListener\Activity\Trait;
+namespace App\Trait\Activity;
 
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ReflectionException;
 

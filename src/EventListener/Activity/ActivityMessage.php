@@ -4,10 +4,10 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\Message;
-use App\EventListener\Contracts\Activity\ActivityMessageInterface;
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\Activity\ActivityMessageInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Activity\Trait\GenericActivityEntityTrait;
+use App\Trait\Activity\GenericActivityEntityTrait;
 
 /**
  * Classe gérant l'activité liée aux messages.

@@ -3,7 +3,7 @@
 namespace App\EncryptDecrypt;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 
 class EncryptDecrypt implements EncryptDecryptInterface
 {

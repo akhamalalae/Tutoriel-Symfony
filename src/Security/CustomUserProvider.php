@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 
 class CustomUserProvider implements UserProviderInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Messaging\Search\Trait;
+namespace App\Trait\Search;
 
 use Elastica\Query\BoolQuery;
 use DateTimeImmutable;

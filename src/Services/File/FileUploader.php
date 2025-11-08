@@ -5,14 +5,14 @@ namespace App\Services\File;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use App\EncryptDecrypt\EncryptDecryptFile;
+use App\Contracts\EncryptDecrypt\EncryptDecryptFileInterface;
 
 class FileUploader
 {
     public function __construct(
         private string $targetDirectory,
         private SluggerInterface $slugger,
-        private EncryptDecryptFile $encryptDecryptFile,
+        private EncryptDecryptFileInterface $encryptDecryptFile,
     ) {
     }
 

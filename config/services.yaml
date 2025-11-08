@@ -21,26 +21,26 @@ services:
     # Déclaration des handlers
     App\EventListener\Activity\Handler\MessageActivityHandler:
         arguments:
-            $activity: '@App\EventListener\Contracts\Activity\ActivityMessageInterface'
+            $activity: '@App\Contracts\Activity\ActivityMessageInterface'
 
     App\EventListener\Activity\Handler\UserActivityHandler:
         arguments:
-            $activity: '@App\EventListener\Contracts\Activity\ActivityUserInterface'
+            $activity: '@App\Contracts\Activity\ActivityUserInterface'
 
     App\EventListener\Activity\Handler\FileMessageActivityHandler:
         arguments:
-            $activity: '@App\EventListener\Contracts\Activity\ActivityFileMessageInterface'
+            $activity: '@App\Contracts\Activity\ActivityFileMessageInterface'
 
     App\EventListener\Activity\Handler\SearchDiscussionActivityHandler:
         arguments:
-            $activity: '@App\EventListener\Contracts\Activity\ActivitySearchDiscussionInterface'
+            $activity: '@App\Contracts\Activity\ActivitySearchDiscussionInterface'
 
     App\EventListener\Activity\Handler\SearchMessageActivityHandler:
         arguments:
-            $activity: '@App\EventListener\Contracts\Activity\ActivitySearchMessageInterface'
+            $activity: '@App\Contracts\Activity\ActivitySearchMessageInterface'
 
     # Déclaration de ActivityRouter avec injection manuelle des handlers
-    App\EventListener\Router\ActivityRouter:
+    App\EventListener\Activity\Router\ActivityRouter:
         arguments:
             $handlers:
                 - '@App\EventListener\Activity\Handler\MessageActivityHandler'

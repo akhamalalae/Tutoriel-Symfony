@@ -3,10 +3,10 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\User;
-use App\EventListener\Contracts\Activity\ActivityUserInterface;
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\Activity\ActivityUserInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Activity\Trait\GenericActivityEntityTrait;
+use App\Trait\Activity\GenericActivityEntityTrait;
 
 /**
  * Gestion des activités liées à l'entité User.

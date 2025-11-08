@@ -1,6 +1,6 @@
 ## Messagerie Sécurisée avec Chiffrement de Données
 
-#### Pour garantir la confidentialité des échanges entre utilisateurs, notre système de messagerie implémente un chiffrement de bout en bout (E2EE).Seuls l’expéditeur et le destinataire peuvent lire les messages.
+#### Pour garantir la confidentialité des échanges entre utilisateurs, le système de messagerie implémente un chiffrement de bout en bout (E2EE).Seuls l’expéditeur et le destinataire peuvent lire les messages.
 
 ## Chiffrement et Déchiffrement des Données en Base
 
@@ -9,10 +9,6 @@
   -  Interception des événements Doctrine
       - EventSubscriber dédié pour écouter le cycle de vie des entités sensibles.
       - Chiffrement avant l’écriture (prePersist, preUpdate) et déchiffrement lors de la lecture (postLoad)
-
-  -  Automatisation complète
-      - prePersist et preUpdate → chiffrement du contenu avant stockage.
-      - postLoad → déchiffrement à la récupération.
       - Support complet des opérations Doctrine : création, mise à jour et suppression.
 
   -  Gestion des clés et secrets
@@ -22,11 +18,11 @@
 
   - Séparation claire des responsabilités
      - EventListener/DatabaseActivitySubscriber.php : Écoute les événements Doctrine (prePersist, postPersist, postLoad, preUpdate) et délègue le traitement à ActivityRouter.
-    - EventListener/Router/ActivityRouter.php : Parcourt la liste des handlers et appelle celui qui prend en charge l’entité (par exemple, User).
+    - EventListener/Activity/Router/ActivityRouter.php : Parcourt la liste des handlers et appelle celui qui prend en charge l’entité (par exemple, User).
     - EventListener/Activity/Handler/UserActivityHandler.php : Gère le cycle de vie de l’entité User et délègue les appels à ActivityUser.
     - EventListener/Activity/ActivityUser.php : Contient la logique métier d’encryptage et de décryptage des données.
   -  Extensibilité
-      - L’ajout d’une nouvelle entité se limite à La création d’un handler dédié et L’ajout de sa logique métier associée.
+      - L’ajout d’une nouvelle entité se limite à la création d’un handler dédié et l’ajout de sa logique métier associée.
       - Aucune modification n’est nécessaire dans ActivityRouter ou DatabaseActivitySubscriber
   -  Respect des principes SOLID
       - SRP : Chaque classe a une seule responsabilité.

@@ -78,6 +78,7 @@ class MessageController extends AbstractController
             return $this->renderJsonResponse($messageForm['form'], $idDiscussion, $page, $searchMessage);
 
         } catch (\Exception $e) {
+            dump($e->getMessage());
             return $this->errorResponseService->createErrorResponse($e);
         }
     }

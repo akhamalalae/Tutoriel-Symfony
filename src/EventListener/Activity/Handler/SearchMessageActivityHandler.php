@@ -4,8 +4,8 @@ namespace App\EventListener\Activity\Handler;
 
 use App\Entity\SearchMessage;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Contracts\Activity\EntityActivityHandlerInterface;
-use App\EventListener\Contracts\Activity\ActivitySearchMessageInterface;
+use App\Contracts\Activity\EntityActivityHandlerInterface;
+use App\Contracts\Activity\ActivitySearchMessageInterface;
 
 /**
  * Gestionnaire d'activité pour l'entité SearchMessage.

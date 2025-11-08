@@ -1,5 +1,6 @@
 <?php
-namespace App\EventListener\Contracts\Activity;
+
+namespace App\Contracts\Activity;
 
 use App\Entity\Message;
 

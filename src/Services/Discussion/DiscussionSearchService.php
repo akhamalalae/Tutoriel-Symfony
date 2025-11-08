@@ -21,7 +21,7 @@ use Elastica\Query\Wildcard;
 use Elastica\Query\Exists;
 use Elastica\Query\Nested;
 use App\Contracts\Message\PaginationInterface;
-use App\Controller\Messaging\Search\Trait\BaseSearchTrait;
+use App\Trait\Search\BaseSearchTrait;
 
 class DiscussionSearchService implements DiscussionSearchInterface
 {

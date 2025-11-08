@@ -4,8 +4,8 @@ namespace App\EventListener\Activity\Handler;
 
 use App\Entity\User;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Contracts\Activity\EntityActivityHandlerInterface;
-use App\EventListener\Contracts\Activity\ActivityUserInterface;
+use App\Contracts\Activity\EntityActivityHandlerInterface;
+use App\Contracts\Activity\ActivityUserInterface;
 
 /**
  * Gestionnaire d'activité pour l'entité User.

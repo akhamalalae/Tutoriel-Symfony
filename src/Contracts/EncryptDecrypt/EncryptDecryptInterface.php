@@ -1,5 +1,6 @@
 <?php
-namespace App\EventListener\Contracts\EncryptDecrypt;
+
+namespace App\Contracts\EncryptDecrypt;
 
 interface EncryptDecryptInterface
 {

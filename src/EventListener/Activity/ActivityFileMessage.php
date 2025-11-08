@@ -4,10 +4,10 @@
 namespace App\EventListener\Activity;
 
 use App\Entity\FileMessage;
-use App\EventListener\Contracts\Activity\ActivityFileMessageInterface;
-use App\EventListener\Contracts\EncryptDecrypt\EncryptDecryptInterface;
+use App\Contracts\Activity\ActivityFileMessageInterface;
+use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Activity\Trait\GenericActivityEntityTrait;
+use App\Trait\Activity\GenericActivityEntityTrait;
 
 /**
  * Classe gérant l'activité liée aux fichiers de messages.
@@ -28,7 +28,7 @@ class ActivityFileMessage implements ActivityFileMessageInterface
      */
     protected static function getFields(): array
     {
-        return ['fileName', 'mimeType', 'originalName']; // Pas de champs standards pour FileMessage (tous sont considérés comme spéciaux)
+        return ['name', 'mimeType', 'originalName']; // Pas de champs standards pour FileMessage (tous sont considérés comme spéciaux)
     }
 
     /**

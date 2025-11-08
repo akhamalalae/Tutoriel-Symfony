@@ -4,8 +4,8 @@ namespace App\EventListener\Activity\Handler;
 
 use App\Entity\Message;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Contracts\Activity\EntityActivityHandlerInterface;
-use App\EventListener\Contracts\Activity\ActivityMessageInterface;
+use App\Contracts\Activity\EntityActivityHandlerInterface;
+use App\Contracts\Activity\ActivityMessageInterface;
 
 /**
  * Gestionnaire d'activité pour l'entité Message.

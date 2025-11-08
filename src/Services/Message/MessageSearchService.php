@@ -21,7 +21,7 @@ use DateTimeImmutable;
 use Elastica\Query\Wildcard;
 use Elastica\Query\MatchPhrase;
 use Elastica\Query\MultiMatch;
-use App\Controller\Messaging\Search\Trait\BaseSearchTrait;
+use App\Trait\Search\BaseSearchTrait;
 
 class MessageSearchService implements MessageSearchInterface
 {

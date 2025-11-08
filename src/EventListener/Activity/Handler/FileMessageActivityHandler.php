@@ -4,8 +4,8 @@ namespace App\EventListener\Activity\Handler;
 
 use App\Entity\FileMessage;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\EventListener\Contracts\Activity\EntityActivityHandlerInterface;
-use App\EventListener\Contracts\Activity\ActivityFileMessageInterface;
+use App\Contracts\Activity\EntityActivityHandlerInterface;
+use App\Contracts\Activity\ActivityFileMessageInterface;
 
 /**
  * Gestionnaire d'activité pour l'entité FileMessage.

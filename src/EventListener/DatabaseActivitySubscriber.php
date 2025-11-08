@@ -4,7 +4,7 @@ namespace App\EventListener;
 
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use App\EventListener\Router\ActivityRouter;
+use App\EventListener\Activity\Router\ActivityRouter;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 

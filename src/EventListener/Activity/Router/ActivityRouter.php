@@ -1,8 +1,8 @@
 <?php
 
-namespace App\EventListener\Router;
+namespace App\EventListener\Activity\Router;
 
-use App\EventListener\Contracts\Activity\EntityActivityHandlerInterface;
+use App\Contracts\Activity\EntityActivityHandlerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 final class ActivityRouter
