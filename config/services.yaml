@@ -18,6 +18,8 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+  
+
     # Déclaration des handlers
     App\EventListener\Activity\Handler\MessageActivityHandler:
         arguments:
@@ -39,7 +41,6 @@ services:
         arguments:
             $activity: '@App\Contracts\Activity\ActivitySearchMessageInterface'
 
-    # Déclaration de ActivityRouter avec injection manuelle des handlers
     App\EventListener\Activity\Router\ActivityRouter:
         arguments:
             $handlers:

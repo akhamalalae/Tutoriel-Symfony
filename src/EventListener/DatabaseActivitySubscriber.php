@@ -8,6 +8,9 @@ use App\EventListener\Activity\Router\ActivityRouter;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
+/**
+ * Abonnement aux événements Doctrine pour router les activités.
+ */
 final class DatabaseActivitySubscriber implements EventSubscriberInterface
 {
     public function __construct(private ActivityRouter $router) {}
