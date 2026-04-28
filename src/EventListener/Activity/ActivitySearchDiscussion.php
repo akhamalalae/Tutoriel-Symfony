@@ -7,15 +7,15 @@ use App\Entity\SearchDiscussion;
 use App\Contracts\Activity\ActivitySearchDiscussionInterface;
 use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\Trait\Activity\GenericActivityEntityTrait;
+use App\Trait\Activity\ActivityEncryptDecryptEntity;
 
 /**
  * Classe gérant l'activité liée aux discussions de recherche.
- * Utilise le trait GenericActivityEntityTrait pour factoriser la logique d'encryptage/décryptage.
+ * Utilise le trait ActivityEncryptDecryptEntity pour factoriser la logique d'encryptage/décryptage.
  */
 class ActivitySearchDiscussion implements ActivitySearchDiscussionInterface
 {
-    use GenericActivityEntityTrait;
+    use ActivityEncryptDecryptEntity;
 
     public function __construct(EncryptDecryptInterface $encryptDecrypt)
     {

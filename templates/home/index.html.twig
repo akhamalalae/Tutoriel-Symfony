@@ -1,36 +1,249 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block body %}
 
-<div class="col-xl-6 col-xxl-5 d-flex">
-    <div class="w-100">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col mt-0">
-                                <h5 class="card-title">Visitors</h5>
-                            </div>
-                            <div class="col-auto">
-                                <div class="stat text-primary">
-                                    {% include 'components/feather_icons/more-horizontal.html.twig' %}
-                                </div>
-                            </div>
-                        </div>
-                        <h1 class="mt-1 mb-3">14.212</h1>
-                        <div class="mb-0">
-                            <span class="text-success">5.25%</span>
-                            <span class="text-muted">Since last week</span>
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
+{% if isManager or isAdmin %}
+    <div class="card shadow-sm border-0">
+        {# ================= HEADER ================= #}
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+            <h5 class="mb-0">
+                {{ 'Dashboard'|trans }}
+            </h5>
+
+            <a data-bs-toggle="collapse" href="#dashboardHelp" aria-expanded="false">
+                <i class="fas fa-info-circle text-primary fs-5"></i>
+            </a>
+        </div>
+
+        <div class="collapse" id="dashboardHelp">
+            <div class="card-body bg-light border-bottom">
+                <p class="mb-1"><span class="badge bg-primary">KPI</span> {{ 'dashboard.help.kpi'|trans }} </p>
+                <p class="mb-1"><span class="badge bg-success">↑</span> {{ 'dashboard.help.up'|trans }} </p>
+                <p class="mb-0"><span class="badge bg-danger">↓</span> {{ 'dashboard.help.down'|trans }} </p>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            {# ================= KPI GLOBAL ================= #}
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-3">
+                    <div class="card bg-secondary text-white shadow-sm">
+                        <div class="card-body">
+                            <h6>{{ 'dashboard.kpi.total_equipment'|trans }}</h6>
+                            <h2>{{ stockStats.total }}</h2>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-success text-white shadow-sm">
+                        <div class="card-body">
+                            <h6>{{ 'dashboard.kpi.available'|trans }}</h6>
+                            <h2>{{ stockStats.available }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark shadow-sm">
+                        <div class="card-body">
+                            <h6>{{ 'dashboard.kpi.reserved'|trans }}</h6>
+                            <h2>{{ stockStats.reserved }}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white shadow-sm">
+                        <div class="card-body">
+                            <h6>{{ 'dashboard.kpi.assigned'|trans }}</h6>
+                            <h2>{{ stockStats.assigned ?? 0 }}</h2>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+            {# ================= ANALYSE (TICKETS) ================= #}
+            <div class="row g-3">
+
+                {# TYPES #}
+                <div class="col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h6>{{ 'dashboard.types'|trans }}</h6>
+                        </div>
+
+                        <div class="card-body">
+                            {% set types = [
+                                { key: 'incident', label: 'dashboard.incident_tickets' },
+                                { key: 'request', label: 'dashboard.request_tickets' },
+                                { key: 'onboarding', label: 'dashboard.onboarding_tickets' },
+                                { key: 'offboarding', label: 'dashboard.offboarding_tickets' }
+                            ] %}
+
+                            {% for t in types %}
+                                <div class="mb-3">
+
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{ t.label|trans }}</span>
+                                        <strong>{{ attribute(ticketsStats, t.key) }}</strong>
+                                    </div>
+
+                                    <small class="text-muted">
+                                        {{ attribute(ticketsStats, t.key ~ '_today') }}
+                                        {{ 'dashboard.today'|trans }}
+                                    </small>
+
+                                    {% set evo = attribute(ticketsEvolution, t.key) %}
+                                    <div>
+                                        <span class="{{ evo >= 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ evo > 0 ? '+' : '' }}{{ evo }}%
+                                        </span>
+                                    </div>
+
+                                    <hr>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {# PRIORITIES #}
+                <div class="col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h6>{{ 'dashboard.priorities'|trans }}</h6>
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set priorities = [
+                                { key: 'critical', label: 'dashboard.critical_priority', color: 'text-danger' },
+                                { key: 'high', label: 'dashboard.high_priority', color: 'text-warning' },
+                                { key: 'medium', label: 'dashboard.medium_priority', color: 'text-primary' },
+                                { key: 'low', label: 'dashboard.low_priority', color: 'text-success' }
+                            ] %}
+
+                            {% for p in priorities %}
+                                <div class="mb-3">
+
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{ p.label|trans }}</span>
+                                        <strong class="{{ p.color }}">
+                                            {{ attribute(ticketsStats, p.key) }}
+                                        </strong>
+                                    </div>
+
+                                    <small class="text-muted">
+                                        {{ attribute(ticketsStats, p.key ~ '_today') }}
+                                        {{ 'dashboard.today'|trans }}
+                                    </small>
+
+                                    {% set evo = attribute(ticketsEvolution, p.key) %}
+                                    <div>
+                                        <span class="{{ evo >= 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ evo > 0 ? '+' : '' }}{{ evo }}%
+                                        </span>
+                                    </div>
+
+                                    <hr>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+
+                {# STATUSES #}
+                <div class="col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h6>{{ 'dashboard.statuses'|trans }}</h6>
+                        </div>
+
+                        <div class="card-body">
+
+                            {% set statuses = [
+                                { key: 'open', label: 'dashboard.open_status' },
+                                { key: 'in_progress', label: 'dashboard.in_progress_status' },
+                                { key: 'waiting_user', label: 'dashboard.waiting_user_status' },
+                                { key: 'resolved', label: 'dashboard.resolved_status' },
+                                { key: 'closed', label: 'dashboard.closed_status' }
+                            ] %}
+
+                            {% for s in statuses %}
+                                <div class="mb-3">
+
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{ s.label|trans }}</span>
+                                        <strong>{{ attribute(ticketsStats, s.key) }}</strong>
+                                    </div>
+
+                                    <small class="text-muted">
+                                        {{ attribute(ticketsStats, s.key ~ '_today') }}
+                                        {{ 'dashboard.today'|trans }}
+                                    </small>
+
+                                    {% set evo = attribute(ticketsEvolution, s.key) %}
+                                    <div>
+                                        <span class="{{ evo >= 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ evo > 0 ? '+' : '' }}{{ evo }}%
+                                        </span>
+                                    </div>
+
+                                    <hr>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {# ================= LOCALISATION ================= #}
+            <div class="card mt-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h6>{{ 'dashboard.locations'|trans }}</h6>
+                </div>
+
+                <div class="card-body table-responsive">
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>{{ 'dashboard.location'|trans }}</th>
+                                <th>{{ 'dashboard.common.total'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loc in stockStats.locations %}
+                                <tr>
+                                    <td>{{ loc.location ?: 'dashboard.undefined'|trans }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {{ loc.total }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
+{% endif %}
 
 {% endblock %}
 

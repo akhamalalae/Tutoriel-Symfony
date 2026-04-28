@@ -1,0 +1,116 @@
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
+{% if ticketSoftwares|length > 0 %}
+    {% for ts in ticketSoftwares %}
+        {% set collapseId = 'softwareCollapse' ~ loop.index0 %}
+
+        <div class="card" data-id="{{ ts.id }}" data-type="card_software_form">
+            {# ================= HEADER ================= #}
+            <div class="card-header bg-primary-subtle d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#{{ collapseId }}"
+                     style="cursor: pointer;">
+
+                    <span class="fw-bold">
+                        <i class="fas fa-microchip me-1 text-primary"></i>
+                        {{ ts.softwareProduct.name }}
+                    </span>
+                </div>
+
+                <button type="button" class="btn btn-danger btn-sm remove-row">✕</button>
+            </div>
+
+            {# ================= COLLAPSE ================= #}
+            <div id="{{ collapseId }}" class="collapse">
+
+                {# ================= BODY ================= #}
+                <div class="card-body">
+
+                    <input type="hidden"
+                        name="ticket_form[ticketSoftware][{{ loop.index0 }}][softwareProduct]"
+                        value="{{ ts.softwareProduct.id }}">
+
+                    <div class="row g-3">
+                        {% if isManager or isAdmin %}
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    {{ 'ticket.field.software.license_key'|trans }}
+                                </label>
+
+                                <input type="text"
+                                    class="form-control"
+                                    name="ticket_form[ticketSoftware][{{ loop.index0 }}][softwareLicense][licenseKey]"
+                                    value="{{ ts.softwareLicense ? ts.softwareLicense.licenseKey : '' }}"
+                                    placeholder="XXXX-XXXX">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    {{ 'ticket.field.software.expires_at'|trans }}
+                                </label>
+
+                                <input type="datetime-local"
+                                    class="form-control"
+                                    name="ticket_form[ticketSoftware][{{ loop.index0 }}][softwareLicense][expiresAt]"
+                                    value="{{
+                                        ts.softwareLicense and ts.softwareLicense.expiresAt
+                                            ? ts.softwareLicense.expiresAt|date('Y-m-d\\TH:i')
+                                            : ''
+                                    }}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    {{ 'ticket.field.software.status'|trans }}
+                                </label>
+
+                                <select class="form-select"
+                                    name="ticket_form[ticketSoftware][{{ loop.index0 }}][status]">
+                                    {% for status in statusOptions %}
+                                        <option value="{{ status.value }}"
+                                            {% if ts.status and ts.status.value == status.value %}selected{% endif %}>
+                                            {{ status.label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-8">
+                            <label class="form-label">
+                                {{ 'ticket.field.software.comment'|trans }}
+                            </label>
+
+                            <textarea class="form-control"
+                                name="ticket_form[ticketSoftware][{{ loop.index0 }}][comment]"
+                                rows="2">{{ ts.comment ?: '' }}
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                {# ================= FOOTER ================= #}
+                <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                    <input type="hidden"
+                        name="ticket_form[ticketSoftware][{{ loop.index0 }}][id]"
+                        value="{{ ts.id ?: '' }}">
+
+                    <small class="text-muted">
+                        {{ 'ticket.field.equipments.created_by'|trans }}
+                        {% if ts.createdBy and ts.createdBy.name %}
+                            {{ ts.createdBy.sensitiveDataFirstName }} {{ ts.createdBy.sensitiveDataName }}
+                        {% endif %}
+                    </small>
+
+                    {% if ts.createdAt is defined %}
+                        <small class="text-muted">
+                            {{ ts.createdAt|date('d/m/Y') }}
+                        </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

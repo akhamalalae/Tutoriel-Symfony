@@ -8,49 +8,45 @@ use App\Entity\SearchDiscussion;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Contracts\Discussion\DiscussionSearchInterface;
 use Elastica\Query\BoolQuery;
-use Elastica\Query\Match;
-use Elastica\Query\MatchPhrase;
-use Elastica\Query\MatchQuery;
-use App\Entity\Discussion;
-use DateTimeImmutable;
-use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Controller\Messaging\Search\Interface\SearchDiscussionsInterface;
 use Elastica\Query\Term;
-use Elastica\Query\Wildcard;
-use Elastica\Query\Exists;
-use Elastica\Query\Nested;
-use App\Contracts\Message\PaginationInterface;
+use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
 use App\Trait\Search\BaseSearchTrait;
 
 class DiscussionSearchService implements DiscussionSearchInterface
 {
     use BaseSearchTrait;
 
-    private const SEARCH_RESULT_LIMIT = 1000;
     private const ITEMS_PER_PAGE = 5;
 
     public function __construct(
         private readonly PaginatedFinderInterface $finder,
-        private readonly PaginationInterface $pagination,
         private readonly UserService $userService,
         private readonly EntityManagerInterface $em
     ) {}
     
     /**
-     * Get pagination information for discussions
+     * Get paginated discussions from Elasticsearch
      *
-     * @param int $page The current page number
-     * @param SearchDiscussion|null $criteria The search criteria
-     *
-     * @return array The pagination information
+     * @param int $page
+     * @param SearchDiscussion|null $criteria
+     * @return array
      */
-    public function discussions(int $page, SearchDiscussion|null $criteria): array
+    public function discussions(int $page, ?SearchDiscussion $criteria): array
     {
         $user = $this->userService->getAuthenticatedUser();
 
         if (!$user) {
-            return [];
+            return [
+                'items' => [],
+                'pagination' => [
+                    'currentPage' => 1,
+                    'perPage' => self::ITEMS_PER_PAGE,
+                    'totalResults' => 0,
+                    'totalPages' => 0,
+                    'hasNextPage' => false,
+                    'hasPreviousPage' => false,
+                ],
+            ];
         }
 
         $boolQuery = new BoolQuery();
@@ -61,19 +57,33 @@ class DiscussionSearchService implements DiscussionSearchInterface
             $this->addSearchCriteria($boolQuery, $criteria);
         }
 
-        $data = $this->executeSearch($boolQuery);
+        // Construction de la requête Elasticsearch
+        $query = new \Elastica\Query($boolQuery);
+        $query->addSort(['dateCreation' => ['order' => 'DESC']]);
 
-        return $this->pagination
-            ->pagination($page, self::ITEMS_PER_PAGE, $data);
+        // Pagination Elasticsearch
+        $paginator = $this->finder->findPaginated($query);
+        $paginator->setMaxPerPage(self::ITEMS_PER_PAGE);
+        $paginator->setCurrentPage($page);
+
+        $results = iterator_to_array($paginator->getCurrentPageResults());
+
+        // Retourne résultats + infos de pagination
+        return [
+            'items' => $results,
+            'pagination' => [
+                'currentPage' => $page,
+                'perPage' => self::ITEMS_PER_PAGE,
+                'totalResults' => $paginator->getNbResults(),
+                'totalPages' => $paginator->getNbPages(),
+                'hasNextPage' => $page < $paginator->getNbPages(),
+                'hasPreviousPage' => $page > 1,
+            ],
+        ];
     }
 
     /**
-     * Add user filter to the query
-     * 
-     * @param BoolQuery $boolQuery The boolean query to modify
-     * @param User $user The user to filter discussions for
-     * 
-     * @return void
+     * Filtrer les discussions par utilisateur connecté
      */
     private function addUserFilter(BoolQuery $boolQuery, User $user): void
     {
@@ -83,12 +93,7 @@ class DiscussionSearchService implements DiscussionSearchInterface
     }
 
     /**
-     * Add search criteria to the query
-     * 
-     * @param BoolQuery $boolQuery The boolean query to modify
-     * @param SearchDiscussion $criteria The search criteria
-     * 
-     * @return void
+     * Ajouter les critères de recherche
      */
     private function addSearchCriteria(BoolQuery $boolQuery, SearchDiscussion $criteria): void
     {
@@ -113,24 +118,5 @@ class DiscussionSearchService implements DiscussionSearchInterface
         if ($createdThisMonth) {
             $this->addDateRangeFilter($boolQuery, 'dateCreation');
         }
-    }
-
-    /**
-     * Execute the search query
-     * 
-     * @param BoolQuery $boolQuery The boolean query to execute
-     * 
-     * @return array The search results
-     */
-    private function executeSearch(BoolQuery $boolQuery): array
-    {
-        $query = new \Elastica\Query();
-        
-        $query->setQuery($boolQuery)
-            ->addSort([
-                'dateCreation' => ['order' => 'DESC']
-            ]);
-
-        return $this->finder->find($query, self::SEARCH_RESULT_LIMIT);
     }
 }

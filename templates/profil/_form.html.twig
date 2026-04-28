@@ -1,0 +1,228 @@
+{% include 'flash_messages/flash_messages_verify_email_error.html.twig' %}
+{{ form_errors(form) }}
+
+{{ form_start(form, {
+    action: path('users_save', { id: user ? user.id : null }),
+    attr: {
+        id: 'user-form',
+        'data-id': user ? user.id : ''
+    }
+}) }}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="flex-grow-1">
+            <small class="float-end text-navy">
+                <div class="card-actions float-end">
+                    <div class="dropdown position-relative">
+                        <a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                            {% include 'components/feather_icons/more-horizontal.html.twig' %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" id="hidden-user-btn">
+                                <i class="fas fa-remove" style="color: #4169E1;"></i>
+                                {{ 'Hidden'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </small>
+
+            <h5 class="card-title mb-0">
+                {% if user and user.name %}
+                    {{ user.sensitiveDataFirstName }} {{ user.sensitiveDataName }}
+                {% else %}
+                    {{ 'User'|trans }}
+                {% endif %}
+            </h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-4">
+
+            {% if user %}
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong class="text-nowrap">{{ 'Profile Details'|trans }}</strong>
+                        </div>
+                        {% include 'profil/profil_info.html.twig' with {'item': user} %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <strong>{{ 'user.identity'|trans }}</strong>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form_label(form.image, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.image) }}
+                            {{ form_errors(form.image) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.firstName, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.firstName) }}
+                            {{ form_errors(form.firstName) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.name, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.name) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+
+                        {% if form.email is defined %}
+                        <div class="mb-3">
+                            {{ form_label(form.email, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.email) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                        {% endif %}
+
+                        {% if form.plainPassword is defined %}
+                        <div class="mb-3">
+                            {{ form_label(form.plainPassword, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.plainPassword) }}
+                            {{ form_errors(form.plainPassword) }}
+                        </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            {{ form_label(form.companyUser, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.companyUser) }}
+                            {{ form_errors(form.companyUser) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.job, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.job) }}
+                            {{ form_errors(form.job) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.dateOfBirth, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.dateOfBirth) }}
+                            {{ form_errors(form.dateOfBirth) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <strong>{{ 'user.address'|trans }}</strong>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form_label(form.street, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.street) }}
+                            {{ form_errors(form.street) }}
+                        </div>
+
+                        <div class="list-group mb-3" id="autocomplete-results"></div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.city, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.city) }}
+                            {{ form_errors(form.city) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.postal_code, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.postal_code) }}
+                            {{ form_errors(form.postal_code) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.country, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.country) }}
+                            {{ form_errors(form.country) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <strong>{{ 'user.social_networks'|trans }}</strong>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form_label(form.twitter, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.twitter) }}
+                            {{ form_errors(form.twitter) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.facebook, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.facebook) }}
+                            {{ form_errors(form.facebook) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.instagram, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.instagram) }}
+                            {{ form_errors(form.instagram) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.linkedIn, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.linkedIn) }}
+                            {{ form_errors(form.linkedIn) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <strong>{{ 'user.skills_access'|trans }}</strong>
+                        <a data-bs-toggle="collapse" data-bs-target="#collapseSkills">
+                            <i class="fa fa-info-circle"></i>
+                        </a>
+                    </div>
+
+                    <div class="collapse" id="collapseSkills">
+                        <div class="alert alert-primary m-2">
+                            {{ 'user.skills_help'|trans }}
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {{ form_label(form.skills, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.skills) }}
+                            {{ form_errors(form.skills) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.roles, null, {'label_attr': {'class': 'text-nowrap'}}) }}
+                            {{ form_widget(form.roles) }}
+                            {{ form_errors(form.roles) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-lg btn-primary">
+                {{ 'Save'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}

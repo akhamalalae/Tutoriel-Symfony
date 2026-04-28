@@ -1,0 +1,83 @@
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
+{# ================= HEADER ================= #}
+<div class="card-header bg-primary-subtle d-flex justify-content-between align-items-center">
+    <div class="fw-bold text-muted">
+        <i class="fas fa-plus-circle text-primary me-1"></i>
+        {{ 'ticket.new_equipement'|trans }}
+    </div>
+    <button type='button' class='btn btn-danger btn-sm remove-row'>✕</button>
+</div>
+
+{# ================= BODY ================= #}
+<div class="card-body">
+    <div class="row g-3">
+        {# ===== EQUIPMENT MODEL ===== #}
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">
+                {{ 'ticket.field.equipments.equipment'|trans }}
+            </label>
+            {{ form_widget(form.equipmentModel, {
+                attr: {
+                    class: 'form-select js-select2-ajax',
+                    'data-type': 'equipment'
+                },
+                id: 'ticket_form_ticketEquipment___name___equipmentModel',
+                name: 'ticket_form[ticketEquipment][__name__][equipmentModel]'
+            }) }}
+        </div>
+        {% if isManager or isAdmin %}
+            {# ===== ASSET ===== #}
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">
+                    {{ 'ticket.field.equipments.real_asset'|trans }}
+                </label>
+
+                {{ form_widget(form.equipmentAsset, {
+                    attr: {
+                        class: 'form-select js-select2-ajax',
+                        'data-type': 'equipmentAsset'
+                    },
+                    id: 'ticket_form_ticketEquipment___name___equipmentAsset',
+                    name: 'ticket_form[ticketEquipment][__name__][equipmentAsset]'
+                }) }}
+            </div>
+            {# ===== STATUS ===== #}
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">
+                    {{ 'ticket.field.equipments.status'|trans }}
+                </label>
+
+                {{ form_widget(form.status, {
+                    attr: { class: 'form-select' },
+                    id: 'ticket_form_ticketEquipment___name___status',
+                    name: 'ticket_form[ticketEquipment][__name__][status]'
+                }) }}
+            </div>
+        {% endif %}
+        {# ===== COMMENT ===== #}
+        <div class="col-md-{% if isManager or isAdmin %}12{% else %}8{% endif %}">
+            <label class="form-label fw-semibold">
+                {{ 'ticket.field.equipments.comment'|trans }}
+            </label>
+
+            {{ form_widget(form.comment, {
+                attr: {
+                    class: 'form-control',
+                    rows: 2
+                },
+                id: 'ticket_form_ticketEquipment___name___comment',
+                name: 'ticket_form[ticketEquipment][__name__][comment]'
+            }) }}
+        </div>
+    </div>
+</div>
+
+{# ================= FOOTER ================= #}
+<div class="card-footer bg-white d-flex justify-content-between align-items-center">
+    <input type="hidden"
+        name="ticket_form[ticketEquipment][__name__][id]"
+        value="">
+</div>
+

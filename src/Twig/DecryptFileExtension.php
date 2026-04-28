@@ -25,6 +25,10 @@ class DecryptFileExtension extends AbstractExtension
     {
         $source = $this->params->get('directory') . $subDirectory . $file;
         
+        if (!file_exists($source) || !is_file($source)) {
+            return '';
+        }
+        
         return base64_encode($this->encryptDecryptFile->decryptFile($source));
     }
 }

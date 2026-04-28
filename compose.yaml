@@ -116,6 +116,13 @@ services:
     ports:
       - "3000:80"
 
+  #sonarqube:
+  #  image: sonarqube:latest
+  # ports:
+  #    - "9001:9000"
+  #  environment:
+  #    SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+
 networks:
   symfony_network:
     driver: bridge

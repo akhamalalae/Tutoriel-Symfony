@@ -44,6 +44,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $company = null;
 
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Company $companyUser = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $job = null;
 
@@ -120,6 +124,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $sensitiveDataFirstName = '';
 
+    private ?string $sensitiveDataFullName = '';
+
     private ?string $sensitiveDataEmail = '';
 
     private ?string $sensitiveDataCompany = '';
@@ -152,6 +158,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'creatorUser', targetEntity: AnswerMessage::class)]
     private Collection $answerMessages;
 
+    /**
+     * @var Collection<int, Onboarding>
+     */
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Onboarding::class, orphanRemoval: true)]
+    private Collection $onboardings;
+
+    /**
+     * @var Collection<int, Offboarding>
+     */
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Offboarding::class, orphanRemoval: true)]
+    private Collection $offboardings;
+
+    /**
+     * @var Collection<int, TicketMessage>
+     */
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: TicketMessage::class, orphanRemoval: true)]
+    private Collection $ticketMessagesTicket;
+
+    /**
+     * @var Collection<int, TicketEquipment>
+     */
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: TicketEquipment::class)]
+    private Collection $ticketEquipment;
+
+    /**
+     * @var Collection<int, EquipmentAsset>
+     */
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: EquipmentAsset::class)]
+    private Collection $equipmentAssets;
+
+    /**
+     * @var Collection<int, SoftwareLicense>
+     */
+    #[ORM\OneToMany(mappedBy: 'assignedTo', targetEntity: SoftwareLicense::class)]
+    private Collection $softwareLicenses;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(mappedBy: 'targetUser', targetEntity: Ticket::class)]
+    private Collection $tickets;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -166,6 +214,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->searchDiscussions = new ArrayCollection();
         $this->searchMessages = new ArrayCollection();
         $this->answerMessages = new ArrayCollection();
+        $this->onboardings = new ArrayCollection();
+        $this->offboardings = new ArrayCollection();
+        $this->ticketMessagesTicket = new ArrayCollection();
+        $this->ticketEquipment = new ArrayCollection();
+        $this->equipmentAssets = new ArrayCollection();
+        $this->softwareLicenses = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -760,6 +815,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getSensitiveDataFullName(): ?string
+    {
+        return $this->sensitiveDataFirstName . ' ' . $this->sensitiveDataName;
+    }
+
+    public function setSensitiveDataFullName(?string $sensitiveDataFullName): static
+    {
+        $this->sensitiveDataFullName = $sensitiveDataFullName;
+
+        return $this;
+    }
+
     public function getSensitiveDataEmail(): ?string
     {
         return $this->sensitiveDataEmail;
@@ -940,6 +1007,228 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($answerMessage->getCreatorUser() === $this) {
                 $answerMessage->setCreatorUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Onboarding>
+     */
+    public function getOnboardings(): Collection
+    {
+        return $this->onboardings;
+    }
+
+    public function addOnboarding(Onboarding $onboarding): static
+    {
+        if (!$this->onboardings->contains($onboarding)) {
+            $this->onboardings->add($onboarding);
+            $onboarding->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOnboarding(Onboarding $onboarding): static
+    {
+        if ($this->onboardings->removeElement($onboarding)) {
+            // set the owning side to null (unless already changed)
+            if ($onboarding->getEmployee() === $this) {
+                $onboarding->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Offboarding>
+     */
+    public function getOffboardings(): Collection
+    {
+        return $this->offboardings;
+    }
+
+    public function addOffboarding(Offboarding $offboarding): static
+    {
+        if (!$this->offboardings->contains($offboarding)) {
+            $this->offboardings->add($offboarding);
+            $offboarding->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffboarding(Offboarding $offboarding): static
+    {
+        if ($this->offboardings->removeElement($offboarding)) {
+            // set the owning side to null (unless already changed)
+            if ($offboarding->getEmployee() === $this) {
+                $offboarding->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCompanyUser(): ?Company
+    {
+        return $this->companyUser;
+    }
+
+    public function setCompanyUser(?Company $companyUser): static
+    {
+        $this->companyUser = $companyUser;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TicketMessage>
+     */
+    public function getTicketMessagesTicket(): Collection
+    {
+        return $this->ticketMessagesTicket;
+    }
+
+    public function addTicketMessagesTicket(TicketMessage $ticketMessagesTicket): static
+    {
+        if (!$this->ticketMessagesTicket->contains($ticketMessagesTicket)) {
+            $this->ticketMessagesTicket->add($ticketMessagesTicket);
+            $ticketMessagesTicket->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicketMessagesTicket(TicketMessage $ticketMessagesTicket): static
+    {
+        if ($this->ticketMessagesTicket->removeElement($ticketMessagesTicket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticketMessagesTicket->getCreatedBy() === $this) {
+                $ticketMessagesTicket->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TicketEquipment>
+     */
+    public function getTicketEquipment(): Collection
+    {
+        return $this->ticketEquipment;
+    }
+
+    public function addTicketEquipment(TicketEquipment $ticketEquipment): static
+    {
+        if (!$this->ticketEquipment->contains($ticketEquipment)) {
+            $this->ticketEquipment->add($ticketEquipment);
+            $ticketEquipment->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicketEquipment(TicketEquipment $ticketEquipment): static
+    {
+        if ($this->ticketEquipment->removeElement($ticketEquipment)) {
+            // set the owning side to null (unless already changed)
+            if ($ticketEquipment->getCreatedBy() === $this) {
+                $ticketEquipment->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EquipmentAsset>
+     */
+    public function getEquipmentAssets(): Collection
+    {
+        return $this->equipmentAssets;
+    }
+
+    public function addEquipmentAsset(EquipmentAsset $equipmentAsset): static
+    {
+        if (!$this->equipmentAssets->contains($equipmentAsset)) {
+            $this->equipmentAssets->add($equipmentAsset);
+            $equipmentAsset->setAssignedTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipmentAsset(EquipmentAsset $equipmentAsset): static
+    {
+        if ($this->equipmentAssets->removeElement($equipmentAsset)) {
+            // set the owning side to null (unless already changed)
+            if ($equipmentAsset->getAssignedTo() === $this) {
+                $equipmentAsset->setAssignedTo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SoftwareLicense>
+     */
+    public function getSoftwareLicenses(): Collection
+    {
+        return $this->softwareLicenses;
+    }
+
+    public function addSoftwareLicense(SoftwareLicense $softwareLicense): static
+    {
+        if (!$this->softwareLicenses->contains($softwareLicense)) {
+            $this->softwareLicenses->add($softwareLicense);
+            $softwareLicense->setAssignedTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoftwareLicense(SoftwareLicense $softwareLicense): static
+    {
+        if ($this->softwareLicenses->removeElement($softwareLicense)) {
+            // set the owning side to null (unless already changed)
+            if ($softwareLicense->getAssignedTo() === $this) {
+                $softwareLicense->setAssignedTo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): static
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets->add($ticket);
+            $ticket->setTargetUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): static
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getTargetUser() === $this) {
+                $ticket->setTargetUser(null);
             }
         }
 

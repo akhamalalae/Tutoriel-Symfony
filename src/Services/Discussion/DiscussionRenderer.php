@@ -50,12 +50,12 @@ class DiscussionRenderer extends AbstractController implements DiscussionRendere
         $discussions = $this->searchService
             ->discussions($page, $searchDiscussion);
         
-        $unreadMessages = $this->unreadMessages($discussions['data'], $user);
+        $unreadMessages = $this->unreadMessages($discussions['items'], $user);
 
         return $this->environment->render('discussion/list.html.twig', [
             'page' => $page,
-            'totalPages' => $discussions['totalPages'],
-            'discussions' => $discussions['data'],
+            'totalPages' => $discussions['pagination']['totalPages'],
+            'discussions' => $discussions['items'],
             'discussionUnreadMessages' => $unreadMessages['discussionUnreadMessages'],
             'numberTotalUnreadMessages' => $unreadMessages['numberTotalUnreadMessages']
         ]);

@@ -1,6 +1,6 @@
 
 <div class="card-body text-center">
-	{% if item.sensitiveDataBrochureFilename %} 
+	{% if item.sensitiveDataBrochureFilename and item.sensitiveDataMimeType %} 
 		{% set subDirectory = 'img/avatars/'  %} 
 		<img
 			src="data:{{ item.sensitiveDataMimeType }};base64,{{ item.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
@@ -34,7 +34,7 @@
 
 		<li class="mb-1">
 			<span data-feather="briefcase" class="feather-sm me-1"></span> 
-			{{ 'Works at'|trans }} {{ item.sensitiveDataCompany }} 
+			{{ 'Works at'|trans }} {{ item.companyUser.name }} 
 		</li>
 
 		<li class="mb-1">

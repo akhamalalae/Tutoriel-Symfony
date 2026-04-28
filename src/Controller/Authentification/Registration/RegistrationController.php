@@ -16,12 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use App\Services\File\FileUploader;
 use Symfony\Component\Mime\Email;
+
 class RegistrationController extends AbstractController
 {
-    const DIRECTORY_AVATARS = 'img/avatars'; 
-    
     public function __construct(private EmailVerifier $emailVerifier)
     {
     }
@@ -32,7 +30,6 @@ class RegistrationController extends AbstractController
         MailerInterface $mailer,
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
-        FileUploader $fileUploader,
         TranslatorInterface $translator): Response
     {
         $user = new User();
@@ -51,18 +48,6 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
-            $file = $form->get('image')->getData();
-            
-            if ($file) {
-                $mimeType = $file->getMimeType();
-
-                $fileName = $fileUploader->upload($file, self::DIRECTORY_AVATARS)['name'];
-                
-                $user->setBrochureFilename($fileName);
-                
-                $user->setMimeType($mimeType);
-            }
 
             $entityManager->persist($user);
             $entityManager->flush();

@@ -56,12 +56,13 @@ class DiscussionUtils {
         const IdSelectedSearchDiscussion = document.getElementById('IdSelectedSearchDiscussion');
         
         return  {
+            'view': 'Discussion',
             'saveSearch': saveSearch,
             'description': elementDescription ? elementDescription.value : '',
             'createdThisMonth': createdThisMonth,
             'name': elementName ? elementName.value : '', 
             'firstName': elementFirstName ? elementFirstName.value : '',
-            'IdSelectedSearchDiscussion': IdSelectedSearchDiscussion ? IdSelectedSearchDiscussion.value : '', 
+            'id': IdSelectedSearchDiscussion ? IdSelectedSearchDiscussion.value : '', 
         };
     }
     cleanCriteria () {

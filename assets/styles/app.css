@@ -24,3 +24,50 @@ body {
 .scrollable strong {
     margin-bottom: end;
 }
+
+/* Badge Bootstrap style */
+.select2-container--bootstrap-5 .select2-selection__choice {
+    display: inline-flex;
+    align-items: center;
+
+    background-color: #00BFFF !important; /* bg-primary */
+    color: white !important;
+
+    border: none !important;
+    border-radius: 50rem !important; /* rounded-pill */
+
+    padding: 0.35em 0.65em !important;
+    font-size: 0.75em;
+    font-weight: 600;
+
+    margin-top: 4px;
+}
+
+/* bouton remove */
+.select2-container--bootstrap-5 .select2-selection__choice__remove {
+    color: white !important;
+    margin-right: 6px;
+    font-weight: bold;
+    border: none;
+}
+
+/* hover remove */
+.select2-container--bootstrap-5 .select2-selection__choice__remove:hover {
+    color: #ddd !important;
+}
+
+/* spacing global */
+.select2-container--bootstrap-5 .select2-selection--multiple {
+    padding: 4px;
+}
+
+.floating-footer {
+    position: fixed;
+    bottom: 60px;
+    z-index: 1050;
+}
+
+main.content {
+    padding-bottom: 100px;
+}
+

@@ -43,3 +43,270 @@ Sign in: Sign in
 Don’t have an account: Don’t have an account
 Sign up: Sign up
 
+ticket_created: "Ticket successfully created."
+ticket_modified: "Ticket successfully modified."
+ticket_removed: "Ticket successfully removed."
+stock_updated_available: " The stock status has been updated to available."
+license_revoked: " A license was revoked by the administrator."
+
+Previous: Previous
+Next: Next
+save: Save
+save_stay: Save and stay
+list_ticket: Ticket
+create_ticket : Create a Ticket
+no_tickets_found: No tickets found
+no_elements_found: No elements found
+List: List
+
+ticket:
+  title: Ticket
+  # Messages généraux
+  hello: Hello
+  updated_changes: Updated the ticket with the following changes
+  sincerely: Sincerely
+  it_department: IT Department
+  
+  general_information: General information
+  attribution_and_status: Attribution and status
+  onboarding: Onboarding
+  offboarding: Offboarding
+  equipments: Equipments
+  new_equipement: New equipment
+  new_software: New software
+  
+  form_ticket: Ticket form
+  add_equipment: Add equipment
+
+  add_software : Add software
+  software: Software
+
+  # Champs principaux du ticket
+  field:
+    title: Title
+    description: Description
+    status: Status
+    type: Type
+    priority: Priority
+    assigned_to: Assigned to
+    target_user: Target user
+    created_by: Created by
+    created_at: Created at
+    resolved_at: Resolved at
+    closed_at: Closed at
+    company: Company
+
+    software:
+      software: Software
+      version: Version
+      license_key: License key
+      expires_at: Expires at
+      comment: Comment
+      status: Status
+    equipments:
+      equipment: Equipment
+      real_asset: Assigned equipment
+      reference: Reference
+      N° Série: Serial Number
+      comment: Comment
+      status: Status
+      created_by: Created by
+    onboarding:
+      position: Position
+      start_date: Start date
+      employee: Employee
+    offboarding:
+      revoke_access: Revoke Access
+      return_equipment: Return Equipment
+      employee: Employee
+      end_date: End date
+
+  # Valeurs booléennes
+  yes: "Yes"
+  no: "No"
+  empty: "Empty"
+
+  enum:
+    low: "Low"
+    medium: "Medium"
+    high: "High"
+    critical: "Critical"
+
+    incident: "Incident"
+    request: "Request"
+    onboarding: "Onboarding"
+    offboarding: "Offboarding"
+
+    waiting_user: Waiting for user
+    in_progress: In progress
+    resolved: Resolved
+    closed: Closed
+    open: Open
+
+    pending: Pending
+    preparing: Preparing
+    ready: Ready
+    delivered: Delivered
+    installed: Installed
+
+  error:
+    title_required: "Title is required"
+    description_required: "Description is required"
+    type_required: "Type is required"
+    priority_required: "Priority is required"
+    company_required: "Company is required"
+    equipment_company_mismatch: The selected equipment is not available in the company's inventory. Please verify that the equipment is correctly assigned to your company or choose an item that exists in your current stock.
+    target_user_required: "Target user is required"
+
+    onboarding:
+      position_required: "Position is required"
+      start_date_required: "Start date is required"
+      employee_required: "Employee is required"
+
+    offboarding:
+      employee_required: "Employee is required"
+      end_date_required: "End date is required"
+
+    equipment_required: "Equipment selection is required"
+    software_required: "Software selection is required"
+
+    status_already_closed: "Ticket is already permanently closed"
+    status_closed_final: "A closed ticket is final"
+    status_must_be_resolved: "Ticket must be resolved before being closed"
+
+  added: "Added"
+  modified: "Modified"
+  deleted: "Deleted"
+
+list_stock: Stock
+stock:
+  title: Stock
+  status:
+    available: "Available"
+    reserved: "Reserved"
+    assigned: "Assigned"
+    in_repair: "In repair"
+    retired: "Retired"
+    out_of_service: "Hors service"
+    
+  condition:
+    new: "New"
+    good: "Good"
+    fair: "Fair"
+    broken: "Broken"
+    
+  form:
+    title: "Stock form"
+    sections:
+      identification: "Identification"
+      status: "Status & condition"
+      assignment: "Assignment"
+      location: "Location"
+      finance: "Finance"
+      maintenance: "Maintenance"
+      comment: "Comment"
+    fields:
+      reference: "Reference"
+      serialNumber: "Serial number"
+      assetTag: "Asset tag"
+
+      status: "Status"
+      assetCondition: "Condition"
+
+      assignedTo: "Assigned to"
+
+      location: "Location"
+      storageLocation: "Storage location"
+
+      purchaseDate: "Purchase date"
+      purchasePrice: "Purchase price"
+      supplier: "Supplier"
+      invoiceNumber: "Invoice number"
+
+      warrantyEndDate: "Warranty end date"
+      lastMaintenanceAt: "Last maintenance"
+      maintenanceComment: "Maintenance comment"
+
+      comment: "Comment"
+
+user:
+  label: "User"
+  identity: "Identity"
+  address: "Address"
+  social_networks: "Social Networks"
+  skills_access: "Skills & Access"
+  skills_help: "Separate your skills with commas"
+  profile_details: "Profile Details"
+
+  first_name: "First name"
+  last_name: "Last name"
+  email: "Email"
+  image: "Image"
+  company: "Company"
+  job: "Job"
+
+  street: "Street"
+  city: "City"
+  postal_code: "Postal code"
+  country: "Country"
+
+  skills: "Skills"
+  date_of_birth: "Date of birth"
+
+  role:
+    title: "Role"
+    user: "User"
+    manager: "Manager"
+    admin: "Admin"
+
+  placeholder:
+    street: "Ex. 123 Main Street"
+    city: "Ex. Paris"
+    postal_code: "Ex. 75000"
+    country: "Ex. France"
+
+  error:
+    password_required: "Please enter a password"
+    password_min: "Your password should be at least {{ limit }} characters"
+    terms: "You should agree to our terms"
+
+dashboard:
+  title: "Dashboard"
+
+  help:
+    kpi: "Global view of stock and tickets"
+    up: "Improvement compared to last week"
+    down: "Decrease or alert"
+
+  kpi:
+    total_equipment: "Total equipment"
+    available: "Available"
+    reserved: "Reserved"
+    assigned: "Assigned"
+
+  types: "Ticket types"
+  priorities: "Priorities"
+  statuses: "Statuses"
+  locations: "Equipment distribution"
+
+  location: "Location"
+  undefined: "Undefined"
+  today: "today"
+
+  incident_tickets: "Incidents"
+  request_tickets: "Requests"
+  onboarding_tickets: "Onboarding"
+  offboarding_tickets: "Offboarding"
+
+  critical_priority: "Critical"
+  high_priority: "High"
+  medium_priority: "Medium"
+  low_priority: "Low"
+
+  open_status: "Open"
+  in_progress_status: "In progress"
+  waiting_user_status: "Waiting for user"
+  resolved_status: "Resolved"
+  closed_status: "Closed"
+  common:
+    total: "Total"

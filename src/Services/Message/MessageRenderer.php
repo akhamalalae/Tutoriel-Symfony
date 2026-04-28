@@ -34,9 +34,9 @@ class MessageRenderer implements MessageRendererInterface
 
         return $this->environment->render('message/list.html.twig', [
             'discussion' => $discussion,
-            'messages' => $messages['data'],
+            'messages' => $messages['items'],
             'page' => $page,
-            'totalPages' => $messages['totalPages'],
+            'totalPages' => $messages['pagination']['totalPages'],
             'searchMessage' => $searchMessage
         ]);
     }

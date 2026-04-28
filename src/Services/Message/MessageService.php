@@ -192,7 +192,7 @@ class MessageService implements MessageHandlerInterface
         $unreadMessages = $this->unreadMessages($discussion, $user);
 
         foreach ($unreadMessages as $message) {
-            if ($message instanceof SearchMessage) {
+            if ($message instanceof Message) {
                 $message->setIsRead(true);
                 
                 $this->em->persist($message);

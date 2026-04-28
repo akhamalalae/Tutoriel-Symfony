@@ -100,5 +100,38 @@ fos_elastica:
                     type: date
                 dateModification:
                     type: date
-
-
+        tickets:
+            persistence:
+                driver: orm
+                model: App\Entity\Ticket
+                provider: ~
+                finder: ~
+            properties:
+                title: { type: text }
+                description: { type: text }
+                status: { type: keyword }
+                createdAt: { type: date }
+                createdBy:
+                    type: object
+                    properties:
+                        id:
+                            type: keyword
+                        sensitiveDataName:
+                            type: text
+                            analyzer: standard
+                        sensitiveDataFirstName:
+                            type: text
+                            analyzer: standard
+                            
+        users:
+            persistence:
+                driver: orm
+                model: App\Entity\User
+                provider: ~
+                finder: ~
+            properties:
+                id: ~
+                name: { type: text }
+                firstName: { type: text }
+                sensitiveDataName: { type: text }
+                sensitiveDataFirstName: { type: text }

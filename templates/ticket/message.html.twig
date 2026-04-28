@@ -1,0 +1,36 @@
+{% if messages|length > 0 %}
+    {% for msg in messages %}
+        <div class="d-flex align-items-start">
+            <div class="flex-grow-1">
+                <strong>
+                    {% if msg and msg.createdBy.Name and msg.createdBy.sensitiveDataBrochureFilename is not empty %} 
+                        {% set subDirectory = 'img/avatars/'  %} 
+                        <img 
+                            src="data:{{ msg.createdBy.sensitiveDataMimeType }};base64,{{ msg.createdBy.sensitiveDataBrochureFilename|decrypt(subDirectory) }}" 
+                            width="36" height="36" 
+                            class="rounded-circle me-2" 
+                            alt="{{ msg.createdBy.sensitiveDataName }}"
+                        >
+                    {% else %} 
+                        <img src="{{asset('img/avatars/avatar.jpg')}}" width="36" height="36" class="rounded-circle me-2" alt="avatar">
+                    {% endif %}
+                    {% if msg and msg.createdBy.Name is not empty %} 
+                        {{ msg.createdBy.sensitiveDataFirstName }} 
+                        {{ msg.createdBy.sensitiveDataName }}
+                    {% endif %}
+                </strong>
+                <br />
+                <div>
+                    <small class="float-end text-navy">{{ msg.createdAt|date("Y-m-d") }} </small>
+                    <strong>
+                        <small class="text-muted">{{ msg.createdAt|date("H:i") }}</small><br />
+                    </strong>
+                    <br />
+                    <div class="alert alert-secondary d-flex align-items-center" role="alert">
+                        <span class="ms-1">{{ msg.message|raw }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

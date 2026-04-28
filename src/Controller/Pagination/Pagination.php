@@ -25,7 +25,7 @@ class Pagination implements PaginationInterface
         $totalPages = $this->totalPages(count($data), $limit);
 
         return [
-            'data' => array_reverse(array_slice($data, $this->offset($page, $limit), $limit)),
+            'data' => array_slice($data, $this->offset($page, $limit), $limit),
             'limit' => $limit,
             'totalPages' => $totalPages
         ];

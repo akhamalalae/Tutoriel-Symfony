@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\Breadcrumb\BreadcrumbService;
 use Symfony\Component\HttpFoundation\RequestStack;
+use App\SuggestionsTerme\TestSuggestionService;
 
 class PrivacyController extends AbstractController
 {
@@ -21,6 +22,13 @@ class PrivacyController extends AbstractController
         $breadcrumbService->addBreadcrumb('Privacy', $this->generateUrl('privacy_policy'));
 
         $locale = $requestStack->getCurrentRequest()->getLocale();
+
+
+
+        $test = new TestSuggestionService();
+        $test->run();
+        die();
+
 
         if ($locale == self::FR) {
             $pagePath = "privacy/fr_index.html.twig";

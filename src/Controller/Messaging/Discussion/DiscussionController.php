@@ -15,9 +15,9 @@ use App\Services\Breadcrumb\BreadcrumbService;
 use App\Services\User\UserService;
 use App\Contracts\Discussion\DiscussionHandlerInterface;
 use App\Contracts\Discussion\DiscussionRendererInterface;
-use App\Contracts\Discussion\SaveDiscussionSearchInterface;
 use App\Contracts\Discussion\DiscussionDeleterInterface;
 use App\Contracts\Error\ErrorResponseInterface;
+use App\Services\Search\DiscussionSearchSaver;
 
 #[IsGranted('ROLE_USER')]
 class DiscussionController extends AbstractController
@@ -27,7 +27,7 @@ class DiscussionController extends AbstractController
         private readonly UserService $userService,
         private readonly DiscussionHandlerInterface $discussionHandler,
         private readonly DiscussionRendererInterface $renderer,
-        private readonly SaveDiscussionSearchInterface $saveDiscussionSearchService,
+        private readonly DiscussionSearchSaver $discussionSearchSaver,
         private readonly DiscussionDeleterInterface $discussionDeleter,
         private readonly ErrorResponseInterface $errorResponseService,
     ) {}
@@ -58,8 +58,7 @@ class DiscussionController extends AbstractController
 
             $criteria = $request->get('criteria');
 
-            $searchDiscussion = $this->saveDiscussionSearchService
-                ->saveSearch($criteria);
+            $searchDiscussion = $this->discussionSearchSaver->save($user, $criteria);
 
             return new JsonResponse([
                 'discussions' => $this->renderer->renderListDiscussion($page, $searchDiscussion),
@@ -67,6 +66,7 @@ class DiscussionController extends AbstractController
             ]);
 
         } catch (\Exception $e) {
+            dump($e);
             return $this->errorResponseService->createErrorResponse($e);
         }    
     }

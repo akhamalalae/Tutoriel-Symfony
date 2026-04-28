@@ -1,0 +1,6 @@
+projectKey=symfony-app
+serverUrl=http://localhost:9001
+serverVersion=25.11.0.114957
+dashboardUrl=http://localhost:9001/dashboard?id=symfony-app
+ceTaskId=57442feb-1840-4487-969c-f6e90649def6
+ceTaskUrl=http://localhost:9001/api/ce/task?id=57442feb-1840-4487-969c-f6e90649def6

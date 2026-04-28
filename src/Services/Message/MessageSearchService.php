@@ -2,49 +2,31 @@
 
 namespace App\Services\Message;
 
-use App\Entity\User;
 use App\Entity\Discussion;
 use App\Entity\SearchMessage;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Controller\Pagination\Pagination;
 use App\Services\User\UserService;
-use App\Contracts\Message\MessageSearchServiceInterface;
 use App\Contracts\Message\MessageSearchInterface;
-use App\Contracts\Message\PaginationInterface;
 use Elastica\Query\BoolQuery;
 use Elastica\Query;
 use Elastica\Query\MatchQuery;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Elastica\Query\Range;
-use DateTimeImmutable;
-use Elastica\Query\Wildcard;
-use Elastica\Query\MatchPhrase;
-use Elastica\Query\MultiMatch;
 use App\Trait\Search\BaseSearchTrait;
 
 class MessageSearchService implements MessageSearchInterface
 {
     use BaseSearchTrait;
 
-    private const SEARCH_RESULT_LIMIT = 1000;
-    private const ITEMS_PER_PAGE = 5;
+    private const ITEMS_PER_PAGE = 6;
 
     public function __construct(
         private readonly PaginatedFinderInterface $finder,
         private readonly EntityManagerInterface $em,
-        private readonly UserService $userService,
-        private readonly PaginationInterface $pagination
+        private readonly UserService $userService
     ) {}
 
     /**
-     * Get pagination information for messages
-     *
-     * @param int $idDiscussion The discussion to search in
-     * @param int $page The current page number
-     * @param SearchMessage|null $criteria The search criteria
-     *
-     * @return array The pagination information
+     * Get paginated messages from Elasticsearch
      */
     public function messages(int $idDiscussion, int $page, ?SearchMessage $criteria): array 
     {
@@ -53,29 +35,42 @@ class MessageSearchService implements MessageSearchInterface
 
         $boolQuery = new BoolQuery();
     
-        // Add discussion filter if specified
+        // Filtrer par discussion
         if ($discussion) {
             $boolQuery->addFilter(new MatchQuery('discussion.id', $discussion->getId()));
         }
 
-        // Add search criteria if specified
+        // Critères supplémentaires
         if ($criteria) {
             $this->addSearchCriteria($boolQuery, $criteria);
         }
 
-        $data = $this->executeSearch($boolQuery);
+        // Crée la requête
+        $query = new Query($boolQuery);
+        $query->addSort(['dateCreation' => ['order' => 'DESC']]);
 
-        return $this->pagination->pagination($page, self::ITEMS_PER_PAGE, $data);
+        // Exécute la recherche paginée
+        $paginator = $this->finder->findPaginated($query);
+        $paginator->setMaxPerPage(self::ITEMS_PER_PAGE);
+        $paginator->setCurrentPage($page);
+
+        // Résultats de la page courante
+        $results = iterator_to_array($paginator->getCurrentPageResults());
+
+        // Construction des métadonnées de pagination
+        return [
+            'items' => array_reverse($results),
+            'pagination' => [
+                'currentPage' => $page,
+                'perPage' => self::ITEMS_PER_PAGE,
+                'totalResults' => $paginator->getNbResults(),
+                'totalPages' => $paginator->getNbPages(),
+                'hasNextPage' => $page < $paginator->getNbPages(),
+                'hasPreviousPage' => $page > 1,
+            ],
+        ];
     }
 
-     /**
-     * Add search criteria to the query
-     * 
-     * @param BoolQuery $boolQuery The boolean query to modify
-     * @param SearchMessage $criteria The search criteria
-     * 
-     * @return void
-     */
     private function addSearchCriteria(BoolQuery $boolQuery, SearchMessage $criteria): void
     {
         $message = $criteria->getSensitiveDataMessage();
@@ -97,27 +92,5 @@ class MessageSearchService implements MessageSearchInterface
         if ($createdThisMonth) {
             $this->addDateRangeFilter($boolQuery, 'dateCreation');
         }
-    }
-
-    /**
-     * Execute the search query
-     * 
-     * @param BoolQuery $boolQuery The boolean query to execute
-     * 
-     * @return array The search results
-     */
-    private function executeSearch(BoolQuery $boolQuery): array
-    {
-        $query = new Query();
-        
-        // Add sorting by date in descending order
-        $query->addSort([
-            'dateCreation' => ['order' => 'DESC']
-        ]);
-
-        // Set the query and execute search
-        $query->setQuery($boolQuery);
-
-        return $this->finder->find($query, self::SEARCH_RESULT_LIMIT);
     }
 }

@@ -1,0 +1,105 @@
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
+{% if ticketEquipments|length > 0 %}
+    {% for te in ticketEquipments %}
+        {% set collapseId = 'equipmentCollapse' ~ loop.index0 %}
+
+        <div class="card" data-id="{{ te.id }}" data-type="card_equipment_form">
+            {# ================= HEADER ================= #}
+            <div class="card-header bg-primary-subtle d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#{{ collapseId }}"
+                     style="cursor: pointer;">
+
+                    <span class="fw-bold">
+                        <i class="fas fa-microchip me-1 text-primary"></i>
+                        {{ te.equipmentModel.name }}
+                    </span>
+                </div>
+
+                <button type="button" class="btn btn-danger btn-sm remove-row">✕</button>
+            </div>
+
+            {# ================= COLLAPSE ================= #}
+            <div id="{{ collapseId }}" class="collapse">
+
+                {# ================= BODY ================= #}
+                <div class="card-body">
+                    <input type="hidden"
+                        name="ticket_form[ticketEquipment][{{ loop.index0 }}][equipmentModel]"
+                        value="{{ te.equipmentModel.id }}">
+
+                    <div class="row g-3">
+                        {% if isManager or isAdmin %}
+                            <div class="col-md-8">
+                                <label class="form-label">
+                                    {{ 'ticket.field.equipments.real_asset'|trans }}
+                                </label>
+
+                                <select class="form-select js-select2-ajax"
+                                    name="ticket_form[ticketEquipment][{{ loop.index0 }}][equipmentAsset]"
+                                    data-type="equipmentAsset">
+                                    {% if te.equipmentAsset %}
+                                        <option value="{{ te.equipmentAsset.id }}" selected>
+                                            {{ te.equipmentAsset.reference ~ ' - ' ~ te.equipmentAsset.serialNumber }}
+                                        </option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        {% endif %}
+
+                        {% if isManager or isAdmin %}
+                            <div class="col-md-4">
+                                <label class="form-label">
+                                    {{ 'ticket.field.equipments.status'|trans }}
+                                </label>
+
+                                <select class="form-select"
+                                    name="ticket_form[ticketEquipment][{{ loop.index0 }}][status]">
+                                    {% for status in statusOptions %}
+                                        <option value="{{ status.value }}"
+                                            {% if te.status and te.status.value == status.value %}selected{% endif %}>
+                                            {{ status.label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-md-{% if isManager or isAdmin %}12{% else %}6{% endif %}">
+                            <label class="form-label">
+                                {{ 'ticket.field.equipments.comment'|trans }}
+                            </label>
+
+                            <textarea class="form-control"
+                                name="ticket_form[ticketEquipment][{{ loop.index0 }}][comment]"
+                                rows="2">{{ te.comment ?: '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                {# ================= FOOTER ================= #}
+                <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                    <input type="hidden"
+                        name="ticket_form[ticketEquipment][{{ loop.index0 }}][id]"
+                        value="{{ te.id ?: '' }}">
+
+                    <small class="text-muted">
+                        {{ 'ticket.field.equipments.created_by'|trans }}
+                        {% if te.createdBy and te.createdBy.name %}
+                            {{ te.createdBy.sensitiveDataFirstName }} {{ te.createdBy.sensitiveDataName }}
+                        {% endif %}
+                    </small>
+
+                    {% if te.createdAt is defined %}
+                        <small class="text-muted">
+                            {{ te.createdAt|date('d/m/Y') }}
+                        </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

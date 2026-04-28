@@ -2,8 +2,6 @@ import Menu from "../Menu/menuManagement";
 
 import Translation from "../Translation/translation";
 
-import ProfilUtils from "./profilUtils";
-
 new Menu().selectItem(document.querySelector('#sidebar-nav-profil'));
 
 let locale = new Translation().locale();

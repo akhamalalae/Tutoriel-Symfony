@@ -1,0 +1,103 @@
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
+{# ================= HEADER ================= #}
+<div class="card-header bg-primary-subtle d-flex justify-content-between align-items-center">
+    <div class="fw-bold text-muted">
+        <i class="fas fa-plus-circle text-primary me-1"></i>
+        {{ 'ticket.new_software'|trans }}
+    </div>
+
+    <button type="button" class="btn btn-danger btn-sm remove-row">✕</button>
+</div>
+
+{# ================= BODY ================= #}
+<div class="card-body">
+    <div class="row g-3">
+        {# ===== SOFTWARE PRODUCT ===== #}
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">
+                {{ 'ticket.field.software.software'|trans }}
+            </label>
+
+            {{ form_widget(form.softwareProduct, {
+                attr: {
+                    class: 'form-select js-select2-ajax',
+                    'data-type': 'softwareProduct'
+                },
+                id: 'ticket_form_ticketSoftware___name___softwareProduct',
+                name: 'ticket_form[ticketSoftware][__name__][softwareProduct]'
+            }) }}
+        </div>
+
+        {% if isManager or isAdmin %}
+            {# ===== LICENSE KEY ===== #}
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">
+                    {{ 'ticket.field.software.license_key'|trans }}
+                </label>
+
+                {{ form_widget(form.softwareLicense.licenseKey, {
+                    attr: {
+                        class: 'form-control',
+                        placeholder: 'XXXX-XXXX'
+                    },
+                    id: 'ticket_form_ticketSoftware___name___softwareLicense_licenseKey',
+                    name: 'ticket_form[ticketSoftware][__name__][softwareLicense][licenseKey]'
+                }) }}
+            </div>
+
+            {# ===== EXPIRES AT ===== #}
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">
+                    {{ 'ticket.field.software.expires_at'|trans }}
+                </label>
+
+                {{ form_widget(form.softwareLicense.expiresAt, {
+                    attr: {
+                        class: 'form-control'
+                    },
+                    id: 'ticket_form_ticketSoftware___name___softwareLicense_expiresAt',
+                    name: 'ticket_form[ticketSoftware][__name__][softwareLicense][expiresAt]'
+                }) }}
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">
+                    {{ 'ticket.field.software.status'|trans }}
+                </label>
+
+                {{ form_widget(form.status, {
+                    attr: { class: 'form-select' },
+                    id: 'ticket_form_ticketSoftware___name___status',
+                    name: 'ticket_form[ticketSoftware][__name__][status]'
+                }) }}
+                
+            </div>
+
+        {% endif %}
+
+        {# ===== COMMENT ===== #}
+        <div class="col-md-8">
+            <label class="form-label fw-semibold">
+                {{ 'ticket.field.software.comment'|trans }}
+            </label>
+
+            {{ form_widget(form.comment, {
+                attr: {
+                    class: 'form-control',
+                    rows: 2
+                },
+                id: 'ticket_form_ticketSoftware___name___comment',
+                name: 'ticket_form[ticketSoftware][__name__][comment]'
+            }) }}
+        </div>
+    </div>
+</div>
+
+{# ================= FOOTER ================= #}
+<div class="card-footer bg-white d-flex justify-content-between align-items-center">
+    <input type="hidden"
+        name="ticket_form[ticketSoftware][__name__][id]"
+        value="">
+</div>

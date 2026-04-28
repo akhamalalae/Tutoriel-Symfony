@@ -10,7 +10,7 @@ class Notification {
                 x: 'center', // ou 'right' ou 'left'
                 y: 'top'     // Position en haut
             },
-            duration: 8000, // Durée d'affichage en millisecondes
+            duration: 10000, // Durée d'affichage en millisecondes
             dismissible: true, // Permet de fermer la notification
         });
 

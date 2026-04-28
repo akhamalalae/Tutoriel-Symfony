@@ -104,3 +104,270 @@ How do I reset my password?: Comment réinitialiser mon mot de passe ?
 How do I update my profile?: Comment mettre à jour mon profil ?
 Contact technical support: Contactez le support technique
 This page describes how we collect, use and protect your personal data.:  Cette page décrit comment nous collectons, utilisons et protégeons vos données personnelles.
+
+ticket_created: "Le ticket a été créé avec succès."
+ticket_modified: "Le ticket a été modifié avec succès."
+ticket_removed: "Le ticket a été supprimé avec succès."
+stock_updated_available: "Le statut du stock a été mis à jour sur disponible."
+license_revoked: "Une licence a été révoquée par l’administrateur."
+
+save: Enregistrer
+save_stay: Enregistrer et rester
+list_ticket: Ticket
+create_ticket: Créer un Ticket
+no_tickets_found: Aucun ticket trouvé
+no_elements_found: Aucun élément trouvé
+List: Liste
+
+ticket:
+  title: Ticket
+  # Messages généraux
+  hello: "Bonjour"
+  updated_changes: "a mis à jour le ticket avec les modifications suivantes"
+  sincerely: "Cordialement"
+  it_department: "Service IT"
+  
+  general_information: Informations générales
+  attribution_and_status: Attribution et statut
+  onboarding: Intégration
+  offboarding: Désintégration
+  equipments: Équipements
+  software: Logiciels
+  
+  form_ticket: Formulaire de ticket
+  add_equipment: Ajouter un équipement
+  add_software: Ajouter un logiciel
+  new_equipement: Nouvel équipement
+  new_software: Nouveau logiciel
+
+  # Champs principaux du ticket
+  field:
+    title: "Titre"
+    description: "Description"
+    status: "Statut"
+    type: "Type"
+    priority: "Priorité"
+    assigned_to: "Assigné à"
+    target_user: "Utilisateur cible"
+    created_by: Créé par
+    created_at: Créé le
+    resolved_at: Résolu le
+    closed_at: Fermé le
+    company: "Entreprise"
+
+    software:
+      software: Software
+      version: "Version"
+      license_key: "Clé de licence"
+      expires_at: "Expire le"
+      comment: "Commentaire"
+      status: Statut
+    equipments:
+      equipment: Équipement
+      real-asset: Équipement attribué
+      reference: Référence
+      N° Série: N° Série
+      comment: Commentaire
+      status: Statut
+      created_by: Créé par
+    onboarding:
+      position: "Poste"
+      start_date: "Date de début"
+      employee: "Employé"
+    offboarding:
+      revoke_access: Révoquer l'accès
+      return_equipment: Retourner l'équipement
+      employee: "Employé"
+      end_date: "Date de fin"
+
+  # Valeurs booléennes
+  yes: "Oui"
+  no: "Non"
+  empty: "Vide"
+
+  enum:
+    low: "Faible"
+    medium: "Moyen"
+    high: "Élevé"
+    critical: "Critique"
+
+    incident: "Incident"
+    request: "Demande"
+    onboarding: "Intégration"
+    offboarding: "Désintégration"
+
+    waiting_user: En attente de l'utilisateur
+    in_progress: En cours
+    resolved: Résolu
+    closed: Fermé
+    open: Ouvert
+
+    pending: En attente
+    preparing: Préparé
+    ready: Prêt
+    delivered: Livré
+    installed: Installé
+
+  error:
+    title_required: "Le titre est obligatoire"
+    description_required: "La description est obligatoire"
+    type_required: "Le type est obligatoire"
+    priority_required: "La priorité est obligatoire"
+    company_required: "La société est obligatoire"
+    equipment_company_mismatch: L’équipement sélectionné n’est pas disponible dans le stock de l’entreprise. Veuillez vérifier qu’il est bien associé à votre entreprise ou sélectionner un équipement présent dans votre inventaire.
+    target_user_required: "Le destinataire est obligatoire"
+
+    onboarding:
+      position_required: "La position est obligatoire"
+      start_date_required: "La date de début est obligatoire"
+      employee_required: "L’employé est obligatoire"
+
+    offboarding:
+      employee_required: "L’employé est obligatoire"
+      end_date_required: "La date de fin est obligatoire"
+
+    equipment_required: "Le choix de l’équipement est obligatoire"
+    software_required: "Le choix du logiciel est obligatoire"
+
+    status_already_closed: "Le ticket est déjà fermé définitivement"
+    status_closed_final: "Un ticket fermé est définitif"
+    status_must_be_resolved: "Le ticket doit être résolu avant d’être fermé"
+
+  added: "Ajouté"
+  modified: "Modifié"
+  deleted: "Supprimé"
+
+list_stock: Stock
+stock:
+  title: Stock
+  status:
+    available: "Disponible"
+    reserved: "Réservé"
+    assigned: "Assigné"
+    in_repair: "En réparation"
+    retired: "Retiré"
+    out_of_service: "Hors service"
+    
+  condition:
+    new: "Neuf"
+    good: "Bon"
+    fair: "Correct"
+    broken: "Cassé"
+  
+  form:
+    title: Formulaire de stock
+    sections:
+      identification: "Identification"
+      status: "Statut & état"
+      assignment: "Affectation"
+      location: "Localisation"
+      finance: "Finance"
+      maintenance:  Maintenance"
+      comment: "Commentaire"
+
+    fields:
+      reference: "Référence"
+      serialNumber: "Numéro de série"
+      assetTag: "Étiquette inventaire"
+
+      status: "Statut"
+      assetCondition: "État du matériel"
+
+      assignedTo: "Assigné à"
+
+      location: "Lieu"
+      storageLocation: "Emplacement de stockage"
+
+      purchaseDate: "Date d'achat"
+      purchasePrice: "Prix d'achat"
+      supplier: "Fournisseur"
+      invoiceNumber: "Numéro de facture"
+
+      warrantyEndDate: "Fin de garantie"
+      lastMaintenanceAt: "Dernière maintenance"
+      maintenanceComment: "Commentaire de maintenance"
+
+      comment: "Commentaire"
+
+user:
+  label: "Utilisateur"
+  identity: "Identité"
+  address: "Adresse"
+  social_networks: "Réseaux sociaux"
+  skills_access: "Compétences & Accès"
+  skills_help: "Séparez vos compétences avec une virgule"
+  profile_details: "Détails du profil"
+
+  first_name: "Prénom"
+  last_name: "Nom"
+  email: "Email"
+  image: "Image"
+  company: "Entreprise"
+  job: "Poste"
+
+  street: "Rue"
+  city: "Ville"
+  postal_code: "Code postal"
+  country: "Pays"
+
+  skills: "Compétences"
+  date_of_birth: "Date de naissance"
+
+  role:
+    title: "Rôle"
+    user: "Utilisateur"
+    manager: "Manager"
+    admin: "Administrateur"
+
+  placeholder:
+    street: "Ex. 123 Rue Principale"
+    city: "Ex. Paris"
+    postal_code: "Ex. 75000"
+    country: "Ex. France"
+
+  error:
+    password_required: "Veuillez saisir un mot de passe"
+    password_min: "Le mot de passe doit contenir au moins {{ limit }} caractères"
+    terms: "Vous devez accepter les conditions"
+
+dashboard:
+  title: "Dashboard"
+
+  help:
+    kpi: "Vue globale du stock et des tickets"
+    up: "Amélioration par rapport à la semaine dernière"
+    down: "Diminution ou alerte"
+
+  kpi:
+    total_equipment: "Total équipements"
+    available: "Disponibles"
+    reserved: "Réservés"
+    assigned: "Assignés"
+
+  types: "Types de tickets"
+  priorities: "Priorités"
+  statuses: "Statuts"
+  locations: "Répartition équipements"
+
+  location: "Localisation"
+  undefined: "Non défini"
+  today: "aujourd'hui"
+
+  incident_tickets: "Incidents"
+  request_tickets: "Demandes"
+  onboarding_tickets: "Onboarding"
+  offboarding_tickets: "Offboarding"
+
+  critical_priority: "Critique"
+  high_priority: "Haute"
+  medium_priority: "Moyenne"
+  low_priority: "Basse"
+
+  open_status: "Ouvert"
+  in_progress_status: "En cours"
+  waiting_user_status: "En attente utilisateur"
+  resolved_status: "Résolu"
+  closed_status: "Fermé"
+
+common:
+  total: "Total"

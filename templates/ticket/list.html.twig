@@ -1,0 +1,365 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'ticket.title'|trans }}{% endblock %}
+
+{% block body %}
+
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
+<div class="card mb-3" id="cardeSearchTicket" style="display:none;">
+    <div class="card-header">
+        <div class="flex-grow-1">
+            <small class="float-end text-navy">
+                <div class="card-actions float-end">
+                    <div class="dropdown position-relative">
+                        <a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
+                            {% include 'components/feather_icons/more-horizontal.html.twig' %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" id="hiddenTicketBtn">
+                                <i class="fas fa-remove" style="color: #4169E1;"></i>
+                                {{ 'Hidden'|trans }}
+                            </a>
+                            <a class="dropdown-item" id="resetTicketBtn">
+                                <i class="fas fa-refresh" style="color: #4169E1;"></i>
+                                {{ 'Reset'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </small>
+            <h5 class="card-title mb-0">
+                <h5 class="card-title mb-0">{{ 'Search'|trans }}</h5>
+            </h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form id="searchForm" class="row g-3">
+
+            <div class="col-md-4">
+                <input type="text" id="searchTitle" class="form-control" placeholder={{ 'ticket.field.title'|trans }}>
+            </div>
+
+            <div class="col-md-4">
+                <input type="text" id="searchDescription" class="form-control" placeholder={{ 'ticket.field.description'|trans }}>
+            </div>
+
+            <div class="col-md-4">
+                <select id="searchStatus" class="form-control">
+                    <option value="">{{ 'ticket.field.status'|trans }}</option>
+                    {% for status in statusOptions %}
+                        <option value="{{ status.value }}">
+                            {{ status.label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card" id="cardeFormTicket">
+    <div class="card-header d-flex align-items-center justify-content-between bg-light">
+        <div class="flex-grow-1">
+            <small class="float-end text-navy">
+                <a id="hiddenFormBtn">
+                    <i class="fas fa-remove" style="color: #4169E1; font-size:24px;"></i>
+                </a>
+            </small>
+            <h5 class="card-title mb-0">
+                {{ 'ticket.form_ticket'|trans }}
+            </h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        {{ form_start(form, {'attr': {'id': 'ticketForm'}}) }}
+            <div class="container-fluid">
+                {# ===================== GENERAL INFO ===================== #}
+                <div class="card mb-4 shadow-sm">
+                
+                    <div class="card-header d-flex align-items-center justify-content-between bg-light">
+                        <h5 class="mb-0">
+                        <i class="fas fa-info-circle" style="color: #4169E1; font-size:18px"></i>
+                        {{ 'ticket.general_information'|trans }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label for="{{ form.title.vars.id }}" class="form-label">{{ 'ticket.field.title'|trans }}</label>
+                                <div id="error_title" class="text-danger mb-1"></div>
+                                {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="{{ form.type.vars.id }}" class="form-label">{{ 'ticket.field.type'|trans }}</label>
+                                <div id="error_type" class="text-danger mb-1"></div>
+                                {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="{{ form.priority.vars.id }}" class="form-label">{{ 'ticket.field.priority'|trans }}</label>
+                                <div id="error_priority" class="text-danger mb-1"></div>
+                                {{ form_widget(form.priority, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+
+                            <div class="col-12">
+                                <label for="{{ form.description.vars.id }}" class="form-label">{{ 'ticket.field.description'|trans }}</label>
+                                <div id="error_description" class="text-danger mb-1"></div>
+                                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                {% if isManager or isAdmin %}
+                    {% if form.onboarding is defined %}
+                        {# ===================== ONBOARDING ===================== #}
+                        <div id="onboardingFields" class="card mb-4 shadow-sm" style="display:none;">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">{{ 'ticket.onboarding'|trans }}</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.onboarding.position.vars.id }}" class="form-label">{{ 'ticket.field.onboarding.position'|trans }}</label>
+                                        <div id="error_onboardingPosition" class="text-danger mb-1"></div>
+                                        {{ form_widget(form.onboarding.position, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="{{ form.onboarding.startDate.vars.id }}" class="form-label">{{ 'ticket.field.onboarding.start_date'|trans }}</label>
+                                        <div id="error_onboardingStartDate" class="text-danger mb-1"></div>
+                                        {{ form_widget(form.onboarding.startDate, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if form.offboarding is defined %}
+                        {# ===================== OFFBOARDING ===================== #}
+                        <div id="offboardingFields" class="card mb-4 shadow-sm" style="display:none;">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">{{ 'ticket.offboarding'|trans }}</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.offboarding.endDate.vars.id }}" class="form-label">{{ 'ticket.field.offboarding.end_date'|trans }}</label>
+                                        <div id="error_offboardingEndDate" class="text-danger mb-1"></div>
+                                        {{ form_widget(form.offboarding.endDate, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.offboarding.returnEquipment.vars.id }}" class="form-label">{{ 'ticket.field.offboarding.return_equipment'|trans }}</label>
+                                        <div id="error_offboardingReturnEquipment" class="text-danger mb-1"></div>
+                                        {{ form_widget(form.offboarding.returnEquipment, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.offboarding.revokeAccess.vars.id }}" class="form-label">{{ 'ticket.field.offboarding.revoke_access'|trans }}</label>
+                                        <div id="error_offboardingRevokeAccess" class="text-danger mb-1"></div>
+                                        {{ form_widget(form.offboarding.revokeAccess, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {# ===================== STATUS / ASSIGN ===================== #}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cogs" style="color: #4169E1; font-size:18px"></i>
+                            {{ 'ticket.attribution_and_status'|trans }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            {% if isManager or isAdmin %}
+                                {% if form.status is defined %}
+                                <div class="col-md-4" id="statusForm">
+                                    <label for="{{ form.status.vars.id }}" class="form-label">{{ 'ticket.field.status'|trans }}</label>
+                                    <div id="error_status" class="text-danger mb-1"></div>
+                                    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+                                </div>
+                                {% endif %}
+                                {% if form.assignedTo is defined %}
+                                    <div class="col-md-4">
+                                        <label for="{{ form.assignedTo.vars.id }}" class="form-label">{{ 'ticket.field.assigned_to'|trans }}</label>
+                                        <div id="error_assignedTo" class="text-danger mb-1"></div>
+
+                                        {{ form_widget(form.assignedTo, {
+                                            attr: {
+                                                class: 'form-select js-select2-ajax',
+                                                'data-type': 'user'
+                                            }
+                                        }) }}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            <div class="col-md-4">
+                                <label for="{{ form.targetUser.vars.id }}" class="form-label">{{ 'ticket.field.target_user'|trans }}</label>
+                                <div id="error_targetUser" class="text-danger mb-1"></div>
+
+                                {{ form_widget(form.targetUser, {
+                                    attr: {
+                                        class: 'form-select js-select2-ajax',
+                                        'data-type': 'user'
+                                    }
+                                }) }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.company.vars.id }}" class="form-label">{{ 'ticket.field.company'|trans }}</label>
+                                <div id="error_company" class="text-danger mb-1"></div>
+                                {{ form_widget(form.company, {'attr': {'class': 'form-select'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# ===================== Equipements ===================== #}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-desktop" style="color:#4169E1;font-size:18px"></i>
+                            {{ 'ticket.equipments'|trans }}
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="error_ticketEquipment" class="text-danger mb-2"></div>
+                        <div id="equipmentsTableBody" class="d-flex flex-column gap-3"
+                            data-prototype="{{ form_widget(form.ticketEquipment.vars.prototype)|e('html_attr') }}">
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white">
+                        <button type="button" class="btn btn-primary btn-sm" id="addEquipment">
+                            + {{ 'ticket.add_equipment'|trans }}
+                        </button>
+                    </div>
+                </div>
+
+                {# ===================== Software ===================== #}
+                <div class="card mb-4 shadow-sm">
+                    {# ================= HEADER ================= #}
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cube me-1 text-primary"></i>
+                            {{ 'ticket.software'|trans }}
+                        </h5>
+                    </div>
+                    {# ================= BODY ================= #}
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div id="error_ticketSoftware" class="text-danger small"></div>
+                            <div id="ticketSoftwareTableBody"
+                                class="d-flex flex-column gap-3 w-100"
+                                data-prototype="{{ form_widget(form.ticketSoftware.vars.prototype)|e('html_attr') }}">
+                            </div>
+                        </div>
+                    </div>
+                    {# ================= FOOTER ================= #}
+                    <div class="card-footer bg-white">
+                        <button type="button"
+                                class="btn btn-primary btn-sm"
+                                id="addTicketSoftware">
+                            + {{ 'ticket.add_software'|trans }}
+                        </button>
+                    </div>
+                </div>
+
+                {# ===================== MESSAGE ===================== #}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-comments" style="color: #4169E1; font-size:18px"></i>
+                            {{ 'Messages'|trans }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="{{ form.message.vars.id }}" class="form-label">{{ 'New message'|trans }}</label>
+                                <div id="error_message" class="text-danger mb-1"></div>
+                                {{ form_widget(form.message, {'attr': {'class': 'form-control', 'rows': '3'}}) }}
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <div id="messagesContainer">
+                                    <!-- Les messages existants seront injectés ici via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
+        <input type="hidden" id="ticketId">
+    </div>
+
+    <!-- Footer FIXE mais aligné sur la card -->
+    <div id="floatingFooter" class="floating-footer bg-white border-top shadow-sm p-3">
+        <div class="container-fluid">
+            <div class="d-flex flex-column flex-md-row justify-content-md-centre gap-2">
+                <button type="submit" id="saveTicket" class="btn btn-primary">
+                    <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    <span class="btn-text">{{ 'Save'|trans }}</span>
+                </button>
+
+                <button type="button" id="saveStayTicket" class="btn btn-success">
+                    <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    <span class="btn-text">{{ 'Save & Stay'|trans }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="cardeListTicket">
+    <div class="card-header">
+        <div class="flex-grow-1">
+            <small class="float-end text-navy">
+                <div class="card-actions float-end">
+                    <div class="dropdown position-relative">
+                        <a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" class="">
+                            {% include 'components/feather_icons/more-horizontal.html.twig' %}
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item create-ticket" id="createTicketBtn">
+                                <i class="fas fa-plus" style="color: #4169E1;"></i>
+                                {{ 'create_ticket'|trans }}
+                            </a>
+                            <a class="dropdown-item" id="searchTicketBtn">
+                                <i class="fas fa-search" style="color: #4169E1;"></i>
+                                {{'Search'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </small>
+            <h5 class="card-title mb-0">
+                {{ 'list_ticket'|trans }}
+            </h5>
+        </div>
+    </div>
+
+    <div class="card-body h-100" id="ticketTableBody">
+        
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('ticket') }}
+{% endblock %}
+

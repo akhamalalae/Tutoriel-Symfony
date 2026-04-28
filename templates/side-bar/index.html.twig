@@ -1,3 +1,6 @@
+{% set isManager = is_granted('ROLE_MANAGER') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
+
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{{ path('app_home') }}">
@@ -6,16 +9,18 @@
             </span>
         </a>
         <ul class="sidebar-nav">
-            <li class="sidebar-header">{{ 'Dashboard'|trans }}</li>
-            
-            <li id='sidebar-nav-dashboard' class="sidebar-item active">
-                <a class="sidebar-link" href="{{ path('app_home') }}">
-                    <i class="align-middle" data-feather="sliders"></i> 
-                    <span class="align-middle">{{ 'Dashboard'|trans }}</span>
-                </a>
-            </li>
+            {% if isManager or isAdmin %}
+                <li class="sidebar-header">{{ 'Dashboard'|trans }}</li>
+                
+                <li id='sidebar-nav-dashboard' class="sidebar-item active">
+                    <a class="sidebar-link" href="{{ path('app_home') }}">
+                        <i class="align-middle" data-feather="sliders"></i> 
+                        <span class="align-middle">{{ 'Dashboard'|trans }}</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="sidebar-header">{{ 'Profil'|trans }}</li>
+            <li class="sidebar-header">{{ 'User'|trans }}</li>
             
             <li id='sidebar-nav-profil' class="sidebar-item">
                 <a class="sidebar-link" href="{{ path('app_update_profil') }}">
@@ -23,6 +28,34 @@
                     <span class="align-middle">{{ 'Profil'|trans }}</span>
                 </a>
             </li>
+            {% if isManager or isAdmin %}
+                <li id='sidebar-nav-users' class="sidebar-item">
+                    <a class="sidebar-link" href="{{ path('users_list') }}">
+                        <i class="align-middle" data-feather="users"></i> 
+                        <span class="align-middle">{{ 'List'|trans }}</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="sidebar-header">{{ 'Ticket'|trans }}</li>
+            
+            <li id='sidebar-nav-ticket' class="sidebar-item">
+                <a class="sidebar-link" href="{{ path('ticket_list') }}">
+                    <i class="align-middle" data-feather="file-text"></i> 
+                    <span class="align-middle">{{ 'List'|trans }}</span>
+                </a>
+            </li>
+
+            {% if isManager or isAdmin %}
+                <li class="sidebar-header">{{ 'stock.title'|trans }}</li>
+            
+                <li id='sidebar-nav-stock' class="sidebar-item">
+                    <a class="sidebar-link" href="{{ path('admin_stock') }}">
+                        <i class="align-middle" data-feather="box"></i> 
+                        <span class="align-middle">{{ 'List'|trans }}</span>
+                    </a>
+                </li>
+            {% endif %}
 
             <li class="sidebar-header">{{ 'Messaging'|trans }}</li>
 
@@ -52,7 +85,6 @@
                     </a>
                 </li>
             </div>
-
         </ul>
     </div>
 </nav>

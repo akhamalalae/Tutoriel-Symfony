@@ -6,6 +6,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 class BreadcrumbService
 {
     private const CACHE_KEY = 'breadcrumbs';

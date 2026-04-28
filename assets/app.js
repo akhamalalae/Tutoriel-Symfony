@@ -1,22 +1,37 @@
+// jQuery
+import $ from 'jquery';
+global.$ = $;
+global.jQuery = $;
 
-/*
-    import 'bootstrap';
-    import 'bootstrap/dist/css/bootstrap.min.css';
-    import './theme/css/app.css';
-    import './theme/js/app.js';
-*/
-import './styles/app.css';
+// Bootstrap
+//import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Plugins
 import 'select2';
-import 'select2/dist/css/select2.css';
+import 'select2/dist/css/select2.min.css';
+import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css';
+
 import 'bootstrap-datepicker';
 import 'bootstrap-datepicker/dist/css/bootstrap-datepicker.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import '@fortawesome/fontawesome-free/js/all.js';
-import $ from 'jquery';
+
+import 'datatables.net';
+import 'datatables.net-dt';
+
 import 'notyf/notyf.min.css';
 
-global.$ = global.jQuery = $;
+// FontAwesome
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/fontawesome-free/js/all.js';
 
+// CSS THEME
+import './styles/theme.css';
+import './styles/app.css';
+
+// JS THEME
+import './js/Theme/theme.js';
+
+// ✅ Init datepicker
 document.addEventListener('DOMContentLoaded', () => {
     $('.datepicker').datepicker({
         format: 'dd/mm/yyyy',
@@ -24,8 +39,3 @@ document.addEventListener('DOMContentLoaded', () => {
         todayHighlight: true
     });
 });
-
-$(document).ready(function() {
-    $('.select2').select2();
-});
-

@@ -7,15 +7,15 @@ use App\Entity\Message;
 use App\Contracts\Activity\ActivityMessageInterface;
 use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\Trait\Activity\GenericActivityEntityTrait;
+use App\Trait\Activity\ActivityEncryptDecryptEntity;
 
 /**
  * Classe gérant l'activité liée aux messages.
- * Utilise le trait GenericActivityEntityTrait pour factoriser la logique d'encryptage/décryptage.
+ * Utilise le trait ActivityEncryptDecryptEntity pour factoriser la logique d'encryptage/décryptage.
  */
 class ActivityMessage implements ActivityMessageInterface
 {
-    use GenericActivityEntityTrait;
+    use ActivityEncryptDecryptEntity;
 
     public function __construct(EncryptDecryptInterface $encryptDecrypt)
     {

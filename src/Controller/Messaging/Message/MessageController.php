@@ -22,9 +22,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Contracts\Message\MessageRendererInterface;
 use App\Contracts\Message\MessageDeleterInterface;
 use App\Contracts\Message\MessageHandlerInterface;
-use App\Contracts\Message\SaveMessageSearchInterface;
 use Symfony\Component\Form\FormInterface;
 use App\Contracts\Error\ErrorResponseInterface;
+use App\Services\Search\MessageSearchSaver;
 
 #[IsGranted('ROLE_USER')]
 class MessageController extends AbstractController
@@ -36,7 +36,7 @@ class MessageController extends AbstractController
         private readonly MessageDeleterInterface $deleter,
         private readonly MessageHandlerInterface $handler,
         private readonly ErrorResponseInterface $errorResponseService,
-        private readonly SaveMessageSearchInterface $saveMessageSearchService,
+        private readonly MessageSearchSaver $messageSearchSaver,
     ) {}
 
     /**
@@ -116,7 +116,7 @@ class MessageController extends AbstractController
     private function saveSearch(User $user, array $criteria): ?SearchMessage
     {
         return !empty($criteria)
-            ? $this->saveMessageSearchService->saveSearch($user, $criteria)
+            ? $this->messageSearchSaver->save($user, $criteria)
             : null;
     }
 

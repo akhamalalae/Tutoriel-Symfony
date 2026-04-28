@@ -18,8 +18,6 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-  
-
     # Déclaration des handlers
     App\EventListener\Activity\Handler\MessageActivityHandler:
         arguments:
@@ -50,6 +48,10 @@ services:
                 - '@App\EventListener\Activity\Handler\SearchDiscussionActivityHandler'
                 - '@App\EventListener\Activity\Handler\SearchMessageActivityHandler'
                 # Ajoute ici tous les autres handlers
+    
+    App\EventListener\DatabaseActivitySubscriber:
+        tags:
+            - { name: 'doctrine.event_subscriber', connection: 'default' }
 
     App\Services\Message\MessageSearchService:
         tags:
@@ -65,14 +67,28 @@ services:
         arguments:
             - '@fos_elastica.finder.discussion'
 
+    App\Search\Ticket\TicketSearch:
+        arguments:
+            $finder: '@fos_elastica.finder.tickets'
+    
+    App\UseCase\Autocomplete\FindUsersAssignedToUseCase:
+        arguments:
+            $finder: '@fos_elastica.finder.users'
+
     App\Services\File\FileUploader:
         arguments:
             $targetDirectory: '%directory%'
 
-    App\EventListener\DatabaseActivitySubscriber:
-        tags:
-            - { name: 'doctrine.event_subscriber', connection: 'default' }
-
     App\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
+
+    App\Services\Search\DiscussionSearchSaver:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@App\Services\Search\DiscussionSearchFactory'
+    
+    App\Services\Search\MessageSearchSaver:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@App\Services\Search\MessageSearchFactory'

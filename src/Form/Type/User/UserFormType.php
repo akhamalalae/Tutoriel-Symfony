@@ -3,11 +3,13 @@
 namespace App\Form\Type\User;
 
 use App\Entity\User;
+use App\Entity\Company;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -17,7 +19,8 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserFormType extends AbstractType
 {
@@ -29,57 +32,58 @@ class UserFormType extends AbstractType
 
         $builder
             ->add('firstName',TextType::class,[
-                'label' => 'First name',
+                'label' => 'user.first_name',
                 'data' => $user ? $user->getSensitiveDataFirstName() : '',
                 'attr' => ['class' => 'form-control'],
                 'required' => $view == 'update' ? false : true,
             ])
             ->add('name',TextType::class,[
-                'label' => 'Name',
+                'label' => 'user.last_name',
                 'data' => $user ? $user->getSensitiveDataName() : '',
                 'attr' => ['class' => 'form-control'],
                 'required' => $view == 'update' ? false : true,
             ])
-            ->add('image', FileType::class, [
-                'label' => 'Image',
-
-                // unmapped means that this field is not associated to any entity property
-                'mapped' => false,
-
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
-                'required' => false,
-
-                // unmapped fields can't define their validation using attributes
-                // in the associated entity, so you can use the PHP constraint classes
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/*',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image',
-                    ])
-                ],
-            ])
         ;
 
-        if ($view == 'update') {
+        if ($view == 'update' || $view == 'all') {
             $builder
-                ->add('company',TextType::class,[
-                    'label' => 'Company',
-                    'data' => $user->getSensitiveDataCompany(),
-                    'attr' => ['class' => 'form-control'],
+                ->add('image', FileType::class, [
+                    'label' => 'user.image',
+
+                    // unmapped means that this field is not associated to any entity property
+                    'mapped' => false,
+
+                    // make it optional so you don't have to re-upload the PDF file
+                    // every time you edit the Product details
                     'required' => false,
+
+                    // unmapped fields can't define their validation using attributes
+                    // in the associated entity, so you can use the PHP constraint classes
+                    'constraints' => [
+                        new File([
+                            'maxSize' => '1024k',
+                            'mimeTypes' => [
+                                'image/*',
+                            ],
+                            'mimeTypesMessage' => 'Please upload a valid image',
+                        ])
+                    ],
+                ])
+                ->add('companyUser', EntityType::class, [
+                    'label' => 'user.company',
+                    'class' => Company::class,
+                    'choice_label' => 'name',
+                    'required' => $view == 'update' ? false : true,
+                    'attr' => ['class' => 'form-control mb-2'],
                 ])
                 ->add('job',TextType::class,[
-                    'label' => 'Job',
+                    'label' => 'user.job',
                     'data' => $user->getSensitiveDataJob(),
                     'attr' => ['class' => 'form-control'],
                     'required' => false,
                 ])
                 ->add('street', TextType::class, [
-                    'label' => 'Rue',
+                    'label' => 'user.street',
                     'required' => false,
                     'data' => $user->getSensitiveDataStreet(),
                     'attr' => [
@@ -88,19 +92,19 @@ class UserFormType extends AbstractType
                     ],
                 ])
                 ->add('city', TextType::class, [
-                    'label' => 'Ville',
+                    'label' => 'user.city',
                     'data' => $user->getSensitiveDataCity(),
                     'required' => false,
                     'attr' => ['placeholder' => 'Ex. Paris'],
                 ])
                 ->add('postal_code', TextType::class, [
-                    'label' => 'Code Postal',
+                    'label' => 'user.postal_code',
                     'data' => $user->getSensitiveDataPostalCode(),
                     'required' => false,
                     'attr' => ['placeholder' => 'Ex. 75000'],
                 ])
                 ->add('country', TextType::class, [
-                    'label' => 'Pays',
+                    'label' => 'user.country',
                     'data' => $user->getSensitiveDataCountry(),
                     'required' => false,
                     'attr' => ['placeholder' => 'Ex. France'],
@@ -130,55 +134,74 @@ class UserFormType extends AbstractType
                     'attr' => ['placeholder' => 'Ex. LinkedIn'],
                 ])
                 ->add('skills', TextareaType::class, [
-                    'label' => 'Skills',
+                    'label' => 'user.skills',
                     'required' => false,
                     'attr' => ['placeholder' => 'Ex. HTML, JavaScript'],
                 ])
                 ->add('dateOfBirth', DateType::class, [
-                    'label' => 'Date of birth',
                     'widget' => 'single_text',
-                    'html5' => false,
-                    'required' => false,
-                    'format' => 'dd/MM/yyyy',  // Définit le format attendu
-                    'attr' => ['class' => 'datepicker']
+                    'label' => 'user.date_of_birth',
+                    'required' => false
                 ])
             ;
         }
 
-        if ($view == 'register') {
-            $builder->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'required' => true,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
-            ->add('email',TextType::class,[
-                'label' => 'Email',
+        if ($view == 'register' || $view == 'all') {
+            $builder->add('email',TextType::class,[
+                'label' => 'user.email',
+                'data' => $user ? $user->getSensitiveDataEmail() : '',
                 'attr' => ['class' => 'form-control'],
                 'required' => true,
-            ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'required' => true,
-                'attr' => ['autocomplete' => 'new-password'],
-                'attr' => ['class' => 'form-control form-control-lg'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
             ]);
+
+            if ($view == 'all') {
+                $builder->add('plainPassword', PasswordType::class, [
+                    'label' => 'Password',
+                    'mapped' => false,
+                    'required' => false,
+                ])
+                ->add('roles', ChoiceType::class, [
+                    'label' => 'user.role.title',
+                    'choices' => [
+                        'user.role.user' => 'ROLE_USER',
+                        'user.role.manager' => 'ROLE_MANAGER',
+                        'user.role.admin' => 'ROLE_ADMIN',
+                    ],
+                    'multiple' => true,   // IMPORTANT (Symfony attend un array)
+                    'expanded' => true,   // checkbox UI
+                    'required' => true,
+                ]);
+            } else {
+                $builder->add('plainPassword', PasswordType::class, [
+                    // instead of being set onto the object directly,
+                    // this is read and encoded in the controller
+                    'label' => 'Password',
+                    'mapped' => false,
+                    'required' => true,
+                    'attr' => ['autocomplete' => 'new-password'],
+                    'attr' => ['class' => 'form-control form-control-lg'],
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'user.error.password_required',
+                        ]),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'user.error.password_min',
+                            // max length allowed by Symfony for security reasons
+                            'max' => 4096,
+                        ]),
+                    ],
+                ])
+                ->add('agreeTerms', CheckboxType::class, [
+                    'mapped' => false,
+                    'required' => true,
+                    'constraints' => [
+                        new IsTrue([
+                            'message' => 'user.error.terms',
+                        ]),
+                    ],
+                ]);
+            }
         }
     }
 

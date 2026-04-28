@@ -26,6 +26,8 @@ final class ActivityRouter
 
     /**
      * @param EntityActivityHandlerInterface[] $handlers
+     * @param CacheInterface $cache
+     * 
      */
     public function __construct(
         array $handlers,
@@ -86,7 +88,7 @@ final class ActivityRouter
         if ($className === null) {
             return null;
         }
-
+        
         // Retrouve l’instance correspondante
         foreach ($this->handlers as $handler) {
             if ($handler::class === $className) {

@@ -7,15 +7,15 @@ use App\Entity\FileMessage;
 use App\Contracts\Activity\ActivityFileMessageInterface;
 use App\Contracts\EncryptDecrypt\EncryptDecryptInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use App\Trait\Activity\GenericActivityEntityTrait;
+use App\Trait\Activity\ActivityEncryptDecryptEntity;
 
 /**
  * Classe gérant l'activité liée aux fichiers de messages.
- * Utilise le trait GenericActivityEntityTrait pour factoriser la logique d'encryptage/décryptage.
+ * Utilise le trait ActivityEncryptDecryptEntity pour factoriser la logique d'encryptage/décryptage.
  */
 class ActivityFileMessage implements ActivityFileMessageInterface
 {
-    use GenericActivityEntityTrait;
+    use ActivityEncryptDecryptEntity;
 
     public function __construct(EncryptDecryptInterface $encryptDecrypt)
     {

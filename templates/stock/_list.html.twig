@@ -1,0 +1,77 @@
+{% for eq in equipments %}
+    <tr>
+        <td>{{ eq.company.name }}</td>
+        <td>
+            {{ eq.assignedTo and eq.assignedTo.name ?
+                eq.assignedTo.sensitiveDataFirstName ~ ' ' ~  eq.assignedTo.sensitiveDataName : '' }}
+        </td>
+        <td>{{ eq.reference }}</td>
+        <td>{{ eq.serialNumber }}</td>
+        <td>{{ eq.assetTag }}</td>
+        <td>
+             {% set status = eq.status.value %}
+
+            <span class="badge
+                {% if status == 'available' %} bg-success
+                {% elseif status == 'reserved' %} bg-warning text-dark
+                {% elseif status == 'assigned' %} bg-primary
+                {% elseif status == 'in_repair' %} bg-info text-dark
+                {% elseif status == 'retired' %} bg-secondary
+                {% elseif status == 'out_of_service' %} bg-danger
+                {% else %} bg-light text-dark
+                {% endif %}
+            ">
+                {{ ('stock.status.' ~ status)|trans }}
+            </span>
+        </td>
+        <td>
+            {% set condition = eq.assetCondition.value %}
+
+            <span class="badge
+                {% if condition == 'new' %} bg-success
+                {% elseif condition == 'good' %} bg-primary
+                {% elseif condition == 'fair' %} bg-warning text-dark
+                {% elseif condition == 'broken' %} bg-danger
+                {% else %} bg-light text-dark
+                {% endif %}
+            ">
+                {{ ('stock.condition.' ~ condition)|trans }}
+            </span>
+        </td>
+        <td>
+            {{ eq.location ? eq.location : '' }}
+            {{ eq.storageLocation ? ' - ' ~ eq.storageLocation : '' }}
+        </td>
+        <td>
+            <div class="dropdown position-relative">
+                <a href="#" style="color:black;" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                    {% include 'components/feather_icons/more-horizontal.html.twig' %}
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item btn-edit" data-id="{{ eq.id }}">
+                        <i class="fas fa-edit" style="color: #4169E1;"></i>
+                        {{ 'Edit'|trans }}
+                    </a>
+                    <a class="dropdown-item btn-delete" data-id="{{ eq.id }}">
+                        <i class="fas fa-trash" style="color: #4169E1;"></i>
+                        {{ 'Remove'|trans }}
+                    </a>
+                </div>
+            </div>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="9">
+            {{ 'no_elements_found'|trans }}
+        </td>
+    </tr>
+{% endfor %}
+
+<tr>
+    <td colspan="9">
+        <div class="pagination">
+            {{ knp_pagination_render(equipments) }}
+        </div>
+    </td>
+</tr>

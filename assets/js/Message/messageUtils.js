@@ -12,7 +12,6 @@ class MessageUtils {
     }
 
     url (idDiscussion, page , criteria) {
-
         return Routing.generate('app_message', {
             '_locale': this.locale , 
             'idDiscussion': idDiscussion, 
@@ -60,12 +59,13 @@ class MessageUtils {
         const elementIdSelectedSearchMessage = document.getElementById('idSelectedSearchMessage');
 
         return  {
+            'view': 'Message',
             'saveSearch': saveSearch,
             'description': elementDescription ? elementDescription.value : '',
             'message': elementMessage ? elementMessage.value : '',
             'fileName': elementFile ? elementFile.value : '', 
             'createdThisMonth': createdThisMonth,
-            'IdSelectedSearchMessage': elementIdSelectedSearchMessage ? elementIdSelectedSearchMessage.value : '', 
+            'id': elementIdSelectedSearchMessage ? elementIdSelectedSearchMessage.value : '', 
         };
     }
     cleanForm () {

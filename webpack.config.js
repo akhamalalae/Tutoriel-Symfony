@@ -29,9 +29,12 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('discussionMessage', './assets/js/Discussion/discussionMessage.js')
     .addEntry('profil', './assets/js/Profil/profil.js')
+    .addEntry('users', './assets/js/Profil/users.js')
     .addEntry('help', './assets/js/Help/help.js')
     .addEntry('settings', './assets/js/Settings/settings.js')
     .addEntry('dashboard', './assets/js/Dashboard/dashboard.js')
+    .addEntry('ticket', './assets/js/Ticket/ticket.js')
+    .addEntry('stock', './assets/js/Stock/stock.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
