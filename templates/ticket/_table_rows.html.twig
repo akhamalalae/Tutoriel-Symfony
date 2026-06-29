@@ -11,6 +11,7 @@
                 <th>{{ 'ticket.field.type'|trans }}</th>
                 <th>{{ 'ticket.field.priority'|trans }}</th>
                 <th>{{ 'ticket.field.created_by'|trans }}</th>
+                <th>{{ 'ticket.field.target_user'|trans }}</th>
                 {% if isManager or isAdmin %}
                     <th>{{ 'ticket.field.assigned_to'|trans }}</th>
                 {% endif %}
@@ -62,10 +63,14 @@
                     <td>
                         {{ ticket.createdBy and ticket.createdBy.Name ? ticket.createdBy.sensitiveDataFirstName ~ ' ' ~ ticket.createdBy.sensitiveDataName : '' }}
                     </td>
+                    <td>
+                        {{ ticket.targetUser and ticket.targetUser.Name ?
+                            ticket.targetUser.sensitiveDataFirstName ~ ' ' ~  ticket.targetUser.sensitiveDataName : '' }}
+                    </td>
                     {% if isManager or isAdmin %}
                         <td>
                             {{ ticket.assignedTo and ticket.assignedTo.Name ?
-                                ticket.assignedTo.sensitiveDataFirstName ~ ' ' ~  ticket.createdBy.sensitiveDataName : '' }}
+                                ticket.assignedTo.sensitiveDataFirstName ~ ' ' ~  ticket.assignedTo.sensitiveDataName : '' }}
                         </td>
                     {% endif %}
                     <td>{{ ticket.company ? ticket.company.name : '' }}</td>
@@ -131,5 +136,4 @@
         </ul>
     </nav>
 </div>
-
 {% endif %}

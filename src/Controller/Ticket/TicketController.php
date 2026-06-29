@@ -47,13 +47,12 @@ class TicketController extends AbstractController
 
         $form = $this->createForm(TicketFormType::class, new Ticket('', ''));
 
-        $statusOptions = [  
-            ['value' => TicketStatus::OPEN->value, 'label' => $this->translator->trans('ticket.enum.open')],
-            ['value' => TicketStatus::IN_PROGRESS->value, 'label' => $this->translator->trans('ticket.enum.in_progress')],
-            ['value' => TicketStatus::WAITING_USER->value, 'label' => $this->translator->trans('ticket.enum.waiting_user')],
-            ['value' => TicketStatus::RESOLVED->value, 'label' => $this->translator->trans('ticket.enum.resolved')],
-            ['value' => TicketStatus::CLOSED->value, 'label' => $this->translator->trans('ticket.enum.closed')]
-        ];
+        $statusOptions = array_map(function (TicketStatus $status) {
+            return [
+                'value' => $status->value,
+                'label' => $this->translator->trans('ticket.enum.' . strtolower($status->name)),
+            ];
+        }, TicketStatus::cases());
 
         return $this->render('ticket/list.html.twig', [
             'form' => $form->createView(),
@@ -140,13 +139,12 @@ class TicketController extends AbstractController
     )]
     public function ticketEquipments(int $id, GetTicketEquipmentsUseCase $useCase): Response
     {
-        $statusOptions = [
-            ['value' => TicketEquipmentStatus::PENDING->value, 'label' => $this->translator->trans('pending')],
-            ['value' => TicketEquipmentStatus::DELIVERED->value, 'label' => $this->translator->trans('delivered')],
-            ['value' => TicketEquipmentStatus::READY->value, 'label' => $this->translator->trans('ready')],
-            ['value' => TicketEquipmentStatus::PREPARING->value, 'label' => $this->translator->trans('preparing')],
-            ['value' => TicketEquipmentStatus::INSTALLED->value, 'label' => $this->translator->trans('installed')]
-        ];
+        $statusOptions = array_map(function (TicketEquipmentStatus $status) {
+            return [
+                'value' => $status->value,
+                'label' => $this->translator->trans(strtolower($status->name)),
+            ];
+        }, TicketEquipmentStatus::cases());
 
         $ticketEquipments = $useCase->execute($id);
 
@@ -161,13 +159,13 @@ class TicketController extends AbstractController
     #[Route('/ticket/{id}/software', name: 'get_form_ticket_software', methods: ['GET'], options: ['expose' => true])]
     public function getTicketSoftware(Ticket $ticket): Response
     {
-        $statusOptions = [
-            ['value' => TicketSoftwareStatus::PENDING->value, 'label' => $this->translator->trans('pending')],
-            ['value' => TicketSoftwareStatus::DELIVERED->value, 'label' => $this->translator->trans('delivered')],
-            ['value' => TicketSoftwareStatus::READY->value, 'label' => $this->translator->trans('ready')],
-            ['value' => TicketSoftwareStatus::PREPARING->value, 'label' => $this->translator->trans('preparing')],
-            ['value' => TicketSoftwareStatus::INSTALLED->value, 'label' => $this->translator->trans('installed')]
-        ];
+        $statusOptions = array_map(
+            fn (TicketSoftwareStatus $status) => [
+                'value' => $status->value,
+                'label' => $this->translator->trans(strtolower($status->name)),
+            ],
+            TicketSoftwareStatus::cases()
+        );
 
         return $this->render('ticket/_ticket_software.html.twig', [
             'ticketSoftwares' => $ticket->getTicketSoftware(),

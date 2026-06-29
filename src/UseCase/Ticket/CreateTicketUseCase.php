@@ -25,9 +25,8 @@ class CreateTicketUseCase
 
         $ticket->setCreatedBy($this->userService->getAuthenticatedUser());
 
-        $this->manager->handle($ticket, $data, false);
-
         $this->em->persist($ticket);
+        $this->manager->handle($ticket, $data, false);
         $this->em->flush();
 
         return $ticket;

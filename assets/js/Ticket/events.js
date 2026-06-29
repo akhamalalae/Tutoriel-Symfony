@@ -338,6 +338,7 @@ async function handleDeleteRow(card) {
 
 function fillForm(data) {
     console.log('Filling form with data :', data);
+
     DOM.setValue(DOM.ticketId, data.id);
     DOM.setValue(DOM.title, data.title);
     DOM.setValue(DOM.description, data.description);
@@ -562,6 +563,8 @@ function resetForm() {
     if (DOM.offboardingReturnEquipment) {
         DOM.offboardingReturnEquipment.checked = false;
     }
+    toggleOnboardingFields();
+    toggleOffboardingFields();
     DOM.setValue(DOM.message, '');
 
     if (DOM.messagesContainer) DOM.messagesContainer.innerHTML = '';

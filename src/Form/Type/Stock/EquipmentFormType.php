@@ -47,27 +47,25 @@ class EquipmentFormType extends AbstractType
         // =========================
         ->add('status', ChoiceType::class, [
             'label' => 'stock.form.fields.status',
-            'choices' => [
-                'stock.status.available' => EquipmentStockStatus::AVAILABLE,
-                'stock.status.reserved' => EquipmentStockStatus::RESERVED,
-                'stock.status.Assigned' => EquipmentStockStatus::ASSIGNED,
-                'stock.status.in_repair' => EquipmentStockStatus::IN_REPAIR,
-                'stock.status.retired' => EquipmentStockStatus::RETIRED,
-                'stock.status.out_of_service' => EquipmentStockStatus::OUT_OF_SERVICE,
-            ],
-            'choice_label' => fn ($choice) => $choice->value,
+            'choices' => array_combine(
+                array_map(
+                    fn (EquipmentStockStatus $status) => 'stock.status.' . $status->value,
+                    EquipmentStockStatus::cases()
+                ),
+                EquipmentStockStatus::cases()
+            ),
         ])
         ->add('assetCondition', ChoiceType::class, [
             'label' => 'stock.form.fields.assetCondition',
-            'choices' => [
-                'stock.condition.new' => ConditionEquipmentStock::NEW,
-                'stock.condition.good' => ConditionEquipmentStock::GOOD,
-                'stock.condition.fair' => ConditionEquipmentStock::FAIR,
-                'stock.condition.broken' => ConditionEquipmentStock::BROKEN,
-            ],
-            'choice_label' => fn ($choice) => $choice->value,
+            'choices' => array_combine(
+                array_map(
+                    fn (ConditionEquipmentStock $condition) => 'stock.condition.' . $condition->value,
+                    ConditionEquipmentStock::cases()
+                ),
+                ConditionEquipmentStock::cases()
+            ),
         ])
-
+        
         // =========================
         // AFFECTATION
         // =========================

@@ -110,12 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Hidden
-        if (e.target.id === 'hidden-stock-btn') {
+        const btnHidden = e.target.closest('#hidden-stock-btn');
+        if (btnHidden) {
             toggleDisplay(formContainer, false);
             toggleDisplay(blockFormContainer, false);
             toggleDisplay(blockEquipmentList, true);
         }
-
+        
         // DELETE
         if (e.target.classList.contains('btn-delete')) {
 

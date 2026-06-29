@@ -215,6 +215,7 @@ class EquipmentAsset
     {
         $this->assignedTo = $user;
 
+        /*
         if ($user) {
             $this->assignedAt ??= new \DateTimeImmutable();
             $this->status = EquipmentStockStatus::ASSIGNED;
@@ -222,6 +223,7 @@ class EquipmentAsset
             $this->assignedAt = null;
             $this->status = EquipmentStockStatus::AVAILABLE;
         }
+        */
 
         return $this;
     }

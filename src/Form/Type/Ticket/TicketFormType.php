@@ -64,12 +64,13 @@ class TicketFormType extends AbstractType
             ])
             ->add('priority', ChoiceType::class, [
                 'label' => 'ticket.field.priority',
-                'choices' => [
-                    'ticket.enum.low' => TicketPriority::LOW,
-                    'ticket.enum.medium' => TicketPriority::MEDIUM,
-                    'ticket.enum.high' => TicketPriority::HIGH,
-                    'ticket.enum.critical' => TicketPriority::CRITICAL,
-                ],
+                'choices' => array_combine(
+                    array_map(
+                        fn (TicketPriority $priority) => 'ticket.enum.' . $priority->value,
+                        TicketPriority::cases()
+                    ),
+                    TicketPriority::cases()
+                ),
                 'choice_value' => fn (?TicketPriority $choice) => $choice?->value,
                 'required' => true,
                 'attr' => ['class' => 'form-control mb-2'],
@@ -121,13 +122,13 @@ class TicketFormType extends AbstractType
             if ($this->security->isGranted('ROLE_MANAGER') || $this->security->isGranted('ROLE_ADMIN')) {
                 $builder->add('status', ChoiceType::class, [
                     'label' => 'ticket.field.status',
-                    'choices' => [
-                        'ticket.enum.open' => TicketStatus::OPEN,
-                        'ticket.enum.in_progress' => TicketStatus::IN_PROGRESS,
-                        'ticket.enum.waiting_user' => TicketStatus::WAITING_USER,
-                        'ticket.enum.resolved' => TicketStatus::RESOLVED,
-                        'ticket.enum.closed' => TicketStatus::CLOSED,
-                    ],
+                    'choices' => array_combine(
+                        array_map(
+                            fn (TicketStatus $status) => 'ticket.enum.' . $status->value,
+                            TicketStatus::cases()
+                        ),
+                        TicketStatus::cases()
+                    ),
                     'choice_value' => fn (?TicketStatus $choice) => $choice?->value,
                     'required' => false,
                     'attr' => ['class' => 'form-control mb-2'],

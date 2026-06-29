@@ -76,34 +76,13 @@ export function getFormData() {
     const errors = {};
 
     /*
-
-    for (const eq of payload.ticketEquipment) {
-        if (!eq.equipmentModel) {
-            errors.ticketEquipment = 'Le choix de l’équipement est obligatoire';
-            break;
+        for (const eq of payload.ticketEquipment) {
+            if (!eq.equipmentModel) {
+                errors.ticketEquipment = 'Le choix de l’équipement est obligatoire';
+                break;
+            }
         }
-    }
-
-    if (!payload.title) errors.title = 'Le titre est obligatoire';
-    if (!payload.description) errors.description = 'La description est obligatoire';
-    if (!payload.type) errors.type = 'Le type est obligatoire';
-    if (!payload.priority) errors.priority = 'La priorité est obligatoire';
-    if (!payload.company) errors.company = 'La société est obligatoire';
-
-    if (payload.status === 'closed' && TicketState.currentStatus !== 'resolved') {
-        errors.status = 'Le ticket doit être résolu avant d’être fermé';
-    }
-
-    if (payload.type == 'onboarding') {
-        if (!payload.onboardingPosition) errors.onboardingPosition = 'La position d\'onboarding est obligatoire';
-        if (!payload.onboardingStartDate) errors.onboardingStartDate = 'Date de début d\'onboarding est obligatoire';
-        if (!payload.onboardingEmployee) errors.onboardingEmployee = 'L\'employé d\'onboarding est obligatoire';
-    }
-
-    if (payload.type == 'offboarding') {
-        if (!payload.offboardingEmployee) errors.offboardingEmployee = 'L\'employé d\'offboarding est obligatoire';
-        if (!payload.offboardingEndDate) errors.offboardingEndDate = 'Date de fin d\'offboarding est obligatoire';
-    }
+        if (!payload.title) errors.title = 'Le titre est obligatoire';
     */
 
     return { payload, errors };

@@ -117,7 +117,6 @@ class Ticket
     public function assignTo(User $consultant): void
     {
         $this->assignedTo = $consultant;
-        $this->status = TicketStatus::IN_PROGRESS;
     }
 
     public function resolve(): void
@@ -141,6 +140,7 @@ class Ticket
         $statusEnum = $status instanceof TicketStatus
             ? $status
             : TicketStatus::from($status);
+
 
         if ($statusEnum === TicketStatus::RESOLVED) {
             $this->resolve();

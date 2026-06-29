@@ -45,14 +45,20 @@ class ValidatorTicketUseCase
         }
 
         if (!empty($data['company']) && !empty($data['ticketEquipment'])) {
-            foreach ($data['ticketEquipment'] as $index => $eq) {
-                $equipmentAsset = $this->em->getRepository(EquipmentAsset::class)
-                    ->find($eq['equipmentAsset'] ?? null);
-                if ($equipmentAsset && $equipmentAsset->getCompany()) {
-                    if ($equipmentAsset->getCompany()->getId() !== (int) $data['company']) {
-                        $errors['company'] = $this->translation('ticket.error.equipment_company_mismatch');
-                        break;
-                    }
+
+            $companyId = (int) $data['company'];
+        
+            $ids = array_filter(array_column($data['ticketEquipment'], 'equipmentAsset'));
+        
+            $equipmentAssets = $this->em->getRepository(EquipmentAsset::class)
+                ->findBy(['id' => $ids]);
+        
+            foreach ($equipmentAssets as $equipmentAsset) {
+                $assetCompany = $equipmentAsset->getCompany();
+        
+                if ($assetCompany && $assetCompany->getId() !== $companyId) {
+                    $errors['company'] = $this->translation('ticket.error.equipment_company_mismatch');
+                    break;
                 }
             }
         }

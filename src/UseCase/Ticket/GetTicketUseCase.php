@@ -9,7 +9,10 @@ use App\Repository\UserRepository;
 
 class GetTicketUseCase
 {
-    public function __construct(private TicketRepository $repo, private UserRepository $userRepository,) {}
+    public function __construct(
+        private TicketRepository $repo,
+        private UserRepository $userRepo
+    ) {}
 
     public function execute(int $id): array
     {
@@ -36,18 +39,16 @@ class GetTicketUseCase
             'status' => $te->getStatus()->value,
         ], $ticket->getTicketEquipment()->toArray());
 
-        /*
         $ticketSoftware = array_map(fn($ts) => [
             'id' => $ts->getId(),
             'idSoftwareProduct' => $ts->getSoftwareProduct()?->getId(),
-            'nameSoftwareProduct' => $ts->getSoftwareProduct()?->getName(),
+            'softwareProduct' => $ts->getSoftwareProduct()?->getName(),
             'idSoftwareLicense' => $ts->getSoftwareLicense()?->getId(),
-            'nameSoftwareLicense' => $ts->getSoftwareLicense()?->getKey(),
+            'softwareLicense' => $ts->getSoftwareLicense()?->getLicenseKey(),
             'idTicket' => $ts->getTicket()?->getId(),
             'comment' => $ts->getComment(),
             'status' => $ts->getStatus()->value,
         ], $ticket->getTicketSoftware()->toArray());
-        */
 
         return [
             'id' => $ticket->getId(),
@@ -55,10 +56,8 @@ class GetTicketUseCase
             'description' => $ticket->getDescription(),
             'status' => $ticket->getStatus()->value,
             'createdAt' => $ticket->getCreatedAt()?->format('Y-m-d H:i:s'),
-
             'assignedTo' => $assignedTo?->getId(),
             'targetUser' => $targetUser?->getId(),
-            
             'assignedToName' => $assignedTo && $assignedTo->getName()
                 ? $assignedTo->getSensitiveDataFirstName() . ' ' . $assignedTo->getSensitiveDataName()
                 : null,
@@ -66,21 +65,19 @@ class GetTicketUseCase
                 ? $targetUser->getSensitiveDataFirstName() . ' ' . $targetUser->getSensitiveDataName()
                 : null,
             'company' => $company?->getId(),
-
             'type' => $ticket->getType()->value,
             'priority' => $ticket->getPriority()->value,
-
             // onboarding
             'onboardingPosition' => $onboarding?->getPosition(),
             'onboardingStartDate' => $onboarding?->getStartDate()?->format('Y-m-d H:i:s'),
-
             // offboarding
             'offboardingRevokeAccess' => $offboarding?->isRevokeAccess(),
             'offboardingReturnEquipment' => $offboarding?->isReturnEquipment(),
             'offboardingEndDate' => $offboarding?->getEndDate()?->format('Y-m-d H:i:s'),
-
             // equipments
             'ticketEquipments' => $ticketEquipments,
+            // software
+            'ticketSoftware' => $ticketSoftware,
         ];
     }
 }

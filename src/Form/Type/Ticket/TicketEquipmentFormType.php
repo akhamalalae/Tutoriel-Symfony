@@ -52,13 +52,13 @@ class TicketEquipmentFormType extends AbstractType
                     ],
                 ])
                 ->add('status', ChoiceType::class, [
-                    'choices' => [
-                        'ticket.enum.pending' => TicketEquipmentStatus::PENDING,
-                        'ticket.enum.preparing' => TicketEquipmentStatus::PREPARING,
-                        'ticket.enum.ready' => TicketEquipmentStatus::READY,
-                        'ticket.enum.delivered' => TicketEquipmentStatus::DELIVERED,
-                        'ticket.enum.installed' => TicketEquipmentStatus::INSTALLED,
-                    ],
+                    'choices' => array_combine(
+                        array_map(
+                            fn (TicketEquipmentStatus $status) => 'ticket.enum.' . $status->value,
+                            TicketEquipmentStatus::cases()
+                        ),
+                        TicketEquipmentStatus::cases()
+                    ),
                     'choice_value' => fn (?TicketEquipmentStatus $choice) => $choice?->value,
                     'attr' => ['class' => 'form-select'],
                 ]);

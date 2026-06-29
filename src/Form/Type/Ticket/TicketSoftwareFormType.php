@@ -34,13 +34,13 @@ class TicketSoftwareFormType extends AbstractType
                 'attr' => ['class' => 'form-control mb-2'],
             ])
             ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'ticket.enum.pending' => TicketSoftwareStatus::PENDING,
-                    'ticket.enum.preparing' => TicketSoftwareStatus::PREPARING,
-                    'ticket.enum.ready' => TicketSoftwareStatus::READY,
-                    'ticket.enum.delivered' => TicketSoftwareStatus::DELIVERED,
-                    'ticket.enum.installed' => TicketSoftwareStatus::INSTALLED,
-                ],
+                'choices' => array_combine(
+                    array_map(
+                        fn (TicketSoftwareStatus $status) => 'ticket.enum.' . $status->value,
+                        TicketSoftwareStatus::cases()
+                    ),
+                    TicketSoftwareStatus::cases()
+                ),
                 'choice_value' => fn (?TicketSoftwareStatus $choice) => $choice?->value,
                 'attr' => ['class' => 'form-select'],
             ])

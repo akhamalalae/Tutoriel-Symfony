@@ -32,7 +32,6 @@ class HistoryLogger
         $log->setCreatedAt(new \DateTimeImmutable());
 
         $this->em->persist($log);
-        dump($log);
     }
 
     private function normalize($value): ?array
