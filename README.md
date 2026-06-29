@@ -1,18 +1,52 @@
-## Messagerie Sécurisée avec Chiffrement de Données
+# Symfony Platform  
+## Secure Messaging & IT Ticketing System  
+### (Event-Driven Architecture | Clean Architecture | Production-Oriented Design)
 
-#### Pour garantir la confidentialité des échanges entre utilisateurs, le système de messagerie implémente un chiffrement de bout en bout (E2EE).Seuls l’expéditeur et le destinataire peuvent lire les messages.
+---
 
-## Fonctionnalités principales :
+# Vision produit
 
-  -  Interception des événements Doctrine
-      - EventSubscriber dédié pour écouter le cycle de vie des entités sensibles.
-      - Chiffrement avant l’écriture (prePersist, preUpdate) et déchiffrement lors de la lecture (postLoad)
-      - Support complet des opérations Doctrine : création, mise à jour et suppression.
+Cette plateforme est une application backend Symfony 6.4 conçue comme un système métier complet combinant :
 
-  -  Gestion des clés et secrets
-      - Les clés et vecteurs d’initialisation sont stockés via le système de secrets Symfony
+- Messagerie sécurisée avec chiffrement de bout en bout (E2EE)
+- Gestion structurée des demandes IT (type ITSM)
 
-## Architecture globale et flux de données
+---
+
+# Valeur métier
+
+## Messagerie sécurisée (E2EE)
+- Confidentialité des échanges
+- Conformité RGPD
+- Protection des données sensibles
+
+## Module IT Ticketing
+- Centralisation des demandes IT
+- Réduction des délais de traitement
+- Suivi et traçabilité complète
+- Amélioration de la collaboration IT / utilisateurs
+
+---
+
+# Messagerie sécurisée (E2EE)
+
+## Objectif
+
+Garantir une communication sécurisée entre utilisateurs via chiffrement de bout en bout.
+
+---
+
+## ⚙️ Fonctionnalités
+
+- Interception des événements Doctrine :
+  - prePersist
+  - preUpdate
+  - postLoad
+
+- Chiffrement automatique des données sensibles
+- Déchiffrement uniquement côté utilisateur
+
+## Architecture technique
 
   - Séparation claire des responsabilités
      - EventListener/DatabaseActivitySubscriber.php : Écoute les événements Doctrine (prePersist, postPersist, postLoad, preUpdate) et délègue le traitement à ActivityRouter.
@@ -23,15 +57,57 @@
       - L’ajout d’une nouvelle entité se limite à la création d’un handler dédié et l’ajout de sa logique métier associée.
       - Aucune modification n’est nécessaire dans ActivityRouter ou DatabaseActivitySubscriber
   -  Respect des principes SOLID
-      - SRP : Chaque classe a une seule responsabilité.
-      - OCP : Ouvert à l'extension, fermé à la modification.
-      - DIP : Dépendances injectées via des interfaces.
 
 ## Bénéfices de cette approche :
 
   -  Protection des informations sensibles contre les fuites de données.
   -  Respect des exigences de conformité et des réglementations sur la protection des données (RGPD, ISO 27001).
   - Transparence pour l’utilisateur final avec un système sécurisé et automatique.
+
+# Module de gestion des tickets IT
+
+## Vision
+
+Plateforme de gestion des demandes IT couvrant tout le cycle de vie des tickets.
+
+---
+
+## Objectifs
+
+- Réduction du temps de traitement
+- Amélioration de la communication IT
+- Structuration des workflows
+- Suivi des performances
+
+---
+
+## 👥 Acteurs
+
+- 👤 Utilisateur : création et suivi des tickets
+- 🧑‍💻 Support IT : traitement et résolution
+- 🧑‍🏫 Manager IT : assignation et supervision
+
+## Workflow métier
+
+USER
+ ↓
+OPEN
+ ↓
+MANAGER (assignation)
+ ↓
+ASSIGNED
+ ↓
+IT (traitement)
+ ↓
+IN_PROGRESS / WAITING_USER
+ ↓
+COMMUNICATION
+ ↓
+RESOLVED
+ ↓
+VALIDATION
+ ↓
+CLOSED
 
 ## Démo de l'application : 
 
