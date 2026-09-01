@@ -12,6 +12,7 @@ class Message
 {
     const ADDED_SUCCESSFULLY = 'ADDED_SUCCESSFULLY';
     const INVALID_FORM = 'INVALID_FORM';
+    const ERROR = 'ERROR';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

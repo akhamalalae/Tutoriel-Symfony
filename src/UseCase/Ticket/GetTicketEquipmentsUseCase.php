@@ -2,8 +2,6 @@
 
 namespace App\UseCase\Ticket;
 
-use App\Entity\Ticket;
-use App\Entity\TicketMessage;
 use App\Repository\TicketRepository;
 use Doctrine\Common\Collections\Collection;
 
@@ -15,12 +13,10 @@ class GetTicketEquipmentsUseCase
     {
         $ticket = $this->repo->find($id);
 
-        $ticketEquipments = $ticket->getTicketEquipment();
-
         if (!$ticket) {
             throw new \RuntimeException('Ticket not found');
         }
 
-        return $ticketEquipments;
+        return $ticket->getTicketEquipment();
     }
 }

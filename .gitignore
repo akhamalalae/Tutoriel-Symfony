@@ -1,6 +1,8 @@
 ###> Symfony ###
-/.env.local
+/.env
+/.env.dev
 /.env.local.php
+/.env.local
 /.env.*.local
 
 /config/secrets/dev/

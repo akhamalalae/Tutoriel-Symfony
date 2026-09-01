@@ -2,20 +2,32 @@
 
 namespace App\UseCase\Ticket;
 
-use App\Entity\TicketEquipment;
 use App\Enum\EquipmentStockStatus;
+use App\Repository\TicketEquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 class DeleteTicketEquipmentRowUseCase
 {
     public function __construct(
+        private TicketEquipmentRepository $repo,
         private EntityManagerInterface $em,
         private Security $security
     ) {}
 
-    public function execute(TicketEquipment $ticketEquipment): array
+    public function execute(int $id): array
     {
+        $ticketEquipment = $this->repo->find($id);
+
+        if (!$ticketEquipment) {
+            return [
+                'success' => false,
+                'status' => 404,
+                'message' => 'Equipment not found',
+                'stockUpdated' => false,
+            ];
+        }
+
         $asset = $ticketEquipment->getEquipmentAsset();
 
         $isAdmin = $this->security->isGranted('ROLE_ADMIN');

@@ -2,19 +2,31 @@
 
 namespace App\UseCase\Ticket;
 
-use App\Entity\TicketSoftware;
+use App\Repository\TicketSoftwareRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 class DeleteTicketSoftwareRowUseCase
 {
     public function __construct(
+        private TicketSoftwareRepository $repo,
         private EntityManagerInterface $em,
         private Security $security
     ) {}
 
-    public function execute(TicketSoftware $ticketSoftware): array
+    public function execute(int $id): array
     {
+        $ticketSoftware = $this->repo->find($id);
+
+        if (!$ticketSoftware) {
+            return [
+                'success' => false,
+                'status' => 404,
+                'licenseRevoked' => false,
+                'message' => 'Software not found',
+            ];
+        }
+
         $isAdmin = $this->security->isGranted('ROLE_ADMIN');
         $isManager = $this->security->isGranted('ROLE_MANAGER');
         $isSimpleUser = !$isAdmin && !$isManager;

@@ -88,7 +88,7 @@ class SoftwareManager
         if (!$ts->getSoftwareLicense()) {
             $this->em->persist($license);
             $ts->setSoftwareLicense($license);
-            $license->setTicketSoftware($ts);
+            $license->addTicketSoftware($ts);
         }
 
         $license

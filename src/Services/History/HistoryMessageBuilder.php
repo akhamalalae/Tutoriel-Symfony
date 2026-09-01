@@ -74,6 +74,10 @@ class HistoryMessageBuilder
 
             // COMPANY
             'company' => $this->translator->trans('ticket.field.company'),
+
+            // COLLECTIONS
+            'ticketEquipment' => $this->translator->trans('ticket.field.equipment'),
+            'ticketSoftware' => $this->translator->trans('ticket.field.software'),
         ];
 
         $label = $labels[$field] ?? ucfirst($field);

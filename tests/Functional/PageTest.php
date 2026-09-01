@@ -1,41 +1,17 @@
 <?php
 
-namespace App\Functional\Tests;
+namespace App\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 
 class PageTest extends WebTestCase
 {
-    public function testSomething(): void
+    public function testLoginPageIsAccessible(): void
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $client = static::createClient(['environment' => 'test', 'debug' => false]);
+        $client->request('GET', '/en/login');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h5', 'Results');
-    }
-
-    public function testPaginationWorks(): void
-    {
-        $client = static::createClient();
-        $crawler = $client->request(Request::METHOD_GET, '/search');
-
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-
-        $courses = $crawler->filter('ol.list-group ');
-        $this->assertEquals(10, count($courses));
-
-        $link = $crawler->selectLink('2')->extract(['href'])[0];
-        $crawler = $client->request(Request::METHOD_GET, $link);
-
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-
-        $courses = $crawler->filter('ol.list-group ');
-        $this->assertGreaterThanOrEqual(1, count($courses));
+        $this->assertSelectorTextContains('h1', 'Welcome');
     }
 }

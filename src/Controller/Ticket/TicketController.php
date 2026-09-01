@@ -29,15 +29,14 @@ use App\UseCase\Exception\ValidationException;
 use App\Form\Type\Ticket\TicketSoftwareFormType;
 use App\Entity\TicketSoftware;
 use App\Enum\TicketSoftwareStatus;
-use Doctrine\ORM\EntityManagerInterface;
 use App\UseCase\Ticket\DeleteTicketEquipmentRowUseCase;
 use App\UseCase\Ticket\DeleteTicketSoftwareRowUseCase;
+use App\UseCase\Ticket\GetTicketSoftwareUseCase;
 
 class TicketController extends AbstractController
 {
     public function __construct(
-        private TranslatorInterface $translator,
-        private EntityManagerInterface $em
+        private TranslatorInterface $translator
     ) {}
 
     #[Route('/user/tickets', name: 'ticket_list', options: ['expose' => true])]
@@ -157,7 +156,7 @@ class TicketController extends AbstractController
     }
 
     #[Route('/ticket/{id}/software', name: 'get_form_ticket_software', methods: ['GET'], options: ['expose' => true])]
-    public function getTicketSoftware(Ticket $ticket): Response
+    public function getTicketSoftware(int $id, GetTicketSoftwareUseCase $useCase): Response
     {
         $statusOptions = array_map(
             fn (TicketSoftwareStatus $status) => [
@@ -167,8 +166,10 @@ class TicketController extends AbstractController
             TicketSoftwareStatus::cases()
         );
 
+        $ticketSoftwares = $useCase->execute($id);
+
         return $this->render('ticket/_ticket_software.html.twig', [
-            'ticketSoftwares' => $ticket->getTicketSoftware(),
+            'ticketSoftwares' => $ticketSoftwares,
             'statusOptions' => $statusOptions
         ]);
     }
@@ -265,18 +266,7 @@ class TicketController extends AbstractController
     #[Route('/user/tickets/{id}/delete/equipment/row', name: 'ticket_equipment_delete_row', methods: ['DELETE'], options: ['expose' => true])]
     public function deleteEquipmentRow(int $id, DeleteTicketEquipmentRowUseCase $useCase): JsonResponse
     {
-        $ticketEquipment = $this->em
-        ->getRepository(TicketEquipment::class)
-        ->find($id);
-
-        if (!$ticketEquipment) {
-            return $this->json([
-                'success' => false,
-                'message' => 'Equipment not found'
-            ], 404);
-        }
-
-        $result = $useCase->execute($ticketEquipment);
+        $result = $useCase->execute($id);
 
         $message = $result['message'];
 
@@ -298,18 +288,7 @@ class TicketController extends AbstractController
         int $id,
         DeleteTicketSoftwareRowUseCase $useCase
     ): JsonResponse {
-        $ticketSoftware = $this->em
-            ->getRepository(TicketSoftware::class)
-            ->find($id);
-
-        if (!$ticketSoftware) {
-            return $this->json([
-                'success' => false,
-                'message' => 'Software not found',
-            ], 404);
-        }
-
-        $result = $useCase->execute($ticketSoftware);
+        $result = $useCase->execute($id);
 
         $message = $result['message'];
 

@@ -50,6 +50,14 @@
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="Unit">
+            <directory>tests/Entity</directory>
+            <directory>tests/Service</directory>
+            <directory>tests/UseCase</directory>
+        </testsuite>
+        <testsuite name="Functional">
+            <directory>tests/Functional</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">

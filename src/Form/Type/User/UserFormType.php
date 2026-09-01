@@ -154,6 +154,13 @@ class UserFormType extends AbstractType
                 'required' => true,
             ]);
 
+            $builder->add('companyUser', EntityType::class, [
+                'label' => 'user.company',
+                'class' => Company::class,
+                'choice_label' => 'name',
+                'attr' => ['class' => 'form-control mb-2'],
+            ]);
+
             if ($view == 'all') {
                 $builder->add('plainPassword', PasswordType::class, [
                     'label' => 'Password',

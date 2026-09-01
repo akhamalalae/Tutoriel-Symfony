@@ -8,7 +8,7 @@
 
 Cette plateforme est une application backend Symfony 6.4 conçue comme un système métier complet combinant :
 
-- Messagerie sécurisée avec chiffrement de bout en bout (E2EE)
+- Messagerie sécurisée avec chiffrement de bout en bout (Sensitive Data Encryption)
 - Gestion structurée des demandes IT (type ITSM)
 
 ---
@@ -167,6 +167,7 @@ CLOSED
 
 - Application
     - https://localhost/fr/login
+    - Authentification ("email": "admin@gmail.com", "password": "rootroot")
 
 - phpMyAdmin
     - http://localhost:8081/
